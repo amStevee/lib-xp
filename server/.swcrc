@@ -1,0 +1,13 @@
+{
+    "env": {
+        "target": {
+            "node": 20
+        }
+    },
+    "jsc": {
+        "parser": {
+            "syntex": "typscript"
+        }
+    },
+    "sourceMaps": "inline"
+}

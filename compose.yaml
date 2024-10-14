@@ -1,33 +1,41 @@
 services:
-  todo_list:
+  web:
     restart: unless-stopped
     build:
       context: ./client
       dockerfile: Dockerfile
       args:
-        - REACT_APP_API_URL=https://<YOUR_USERNAME>-server--3010.prod1.defang.dev
+        - REACT_APP_API_URL=https://amStevee-server--3010.prod1.defang.dev
     ports:
-      - mode: ingress
-        target: 3000
-        published: 3000
+      - "3000:3000"
     deploy:
       resources:
         reservations:
           memory: 2GB
     depends_on:
       - server
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   server:
     restart: unless-stopped
     build:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - target: 3010
-        mode: ingress
-        published: 3010
+      - "3010:3010"
+    command: pnpm start:docker
     environment:
-     - DATABASE_URL    # To use your production database connection string, use `defang config set DATABASE_URL`
-    #deploy:
-    #  resources:
-    #    reservations:
-    #      memory: 256M
+     - DATABASE_URL:${DATABASE_URL}    # To use your production database connection string, use `defang config set DATABASE_URL`
+    deploy:
+     resources:
+       reservations:
+         memory: 256M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+

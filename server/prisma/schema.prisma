@@ -12,3 +12,95 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Librarian {
+  id String @default(uuid()) @unique
+  firstname String
+  lastname String
+  email String @unique
+  address String
+  contact String @unique
+  rank Int
+  books_entered String[] @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("librarian")
+}
+
+model Book {
+  id String @default(uuid()) @unique
+  title String
+  author String
+  subject String[]
+  imprint String
+  collation String
+  G_M_D String
+  book_cover String
+  material_number String
+  availability Boolean
+  bibilography String
+  Keywords String[]
+  other_Title String?
+  co_author String?
+  editor String?
+  edition String?
+  series String?
+  Web_address String?
+  entered_at DateTime
+  book_likes Book_likes[]
+  book_consulted Book_consulted[]
+  circulation Circulation[]
+
+  @@index([title])
+  @@index([author])
+  @@map("book")
+}
+
+model Patron {
+  id String @default(uuid()) @unique
+  Google_Id String @unique
+  firstname String
+  lastname String
+  address String
+  contact String @unique
+  email String @unique
+  borrowed_book String[] @unique
+  book_likes Book_likes[]
+  book_consulted Book_consulted[]
+  circulation Circulation[]
+
+  @@map("patron")
+
+}
+
+model Book_likes {
+  book_id String @unique
+  book Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  patron_id String @unique
+  patron Patron @relation(fields: [patron_id], references: [id], onDelete: Cascade)
+  liked_at DateTime @default(now())
+
+  @@map("book_likes")
+}
+
+model Book_consulted {
+  book_id String @unique
+  book Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  patron_id String @unique
+  patron Patron @relation(fields: [patron_id], references: [id], onDelete: Cascade)
+  consulted_at DateTime @default(now())
+
+  @@map("book_consulted")
+}
+
+model Circulation {
+  book_id String @unique
+  book Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  patron_id String @unique
+  patron Patron @relation(fields: [patron_id], references: [id], onDelete: Cascade)
+  checkout DateTime
+  date_due DateTime
+
+  @@map("circulation")
+}

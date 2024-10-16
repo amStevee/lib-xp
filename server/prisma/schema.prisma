@@ -13,11 +13,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt   DateTime
+}
+
 model Librarian {
   id String @default(uuid()) @unique
   firstname String
   lastname String
   email String @unique
+  password String
+  profile_img String
   address String
   contact String @unique
   rank Int
@@ -59,12 +68,14 @@ model Book {
 
 model Patron {
   id String @default(uuid()) @unique
-  Google_Id String @unique
+  google_Id String? @unique
   firstname String
   lastname String
   address String
   contact String @unique
   email String @unique
+  password String
+  profile_img String
   borrowed_book String[] @unique
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

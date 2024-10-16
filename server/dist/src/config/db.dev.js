@@ -1,7 +1,1 @@
-import dotenv from 'dotenv';
-dotenv.config();
-var Pool = require("pg").Pool;
-var parse = require('pg-connection-string').parse;
-var config = parse(process.env.DATABASE_URL);
-var pool = new Pool(config);
-module.exports = pool;
+Object.defineProperty(exports,"__esModule",{value:true});const _dotenv=/*#__PURE__*/_interop_require_default(require("dotenv"));function _interop_require_default(obj){return obj&&obj.__esModule?obj:{default:obj}}_dotenv.default.config();const Pool=require("pg").Pool;const parse=require("pg-connection-string").parse;const config=parse(process.env.DATABASE_URL);const pool=new Pool(config);module.exports=pool;

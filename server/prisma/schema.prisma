@@ -66,6 +66,8 @@ model Patron {
   contact String @unique
   email String @unique
   borrowed_book String[] @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
   book_likes Book_likes[]
   book_consulted Book_consulted[]
   circulation Circulation[]

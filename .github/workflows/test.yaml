@@ -1,0 +1,46 @@
+name: Test project
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Set up Docker and bring up the services
+      - name: Set up Docker
+        run: |
+          docker-compose -f compose.dev.yaml up -d --build
+          # Wait for services to be ready
+          sleep 30  # Adjust if necessary for your services to start
+
+      # Run tests in the server
+      - name: Run server tests
+        id: server-tests
+        run: |
+          if ! docker-compose -f compose.dev.yaml exec server pnpm test; then
+            echo "Server tests failed. Fetching logs..."
+            docker-compose -f compose.dev.yaml logs server
+            exit 1
+          fi
+        continue-on-error: true
+      
+      # Run tests in the client
+      - name: Run client tests
+        id: client-tests
+        run: |
+          if ! docker-compose -f compose.dev.yaml exec client pnpm test; then
+            echo "Client tests failed. Fetching logs..."
+            docker-compose -f compose.dev.yaml logs client
+            exit 1
+          fi
+        continue-on-error: true
+
+      # stop and remove containers after tests
+      - name: Tear down Docker
+        run: docker-compose -f compose.dev.yaml down

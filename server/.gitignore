@@ -10,11 +10,8 @@
 
 # production
 /build
-<<<<<<< HEAD
 /dist
-=======
-./dist
->>>>>>> origin/main
+
 
 # misc
 .DS_Store

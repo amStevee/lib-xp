@@ -1,0 +1,39 @@
+services:
+  db:
+    # image: postgres:16
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB:${POSTGRES_DB}
+      - POSTGRES_USER:${POSTGRES_USER}
+      - POSTGRES_PASSWORD:${POSTGRES_PASSWORD}
+    ports:
+      - 5432:5432
+
+  web:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - "./client:/code"
+      - /code/node_modules
+    depends_on:
+      - server
+
+  server:
+    restart: unless-stopped
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 3010:3010
+      - 9229:9229 # debugging port
+    environment:
+    - DATABASE_URL:${DATABASE_MOCK_URL}
+    - PORT:3010
+    volumes:
+      - "./server:/app"
+      - /app/node_modules
+    depends_on:
+      - db

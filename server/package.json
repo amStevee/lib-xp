@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "db:console": "defang compose exec db psql -h localhost -U postgres -d lib-xp",
     "build": "swc src --out-dir dist",
     "dev:start": "nodemon ./src/index.ts",
@@ -36,10 +36,7 @@
     "passport-jwt": "^4.0.1",
     "pg": "^8.11.5",
     "pg-connection-string": "^2.6.4",
-<<<<<<< HEAD
     "rimraf": "^6.0.1",
-=======
->>>>>>> origin/main
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"

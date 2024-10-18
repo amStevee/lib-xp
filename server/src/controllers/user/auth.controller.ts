@@ -1,13 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
-import verifyUserData from '../../utils/verifyUserData';
+import getUserData from '../../utils/getUserData';
 import jwt from 'jsonwebtoken';
 import { CustomError } from '../../utils/errorHandler';
+import passport from 'passport';
+
 
 export async function signin(req:Request, res:Response, next:NextFunction) {
 
-    const user = await verifyUserData(req.body, next);
+    const user = await getUserData(req.body);
 
-    if(!user) return next(new CustomError('could not sigin acount', 500));
+    if(user instanceof CustomError) return next(user);
 
     const token = jwt.sign(user, 'key', {expiresIn: "60d"});
 
@@ -18,9 +20,7 @@ export async function signin(req:Request, res:Response, next:NextFunction) {
 export async function signout(req:Request, res:Response, next:NextFunction) {
     // hanndle with passport
 }
-export async function signin_google(req:Request, res:Response, next:NextFunction) {
-    // hanndle with passport
-}
+export const signin_google = passport.authenticate('google')
 
 export async function google_redirect(req:Request, res:Response, next:NextFunction) {
     // hanndle with passport

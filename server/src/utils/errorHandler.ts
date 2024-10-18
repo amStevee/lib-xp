@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import dotenv from 'dotenv';
-import CreateError from "../types";
+import {CreateError} from "../types";
 dotenv.config();
 
 export const routeNotFound = async(req:Request, res:Response, next: NextFunction) => {

@@ -11,7 +11,7 @@ export interface UserData {
   lastname?: string;
   address?: string;
   contact?: string; //unique
-  uemail: string; //unique
+  email: string; //unique
   rank?: number;
   password?: string
 }

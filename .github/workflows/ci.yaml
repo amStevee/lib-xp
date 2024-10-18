@@ -1,4 +1,4 @@
-name: Test project
+name: Deploy
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
         run: |
           docker-compose -f compose.dev.yaml up -d --build
           # Wait for services to be ready
-          sleep 30  # Adjust if necessary for your services to start
+          sleep 30 
 
       # Run tests in the server
       - name: Run server tests
@@ -28,7 +28,6 @@ jobs:
             docker-compose -f compose.dev.yaml logs server
             exit 1
           fi
-        continue-on-error: true
       
       # Run tests in the client
       - name: Run client tests
@@ -44,3 +43,17 @@ jobs:
       # stop and remove containers after tests
       - name: Tear down Docker
         run: docker-compose -f compose.dev.yaml down
+
+  deploy:
+    need: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+
+    - name: Deploy
+      uses: DefangLabs/defang-github-action@v1.1.0

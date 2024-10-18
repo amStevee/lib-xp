@@ -1,12 +1,11 @@
 import expressSession from 'express-session';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
-import app from '../app';
-import prisma from './db';
+
+import db from './db';
 import dotenv from 'dotenv';
 dotenv.config()
 
-export default app.use(
-  expressSession({
+const Session = expressSession({
     cookie: {
      maxAge: 7 * 24 * 60 * 60 * 1000 // ms
     },
@@ -14,12 +13,13 @@ export default app.use(
     resave: true,
     saveUninitialized: true,
     store: new PrismaSessionStore(
-      prisma,
+      db,
       {
         checkPeriod: 2 * 60 * 1000,  //ms
         dbRecordIdIsSessionId: true,
         dbRecordIdFunction: undefined,
       }
     )
-  })
-);
+});
+
+export default Session;

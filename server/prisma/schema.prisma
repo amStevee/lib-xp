@@ -44,7 +44,7 @@ model Book {
   subject String[]
   imprint String
   collation String
-  G_M_D String
+  G_M_D GMD 
   book_cover String
   material_number String
   availability Boolean
@@ -112,8 +112,15 @@ model Circulation {
   book Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
   patron_id String @unique
   patron Patron @relation(fields: [patron_id], references: [id], onDelete: Cascade)
-  checkout DateTime
+  checkout DateTime @default(now())
   date_due DateTime
 
   @@map("circulation")
+}
+
+enum GMD {
+  Monograph
+  Serial
+  Palmphlet
+  Dictionary
 }

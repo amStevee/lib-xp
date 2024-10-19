@@ -1,19 +1,19 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend server for LibXp a small library management system",
   "main": "index.js",
   "scripts": {
     "test": "jest",
     "db:console": "defang compose exec db psql -h localhost -U postgres -d lib-xp",
-    "build": "swc src --out-dir dist",
+    "build": "rimraf ./dist && swc src --out-dir dist",
     "dev:start": "nodemon ./src/index.ts",
     "dev": "pnpm build && pnpm dev:start",
     "start": "node ./dist/src/index.js",
     "start:docker": "pnpm build && pnpm start"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["nodejs", "express", "typescript", "prisma", "docker", "jest"],
+  "author": "Steven Anongo",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "5.20.0",

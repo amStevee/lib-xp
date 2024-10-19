@@ -18,4 +18,4 @@ RUN pnpm build
 
 
 EXPOSE 3010
-CMD ["node", "index.js"]
+CMD ["pnpm", "start:docker"]

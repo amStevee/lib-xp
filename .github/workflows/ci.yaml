@@ -14,6 +14,8 @@ jobs:
 
       # Set up Docker and bring up the services
       - name: Set up Docker
+      - env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           docker compose -f compose.dev.yaml up -d --build
           # Wait for services to be ready

@@ -45,7 +45,7 @@ jobs:
         run: docker-compose -f compose.dev.yaml down
 
   deploy:
-    need: test
+    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: read

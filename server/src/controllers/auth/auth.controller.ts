@@ -23,6 +23,6 @@ export async function signout(req:Request, res:Response, next:NextFunction) {
 export const signin_google = passport.authenticate('google')
 
 export const google_redirect = passport.authenticate('google', {
-    successRedirect: '/',
+    successReturnToOrRedirect: '/',
     failureRedirect: '/auth0/login'
 })

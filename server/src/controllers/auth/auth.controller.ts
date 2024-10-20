@@ -13,8 +13,10 @@ export async function signin(req:Request, res:Response, next:NextFunction) {
 
     const token = jwt.sign(user, 'key', {expiresIn: "60d"});
 
+    const data = {id:user.id, email:user.email, firstname:user.firstname, lastname:user.lastname, profile_img: user.profile_img};
+    
     res.setHeader("Authorization", `Bearer ${token}`);
-    res.status(200).json({msg: 'Signed in', user});
+    res.status(200).json({msg: 'Signed in', data: {...data}});
 }
 
 export async function signout(req:Request, res:Response, next:NextFunction) {

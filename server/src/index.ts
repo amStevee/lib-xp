@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import { globalErrorHandler, routeNotFound } from './utils/errorHandler';
 // Import routes
 import authRoute from './routes/auth-routes/auth.routes';
+import passportMiddleware from './config/passport-setup';
 
 dotenv.config();
 
@@ -19,7 +20,8 @@ app.use(cors({
     maxAge: 60 * 1000
 }));
 app.use(limiter);
-app.use(Session);
+// passportMiddleware()
+// app.use(Session);
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));

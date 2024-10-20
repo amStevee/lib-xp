@@ -4,7 +4,7 @@ import jwt from 'passport-jwt';
 import db from './db';
 
 
-passport.use(new GoogleStrategy({
+const passportMiddleware = () => passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     callbackURL: "http://localhost:8000/oauth2/redirect/google",
@@ -14,3 +14,6 @@ passport.use(new GoogleStrategy({
     db.patron.findUnique({where: {google_Id: profile.id}})
   }
 ));
+
+
+export default passportMiddleware;

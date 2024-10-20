@@ -12,32 +12,32 @@ export default async function getUserData({email, password}:UserData) {
     }
     
     try {
-    //     // check if user exist in db
-    // const user = db.patron.findUnique({where: {email}});
-    // if(!user) 
-    //     return new CustomError('user not registered \n register[http://localhost:8000/oauth2/google] ?', 404);
-    
-    // // hash password and compare with db hash
-    // const salt = await bcrypt.genSalt(10);
-    // const hash = await bcrypt.hash(password, salt);
-    // const isPassword = await bcrypt.compare(user.password, hash);
-    
-    // if (!isPassword) return new CustomError('Invalid cridentials', 400);
+        // check if user exist in db
+        const user = await db.patron.findUnique({where: {email}});
+        if(!user) 
+            return new CustomError('user not registered \n register[http://localhost:8000/oauth2/google] ?', 404);
+        
+        // hash password and compare with db hash
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(password, salt);
+        const isPassword = await bcrypt.compare(user.password, hash);
+        
+        if (!isPassword) return new CustomError('Invalid cridentials', 400);
 
-    // const data = {id:user.id, email:user.email, firstname:user.firstname, lastname:user.lastname};
-
-    return {email, password};
+        return {...user, password: null};
 
     } catch (error:any) {
-        if (error.name === 'PrismaIn') {
-            if (failCount > 3) return new CustomError('Unable to connect to db', 500);
-            setTimeout(() => {getUserData({email, password}), 2000});
-            failCount += 1;
+        if (error.name === 'PrismaClientInitializationError') {
+            if (failCount > 3) {
+                return new CustomError('connectionError:Unable to connect to DB', 500)
+            } else {
+                console.log(`connectionError: reconnecting to db ----- attempt - ${failCount} of 3`)
+                failCount += 1;
+                return getUserData({email, password});
+            }
+            
         }
         return new CustomError(error.message, 500);
     }
-
-
-
     
 }

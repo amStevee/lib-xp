@@ -22,6 +22,7 @@ export async function signout(req:Request, res:Response, next:NextFunction) {
 }
 export const signin_google = passport.authenticate('google')
 
-export async function google_redirect(req:Request, res:Response, next:NextFunction) {
-    // hanndle with passport
-}
+export const google_redirect = passport.authenticate('google', {
+    successRedirect: '/',
+    failureRedirect: '/auth0/login'
+})

@@ -20,7 +20,7 @@ export async function signin(req:Request, res:Response, next:NextFunction) {
 export async function signout(req:Request, res:Response, next:NextFunction) {
     // hanndle with passport
 }
-export const signin_google = passport.authenticate('google')
+export const signin_google = passport.authenticate('google', { scope: ['profile'] });
 
 export const google_redirect = passport.authenticate('google', {
     successReturnToOrRedirect: '/',

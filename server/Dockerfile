@@ -10,8 +10,6 @@ RUN pnpm install
 COPY prisma/schema.prisma ./prisma/
 RUN npx prisma generate
 
-RUN npx prisma migrate dev
-
 
 COPY . .
 RUN pnpm build

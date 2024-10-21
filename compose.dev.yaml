@@ -19,6 +19,7 @@ services:
       - "./client:/code"
       - /code/node_modules
     depends_on:
+      - db
       - server
 
   server:
@@ -37,3 +38,8 @@ services:
       - /app/node_modules
     depends_on:
       - db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3010/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

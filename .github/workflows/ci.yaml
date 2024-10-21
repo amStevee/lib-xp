@@ -27,7 +27,7 @@ jobs:
         run: |
           if ! docker compose -f compose.dev.yaml exec server pnpm test; then
             echo "Server tests failed. Fetching logs..."
-            docker-compose -f compose.dev.yaml logs server
+            docker compose -f compose.dev.yaml logs server
             exit 1
           fi
       
@@ -35,16 +35,16 @@ jobs:
       - name: Run client tests
         id: client-tests
         run: |
-          if ! docker compose -f compose.dev.yaml exec client pnpm test; then
+          if ! docker compose -f compose.dev.yaml exec web pnpm test; then
             echo "Client tests failed. Fetching logs..."
-            docker-compose -f compose.dev.yaml logs client
+            docker compose -f compose.dev.yaml logs client
             exit 1
           fi
         continue-on-error: true
 
       # stop and remove containers after tests
       - name: Tear down Docker
-        run: docker-compose -f compose.dev.yaml down
+        run: docker compose -f compose.dev.yaml down
 
   deploy:
     needs: test

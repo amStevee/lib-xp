@@ -8,6 +8,7 @@ import { globalErrorHandler, routeNotFound } from './utils/errorHandler';
 // Import routes
 import authRoute from './routes/auth-routes/auth.routes';
 import passportMiddleware from './config/passport-setup';
+import passport from 'passport';
 
 dotenv.config();
 
@@ -20,14 +21,18 @@ app.use(cors({
     maxAge: 60 * 1000
 }));
 app.use(limiter);
-// passportMiddleware()
-// app.use(Session);
+passportMiddleware();
+app.use(Session);
+app.use(passport.initialize());
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 
 // Routes
+app.get('/', (req, res) => {
+    res.status(200).json({msg: 'success', data: 'Hello world'})
+})
 app.use('/oauth2', authRoute);
 
 // Error handling

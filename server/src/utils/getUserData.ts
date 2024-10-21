@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import { NextFunction } from 'express';
 import { UserData } from '../types';
 import { CustomError } from './errorHandler';
 import db from '../config/db';

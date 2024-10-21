@@ -21,11 +21,12 @@ export async function signin(req:Request, res:Response, next:NextFunction) {
 
 export async function signout(req:Request, res:Response, next:NextFunction) {
     // hanndle with passport
+    // req.logOut()
     res.send('You reached the signout route')
 }
-export const signin_google = passport.authenticate('google', { scope: ['profile'] });
+export const signin_google = passport.authenticate('google');
 
-export const google_redirect = passport.authenticate('google', {
-    successReturnToOrRedirect: '/',
-    failureRedirect: '/auth0/login'
-})
+export const google_redirect = async function (req:Request, res:Response) {
+    // res.redirect('http://localhost:3000/');
+    res.redirect('/');
+}

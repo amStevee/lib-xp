@@ -2,6 +2,18 @@ import passport from 'passport';
 import {Strategy as GoogleStrategy} from 'passport-google-oauth20';
 import jwt from 'passport-jwt';
 import db from './db';
+import { UserData } from '../types';
+
+passport.serializeUser((user,done) => {
+  done(null, (user as UserData).id)
+});
+
+passport.deserializeUser((id:string, done) => {
+  db.patron.findUnique({where: {id}})
+  .then((user) => {
+    done(null, user);
+  });
+})
 
 
 const passportMiddleware = () => passport.use(new GoogleStrategy({
@@ -10,8 +22,27 @@ const passportMiddleware = () => passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:8000/oauth2/redirect/google",
     scope: ['profile']
   },
-  function(accessToken, refreshToken, profile, cb) {
-    db.patron.findUnique({where: {google_Id: profile.id}})
+  function(accessToken, refreshToken, profile, done) {
+    db.patron.findUnique({where: {google_Id: profile.id}}).then((currentUser) => {
+      if (currentUser) {
+        done(null, currentUser);
+      }else {
+        db.patron.create({
+          data: {
+            google_Id: profile.id,
+            firstname: profile.name?.givenName || '',
+            lastname: profile.name?.familyName || '',
+            address: '',
+            contact: profile.name?.familyName || '',
+            email: profile.emails?.toString() || '',
+            password: '',
+            profile_img: profile.profileUrl,
+          }
+        }).then((newUser) => {
+          done(null, newUser)
+        })
+      }
+    })
   }
 ));
 

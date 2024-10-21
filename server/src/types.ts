@@ -6,6 +6,7 @@ export interface CreateError extends Error {
 }
 
 export interface UserData {
+  id?: string;
   Google_Id?: string; //unique
   firstname?: string;
   lastname?: string;

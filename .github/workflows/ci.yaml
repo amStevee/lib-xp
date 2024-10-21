@@ -12,6 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up environment variables
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "API_URL=${{ secrets.API_URL }}" >> .env
+
       # Set up Docker and bring up the services
       - name: Set up Docker
         env:

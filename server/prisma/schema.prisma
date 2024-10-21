@@ -24,6 +24,7 @@ model Librarian {
   id String @default(uuid()) @unique
   firstname String
   lastname String
+  displayname String
   email String @unique
   password String
   profile_img String
@@ -69,12 +70,13 @@ model Book {
 model Patron {
   id String @default(uuid()) @unique
   google_Id String? @unique
-  firstname String
-  lastname String
-  address String
-  contact String @unique
+  firstname String?
+  lastname String?
+  displayname String
+  address String?
+  contact String? @unique
   email String @unique
-  password String
+  password String?
   profile_img String
   borrowed_book String[] @unique
   created_at DateTime @default(now())

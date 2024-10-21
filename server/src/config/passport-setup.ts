@@ -23,6 +23,11 @@ const passportMiddleware = () => passport.use(new GoogleStrategy({
     scope: ['profile']
   },
   function(accessToken, refreshToken, profile, done) {
+    const email = (profile.emails && profile.emails.length > 0) ? profile?.emails[0]?.value : null;
+
+    if (!email) {
+      return done(new Error('No email found'), undefined);
+    }
     db.patron.findUnique({where: {google_Id: profile.id}}).then((currentUser) => {
       if (currentUser) {
         done(null, currentUser);
@@ -30,13 +35,9 @@ const passportMiddleware = () => passport.use(new GoogleStrategy({
         db.patron.create({
           data: {
             google_Id: profile.id,
-            firstname: profile.name?.givenName || '',
-            lastname: profile.name?.familyName || '',
-            address: '',
-            contact: profile.name?.familyName || '',
-            email: profile.emails?.toString() || '',
-            password: '',
+            email,
             profile_img: profile.profileUrl,
+            displayname: profile.displayName
           }
         }).then((newUser) => {
           done(null, newUser)

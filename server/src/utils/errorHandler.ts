@@ -19,7 +19,9 @@ export class CustomError extends Error {
 export const globalErrorHandler = async function (error:CreateError, req:Request, res:Response, next:NextFunction) {
     error.statusCode = error.statusCode || 500;
     error.status = error.statusCode >= 400 && error.statusCode < 500 ? 'fail' : 'error';
-    process.env.NODE_ENV == 'production'
+
+    
+    process.env.NODE_ENV === 'production'
     ? res.status(error.statusCode).json({msg: 'server error'}) 
     : res.status(error.statusCode).json({
         status: error.status,

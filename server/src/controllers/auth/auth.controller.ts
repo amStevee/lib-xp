@@ -3,6 +3,7 @@ import getUserData from '../../utils/getUserData';
 import jwt from 'jsonwebtoken';
 import { CustomError } from '../../utils/errorHandler';
 import passport from 'passport';
+import { FRONTEND_BASE_URL } from '../../config/constants';
 
 
 export async function signin(req:Request, res:Response, next:NextFunction) {
@@ -27,6 +28,6 @@ export async function signout(req:Request, res:Response, next:NextFunction) {
 export const signin_google = passport.authenticate('google');
 
 export const google_redirect = async function (req:Request, res:Response) {
-    // res.redirect('http://localhost:3000/');
+    // res.redirect(FRONTEND_BASE_URL);
     res.redirect('/');
 }

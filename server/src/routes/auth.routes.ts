@@ -1,7 +1,7 @@
 import express from 'express';
-import { google_redirect, signin, signin_google, signout } from '../../controllers/auth/auth.controller';
+import { google_redirect, signin, signin_google, signout } from '../controllers/auth/auth.controller';
 import passport from 'passport';
-import { verifyUser } from '../../middleware/verifyUser';
+import { verifyUser } from '../middleware/verifyUser';
 
 const router = express.Router();
 

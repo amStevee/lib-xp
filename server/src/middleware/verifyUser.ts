@@ -17,6 +17,6 @@ export function verifyUser(req:Request, res:Response, next:NextFunction) {
             next()
         }else {
             res.redirect(`${FRONTEND_BASE_URL}/signin`)
-            next(new CustomError('You need to be signed in first', 403));
+            next(new CustomError('Signin to access this service', 403));
         }
 }

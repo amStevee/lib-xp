@@ -4,7 +4,7 @@
   "description": "Backend server for LibXp a small library management system",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "db:console": "defang compose exec db psql -h localhost -U postgres -d lib-xp",
     "build": "rimraf ./dist && swc src --out-dir dist",
     "dev:start": "nodemon ./src/index.ts",

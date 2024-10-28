@@ -23,15 +23,16 @@ const passportMiddleware = () => passport.use(new GoogleStrategy({
     scope: ['profile']
   },
   function(accessToken, refreshToken, profile, done) {
-    const email = (profile.emails && profile.emails.length > 0) ? profile?.emails[0]?.value : null;
 
-    if (!email) {
-      return done(new Error('No email found'), undefined);
-    }
     db.patron.findUnique({where: {google_Id: profile.id}}).then((currentUser) => {
       if (currentUser) {
         done(null, currentUser);
       }else {
+        const email = (profile.emails && profile.emails.length > 0) ? profile?.emails[0]?.value : null;
+
+        if (!email) {
+          return done(new Error('No email found'), undefined);
+        }
         db.patron.create({
           data: {
             google_Id: profile.id,

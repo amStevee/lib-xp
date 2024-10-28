@@ -5,7 +5,7 @@ export interface CreateError extends Error {
     status: string
 }
 
-export interface UserData {
+export interface User {
   id?: string;
   Google_Id?: string; //unique
   firstname?: string;

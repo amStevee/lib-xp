@@ -2,7 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import db from "../config/db";
 import { CustomError } from "../utils/errorHandler";
 
+
 export default async function(req:Request, res:Response, next:NextFunction) {
+
     try {
         const user = await db.patron.findUnique({where: {id: ''}});
         if (!user) return next(new CustomError('user not found', 404))

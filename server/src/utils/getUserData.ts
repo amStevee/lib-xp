@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
-import { UserData } from '../types';
+import { User } from '../types';
 import { CustomError } from './errorHandler';
 import db from '../config/db';
 
 let failCount = 0;
 
-export default async function getUserData({email, password}:UserData) {
+export default async function getUserData({email, password}:User) {
     if(!email || !password) {
         return new CustomError('email and password needed', 400);
     }

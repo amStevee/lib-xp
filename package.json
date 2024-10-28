@@ -1,4 +1,7 @@
 {
+	"scripts": {
+		"start": ""
+	},
 	"devDependencies": {
 		"@types/express-session": "^1.18.0",
 		"@types/passport": "^1.0.16",

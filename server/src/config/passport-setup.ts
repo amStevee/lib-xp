@@ -2,10 +2,10 @@ import passport from 'passport';
 import {Strategy as GoogleStrategy} from 'passport-google-oauth20';
 import jwt from 'passport-jwt';
 import db from './db';
-import { UserData } from '../types';
+import { User } from '../types';
 
 passport.serializeUser((user,done) => {
-  done(null, (user as UserData).id)
+  done(null, (user as User).id)
 });
 
 passport.deserializeUser((id:string, done) => {
@@ -23,21 +23,18 @@ const passportMiddleware = () => passport.use(new GoogleStrategy({
     scope: ['profile']
   },
   function(accessToken, refreshToken, profile, done) {
-
+    
     db.patron.findUnique({where: {google_Id: profile.id}}).then((currentUser) => {
       if (currentUser) {
         done(null, currentUser);
       }else {
-        const email = (profile.emails && profile.emails.length > 0) ? profile?.emails[0]?.value : null;
+        const profile_photo = profile.photos ? profile.photos?.map(url => (url.value)) : 'null';
 
-        if (!email) {
-          return done(new Error('No email found'), undefined);
-        }
         db.patron.create({
           data: {
             google_Id: profile.id,
-            email,
-            profile_img: profile.profileUrl,
+            email: profile.id,
+            profile_img: profile_photo[0]!,
             displayname: profile.displayName
           }
         }).then((newUser) => {

@@ -77,8 +77,8 @@ model Patron {
   contact String? @unique
   email String @unique
   password String?
-  profile_img String
-  borrowed_book String[] @unique
+  profile_img String?
+  borrowed_books String[] @unique
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   book_likes Book_likes[]

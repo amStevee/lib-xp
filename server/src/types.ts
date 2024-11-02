@@ -7,14 +7,15 @@ export interface CreateError extends Error {
 
 export interface User {
   id?: string;
-  Google_Id?: string; //unique
+  google_Id?: string; //unique
   firstname?: string;
   lastname?: string;
+  displayname?: string;
   address?: string;
   contact?: string; //unique
   email: string; //unique
-  rank?: number;
-  password?: string
+  password?: string;
+  profile_img?: string;
 }
 
 export interface CustomRequest extends Request {

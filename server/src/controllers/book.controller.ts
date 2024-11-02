@@ -4,6 +4,7 @@ import { CustomError } from "../utils/errorHandler";
 
 export async function getAllBooks(req:Request, res:Response, next:NextFunction) {
     const {limit, page} = req.query;
+
     try {
         const queryLimit = Number(limit) || 10;
         const books = await db.book.findMany({skip: Number(page), take:queryLimit});

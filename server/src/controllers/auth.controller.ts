@@ -4,15 +4,56 @@ import jwt from 'jsonwebtoken';
 import { CustomError } from '../utils/errorHandler';
 import passport from 'passport';
 import { FRONTEND_BASE_URL } from '../config/constants';
+import bcrypt from 'bcrypt'
+import db from '../config/db';
+import { VerifyClientData } from '../utils/verifyClientData';
+
+export async function signup(req:Request, res:Response, next:NextFunction) {
+    const userData = VerifyClientData(req.body);
+    if (typeof userData === 'string') return next(new CustomError(userData, 400));
+
+    const user: Omit<typeof userData, 'id' | 'google_Id'> = userData;
+    // Verify user email before proceeding.
+    // 
+    // 
+    // 
+
+    // Hash password
+    if(!user.password) return next(new CustomError('password required', 403));
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(user.password, salt);
+
+    // Check if user alredy exist
+    const isUser = await db.patron.findUnique({where: {email: user.email}});
+    if (isUser) return next(new CustomError('user already exist', 403));
+    
+    const newUser = await db.patron.create({
+        data: {...user, password: hash}
+    });
+    const expTimeFrame = process.env.NODE_ENV === 'development' ? "60d" : "1h";
+    if (!process.env.JWT_SECRET) return next(new CustomError('secret_key needed', 400));
+    const token = jwt.sign(newUser, process.env.JWT_SECRET, {expiresIn: expTimeFrame});
+
+    
+    res.setHeader('Authorization', `Bearer ${token}`);
+    res.status(200).json({
+        msg: 'account created successfully', 
+        data: {...newUser, password:null}
+    });
+}
 
 
 export async function signin(req:Request, res:Response, next:NextFunction) {
+    const userData = VerifyClientData(req.body);
+    if (typeof userData === 'string') return next(new CustomError(userData, 400));
     const expTimeFrame = process.env.NODE_ENV === 'dev' ? "60d" : "1h";
 
     try {
-        const user = await getUserData(req.body);
+        const user = await getUserData(userData);
     
         if(user instanceof CustomError) return next(user);
+        
+        if (typeof user === 'string') return res.redirect(user);
     
         const token = jwt.sign(user, 'key', {expiresIn: expTimeFrame});
     

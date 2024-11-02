@@ -70,11 +70,10 @@ model Book {
 model Patron {
   id String @default(uuid()) @unique
   google_Id String? @unique
-  firstname String?
-  lastname String?
-  displayname String
+  firstname String
+  lastname String
+  displayname String? @unique
   address String?
-  contact String? @unique
   email String @unique
   password String?
   profile_img String?

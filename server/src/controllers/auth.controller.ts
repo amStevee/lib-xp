@@ -3,62 +3,77 @@ import getUserData from '../utils/getUserData';
 import jwt from 'jsonwebtoken';
 import { CustomError } from '../utils/errorHandler';
 import passport from 'passport';
-import { FRONTEND_BASE_URL } from '../config/constants';
-import bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt';
 import db from '../config/db';
-import { VerifyClientData } from '../utils/verifyClientData';
+import { crossCheckClientData } from '../utils/verifyClientData';
 
 export async function signup(req:Request, res:Response, next:NextFunction) {
-    const userData = VerifyClientData(req.body);
-    if (typeof userData === 'string') return next(new CustomError(userData, 400));
+    const requiredFilds = {
+        firstname: 'firstname',
+        lastname: 'lastname',
+        displayname: 'displayname',
+        address: 'address',
+        email: 'email',
+        password: 'password'
+    }
+    const userData = crossCheckClientData(req.body, requiredFilds);
+    if (userData instanceof CustomError) return next(userData);
 
     const user: Omit<typeof userData, 'id' | 'google_Id'> = userData;
-    // Verify user email before proceeding.
-    // 
-    // 
-    // 
+    try {
+        // Verify user email before proceeding.
+        // 
+        // 
+        // //
 
-    // Hash password
-    if(!user.password) return next(new CustomError('password required', 403));
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(user.password, salt);
-
-    // Check if user alredy exist
-    const isUser = await db.patron.findUnique({where: {email: user.email}});
-    if (isUser) return next(new CustomError('user already exist', 403));
+        // Hash password
+        if(!user.password) return next(new CustomError('password required', 403));
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(user.password, salt);
+        
     
-    const newUser = await db.patron.create({
-        data: {...user, password: hash}
-    });
-    const expTimeFrame = process.env.NODE_ENV === 'development' ? "60d" : "1h";
-    if (!process.env.JWT_SECRET) return next(new CustomError('secret_key needed', 400));
-    const token = jwt.sign(newUser, process.env.JWT_SECRET, {expiresIn: expTimeFrame});
-
+        // Check if user alredy exist
+        const isUser = await db.patron.findUnique({where: {email: user.email}});
+        if (isUser) return next(new CustomError('user already exist', 403));
+        
+        // Remove profile_img from this later
+        const newUser = await db.patron.create({
+            data: { firstname: user.firstname, lastname: user.lastname, displayname: user.displayname, email: user.email, address: user.address, profile_img: user.profile_img, password: hash}
+        });
     
-    res.setHeader('Authorization', `Bearer ${token}`);
-    res.status(200).json({
-        msg: 'account created successfully', 
-        data: {...newUser, password:null}
-    });
+        const expTimeFrame = process.env.NODE_ENV === 'development' ? "60d" : "1h";
+        if (!process.env.JWT_SECRET) return next(new CustomError('secret_key needed', 400));
+        const token = jwt.sign(newUser, process.env.JWT_SECRET, {expiresIn: expTimeFrame});
+    
+        res.setHeader('Authorization', `Bearer ${token}`);
+        res.status(200).json({
+            msg: 'account created successfully', 
+            data: {...newUser, password:null}
+        });
+    } catch (error:any) {
+        if (process.env.NODE_ENV === 'production' && error.message.includes('Invalid `db.patron.create()`')) {
+            return next(new CustomError('faild to create account please try again', 500));
+        }
+        next(new CustomError(error.message, 500));
+    }
 }
 
 
 export async function signin(req:Request, res:Response, next:NextFunction) {
-    const userData = VerifyClientData(req.body);
-    if (typeof userData === 'string') return next(new CustomError(userData, 400));
-    const expTimeFrame = process.env.NODE_ENV === 'dev' ? "60d" : "1h";
-
+    const userData = crossCheckClientData(req.body, {email: 'email', password: 'password'});
+    if (userData instanceof CustomError) return next(userData);
+ 
     try {
         const user = await getUserData(userData);
-    
+        
         if(user instanceof CustomError) return next(user);
         
-        if (typeof user === 'string') return res.redirect(user);
-    
-        const token = jwt.sign(user, 'key', {expiresIn: expTimeFrame});
+        const expTimeFrame = process.env.NODE_ENV === 'dev' ? "60d" : "1h";
+        if (!process.env.JWT_SECRET) return next(new CustomError('secret_key needed', 400));
+        const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: expTimeFrame});
     
         const data = {id:user.id, email:user.email, firstname:user.firstname, lastname:user.lastname, profile_img: user.profile_img};
-    
+        
         res.setHeader("Authorization", `Bearer ${token}`);
         res.status(200).json({msg: 'Signed in', data: {...data}});
     } catch (error:any) {

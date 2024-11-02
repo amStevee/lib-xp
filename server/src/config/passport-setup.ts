@@ -35,13 +35,15 @@ const passportMiddleware = () => {
       if (currentUser) {
         done(null, currentUser);
       }else {
-        const profile_photo = profile.photos ? profile.photos?.map(url => (url.value)) : 'null';
 
+        const email = profile._json.email ? profile._json.email : 'google'
         db.patron.create({
           data: {
             google_Id: profile.id,
-            email: profile.id,
-            profile_img: profile_photo[0]!,
+            email,
+            firstname: profile._json.given_name,
+            lastname: profile._json.family_name,
+            profile_img: profile._json.picture || '',
             displayname: profile.displayName
           }
         }).then((newUser) => {

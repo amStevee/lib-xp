@@ -1,6 +1,7 @@
-test('Request to get all books is functional', async function () {
+test('Get all books route', async function () {
+    const url = process.env.API_URL || 'http://localhost:8000'
     try {
-        const data = await fetch('http://localhost:8000/books');
+        const data = await fetch(`${url}/books`);
         expect(data).toEqual({
             "msg": "success",
             "data": []

@@ -1,9 +1,7 @@
 import passport from 'passport';
 import {Strategy as GoogleStrategy} from 'passport-google-oauth20';
-import jwt from 'passport-jwt';
 import db from './db';
 import { User } from '../types';
-import { CustomError } from '../utils/errorHandler';
 
 
 
@@ -36,11 +34,10 @@ const passportMiddleware = () => {
         done(null, currentUser);
       }else {
 
-        const email = profile._json.email ? profile._json.email : 'google'
         db.patron.create({
           data: {
             google_Id: profile.id,
-            email,
+            email: profile._json.email || 'googole',
             firstname: profile._json.given_name,
             lastname: profile._json.family_name,
             profile_img: profile._json.picture || '',

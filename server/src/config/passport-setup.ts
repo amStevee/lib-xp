@@ -24,7 +24,7 @@ const passportMiddleware = () => {
   return passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:8000/oauth2/redirect/google",
+    callbackURL: `${process.env.API_URL}/oauth2/redirect/google`,
     scope: ['profile']
   },
   function(accessToken, refreshToken, profile, done) {
@@ -34,15 +34,22 @@ const passportMiddleware = () => {
         done(null, currentUser);
       }else {
 
-        db.patron.create({
-          data: {
-            google_Id: profile.id,
-            email: profile._json.email || 'googole',
-            firstname: profile._json.given_name,
-            lastname: profile._json.family_name,
-            profile_img: profile._json.picture || '',
-            displayname: profile.displayName
-          }
+        console.log( profile._json.email, profile.emails)
+        if (!profile.name) {
+          throw new Error('name is undefined in patron relation')
+        }
+          
+          db.patron.create({
+            data: {
+              google_Id: profile.id,
+              email: profile._json.email || profile.id,
+              firstname: profile._json.family_name || profile.name.familyName,
+              lastname: profile._json.given_name || profile.name.givenName,
+              profile_img: profile._json.picture || '',
+              displayname: profile.displayName,
+              borrowed_books: []
+            }
+
         }).then((newUser) => {
           done(null, newUser)
         })

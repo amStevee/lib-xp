@@ -13,7 +13,7 @@ export async function getAllusers(req:Request, res:Response, next:NextFunction) 
 
 export async function deleteAllUsers(req:Request, res:Response, next:NextFunction) {
     try {
-        const data = await db.patron.deleteMany({where: {lastname: 'Anongo'}});
+        const data = await db.patron.deleteMany();
         res.status(200).json({msg: 'success', data})
     } catch (error: any) {
         next(new CustomError(error.message, 500));

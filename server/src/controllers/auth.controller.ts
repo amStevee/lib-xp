@@ -36,14 +36,16 @@ export async function signup(req:Request, res:Response, next:NextFunction) {
         const isUser = await db.patron.findUnique({where: {email: user.email}});
         if (isUser) return next(new CustomError('user already exist', 403));
         
-        // Remove profile_img from this later
         const newUser = await db.patron.create({
-            data: { firstname: user.firstname, lastname: user.lastname, displayname: user.displayname, email: user.email, address: user.address, profile_img: user.profile_img, password: hash}
+            data: { firstname: user.firstname, lastname: user.lastname, displayname: user.displayname, email: user.email, password: hash}
         });
     
         const expTimeFrame = process.env.NODE_ENV === 'development' ? "60d" : "1h";
         if (!process.env.JWT_SECRET) return next(new CustomError('secret_key needed', 400));
         const token = jwt.sign(newUser, process.env.JWT_SECRET, {expiresIn: expTimeFrame});
+
+        // REMOVE 
+        console.log(token)
     
         res.setHeader('Authorization', `Bearer ${token}`);
         res.status(200).json({
@@ -82,9 +84,12 @@ export async function signin(req:Request, res:Response, next:NextFunction) {
 }
 
 export async function signout(req:Request, res:Response, next:NextFunction) {
-    // hanndle with passport
-    // req.logOut()
-    res.send('You reached the signout route')
+    req.logout((err) => {
+        if (err) {
+          return res.status(500).send('Failed to log out');
+        }
+        res.redirect('/'); 
+      });
 }
 export const signin_google = passport.authenticate('google');
 

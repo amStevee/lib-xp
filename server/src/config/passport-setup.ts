@@ -1,7 +1,7 @@
 import passport from 'passport';
 import {Strategy as GoogleStrategy} from 'passport-google-oauth20';
 import db from './db';
-import { User } from '../types';
+import { User } from '../entities/User';
 
 
 

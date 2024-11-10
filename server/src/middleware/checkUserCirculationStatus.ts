@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import db from "../config/db";
 import { CustomError } from "../utils/errorHandler";
-import { User } from "../types";
+import { User } from "../entities/User";
 
 
 export default async function(req:Request, res:Response, next:NextFunction) {

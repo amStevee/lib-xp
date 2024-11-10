@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
-import { User } from '../types';
 import { CustomError } from './errorHandler';
 import db from '../config/db';
+import { User } from '../entities/User';
 
 let failCount = 0;
 

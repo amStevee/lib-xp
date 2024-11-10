@@ -6,6 +6,8 @@ import passport from 'passport';
 import * as bcrypt from 'bcrypt';
 import db from '../config/db';
 import { crossCheckClientData } from '../utils/verifyClientData';
+import { User } from '../entities/User';
+
 
 export async function signup(req:Request, res:Response, next:NextFunction) {
     const requiredFilds = {
@@ -62,7 +64,7 @@ export async function signup(req:Request, res:Response, next:NextFunction) {
 
 
 export async function signin(req:Request, res:Response, next:NextFunction) {
-    const userData = crossCheckClientData(req.body, {email: 'email', password: 'password'});
+    const userData = crossCheckClientData<User>(req.body, {email: 'email', password: 'password'});
     if (userData instanceof CustomError) return next(userData);
  
     try {

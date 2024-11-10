@@ -56,8 +56,8 @@ model Book {
   editor String?
   edition String?
   series String?
-  Web_address String?
-  entered_at DateTime
+  web_address String?
+  entered_at DateTime @default(now())
   book_likes Book_likes[]
   book_consulted Book_consulted[]
   circulation Circulation[]

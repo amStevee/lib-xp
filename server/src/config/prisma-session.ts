@@ -1,7 +1,7 @@
 import expressSession from 'express-session';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 
-import db from './db';
+import db from './prismaClient';
 import dotenv from 'dotenv';
 dotenv.config()
 

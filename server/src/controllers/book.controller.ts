@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import db from "../config/db";
+import db from "../config/prismaClient";
 import { CustomError } from "../utils/errorHandler";
 import { crossCheckClientData } from "../utils/verifyClientData";
 import { Book } from "../entities/Book";

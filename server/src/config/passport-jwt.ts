@@ -1,6 +1,6 @@
 import passport from 'passport';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
-import db from './db';
+import db from './prismaClient';
 
 // JWT strategy options
 const jwtOptions = {

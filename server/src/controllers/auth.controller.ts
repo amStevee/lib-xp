@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { CustomError } from '../utils/errorHandler';
 import passport from 'passport';
 import * as bcrypt from 'bcrypt';
-import db from '../config/db';
+import db from '../config/prismaClient';
 import { crossCheckClientData } from '../utils/verifyClientData';
 import { User } from '../entities/User';
 

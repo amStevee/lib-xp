@@ -8,7 +8,8 @@ import { globalErrorHandler, routeNotFound } from './utils/errorHandler';
 // Import routes
 import authRoute from './routes/auth.routes';
 import bookRoute from './routes/book.routes';
-import usersRoute from './routes/users.routes'; // FOR DEVELOPMENT WOULD REMOVE LATER
+import usersRoute from './routes/users.routes';
+import circulationRoute from './routes/circulation.routes';
 import passportMiddleware from './config/passport-setup';
 import passport from 'passport';
 
@@ -37,7 +38,8 @@ app.get('/', (req, res) => {
 })
 app.use('/oauth2', authRoute);
 app.use('/books', bookRoute);
-app.use('/users', usersRoute); // FOR DEVELOPMENT WOULD REMOVE LATER
+app.use('/users', usersRoute);
+app.use('/circulation-status', circulationRoute);
 
 // Error handling
 app.all('*', routeNotFound);

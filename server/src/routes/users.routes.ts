@@ -1,12 +1,14 @@
 import {Router} from 'express';
-import { deleteUser, getAllusers, getuser } from '../controllers/users.controller';
-import { verifyUser } from '../middleware/verifyUser';
 
+import { verifyUser } from '../middleware/verifyUser';
+import { UserController } from '../controllers/users.controller';
+
+const userController = new UserController()
 const router = Router();
 
-router.route('/').get(getAllusers);
-router.route('/user').get(verifyUser, getuser);
-router.route('/').delete(verifyUser, deleteUser);
+router.route('/').get(userController.getAllusers);
+router.route('/user').get(verifyUser, userController.getuser);
+router.route('/').delete(verifyUser, userController.deleteUser);
 
 export default router;
 

@@ -1,14 +1,15 @@
 import express from 'express';
-import { google_redirect, signin, signin_google, signout, signup } from '../controllers/auth.controller';
 import passport from 'passport';
+import { AuthController } from '../controllers/auth.controller';
 
+const authController = new AuthController();
 const router = express.Router();
 
-router.route('/signup').post(signup);
-router.route('/signin').post(signin);
-router.route('/google').get(signin_google);
-router.route('/redirect/google').get(passport.authenticate('google'), google_redirect);
-router.route('/signout').get(signout);
+router.route('/signup').post(authController.signup);
+router.route('/signin').post(authController.signin);
+router.route('/google').get(authController.signin_google);
+router.route('/redirect/google').get(passport.authenticate('google'), authController.google_redirect);
+router.route('/signout').get(authController.signout);
 
 
 

@@ -4,19 +4,16 @@ import { CustomError } from "../utils/errorHandler";
 import { crossCheckClientData } from "../utils/verifyClientData";
 import { Book } from "../entities/Book";
 import { User } from "../entities/User";
+import { BookService } from "../services/book.service";
 
-
+const bookService = new BookService();
 
 export async function addNewBook(req:Request, res:Response, next:NextFunction) {
     const qdata = crossCheckClientData<Book>(req.body);
 
     if (qdata instanceof CustomError) return next(qdata);
 
-    const isBook = await db.book.findMany({where: {material_number: qdata.material_number}});
-
-    if (isBook.length) return next(new CustomError(`Book already exit ${isBook}`, 400))
-
-    const newBook = await db.book.create({data: {...qdata}});
+    const newBook = await bookService.create(qdata);
 
     res.status(200).json({...newBook});
 
@@ -26,8 +23,7 @@ export async function getAllBooks(req:Request, res:Response, next:NextFunction) 
     const {limit, page} = req.query;
 
     try {
-        const queryLimit = Number(limit) || 10;
-        const books = await db.book.findMany({ take:queryLimit});
+        const books = await bookService.findAll(Number(limit), Number(page))
         //  include: {book_likes: {where: {book_id: id}}}
 
         res.json({msg: 'success', data: [...books]})

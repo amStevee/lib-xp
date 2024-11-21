@@ -1,15 +1,17 @@
 import express from 'express';
-import { addNewBook, deleteBook, getAllBooks, getBook, likeBook } from '../controllers/book.controller';
+
 import checkoutStatus from '../middleware/checkUserCirculationStatus'
 import { verifyUser } from '../middleware/verifyUser';
+import { BookController } from '../controllers/book.controller';
 
+const bookContorller = new BookController()
 const router = express.Router();
 
 // Get all books from db
-router.route('/').get(getAllBooks);
-router.route('/book').post(verifyUser,  addNewBook);
-router.route('/book/:id').get(verifyUser, getBook).delete(verifyUser, deleteBook);
-router.route('/like/book/:id').get(verifyUser, likeBook);
+router.route('/').get(bookContorller.getAllBooks);
+router.route('/book').post(verifyUser,  bookContorller.addNewBook);
+router.route('/book/:id').get(verifyUser, bookContorller.getBook).delete(verifyUser, bookContorller.deleteBook);
+router.route('/like/book/:book_id').get(verifyUser, bookContorller.toggleBookLike);
 
 
 

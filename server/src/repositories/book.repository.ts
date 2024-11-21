@@ -16,4 +16,34 @@ export class BookRepository {
     
         return db.book.findMany({ take:limit || 10, skip: page});
     }
+
+    async findUnique(id:string | null, title:string | null, author:string | null) {
+        let book;
+        if (title) {
+            book = db.book.findMany({where: {title: {contains: title}}, include: {book_likes: true}});
+        } else if (author) {
+            book =  db.book.findMany({where: {author: {contains: author}}, include: {book_likes: true}});
+        }else {
+            if (!id) throw new CustomError('book id not found', 404);
+            book = db.book.findUnique({where: {id: id}, include: {book_likes: true}});     
+        }
+        return book;
+    }
+
+    async toggleBookLike(book_id:string, patron_id:string) {
+        const isBookLiked = await db.book_likes.findMany({where: {book_id: book_id}});
+        if (isBookLiked.length) {
+            return db.book_likes.delete({where: {patron_id}});
+        }else {
+            return db.book_likes.create({data: {
+                book_id: book_id,
+                patron_id
+            }})
+        }
+        
+    }
+
+    async delete(id:string) {
+        return db.book.delete({where: {id: String(id)}});
+    }
 }

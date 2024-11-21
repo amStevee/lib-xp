@@ -41,11 +41,12 @@ export class UserRepository {
     }
 
     async findOne(id:string) {
+        // **make the book_consulted and book_likes optional by getting the data from the request ?query**
         return db.patron.findUnique({
             where: {id}, 
             include: {
-                book_consulted: {where: {patron_id: id}}, 
-                book_likes: {where: {patron_id: id}}
+                book_consulted: true, 
+                book_likes: true
             }
         })
     }

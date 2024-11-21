@@ -23,8 +23,7 @@ export async function getAllBooks(req:Request, res:Response, next:NextFunction) 
     const {limit, page} = req.query;
 
     try {
-        const books = await bookService.findAll(Number(limit), Number(page))
-        //  include: {book_likes: {where: {book_id: id}}}
+        const books = await bookService.findAll(Number(limit), Number(page));
 
         res.json({msg: 'success', data: [...books]})
     } catch (error:any) {

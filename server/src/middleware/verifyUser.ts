@@ -14,10 +14,11 @@ export function verifyUser(req:Request, res:Response, next:NextFunction) {
           }
           req.user = user;
           next();
-        });}else if(req.user) {
+        });
+    }else if(req.user) {
             next()
-        }else {
+    }else {
             res.redirect(`${FRONTEND_BASE_URL}/signin`)
-            next(new CustomError('Signin to access this service', 403));
+            // next(new CustomError('Signin to access this service', 403));
         }
 }

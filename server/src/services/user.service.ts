@@ -1,12 +1,11 @@
 import { CreateUserDto } from "../dtos/createUserDto";
 import { User } from "../entities/User";
 import { UserRepository } from "../repositories/user.repository";
-import { CreateUserUseCase } from "../use-cases/createUser.use-case";
 
 const userRepository = new UserRepository();
 
 
-export class UserService implements CreateUserUseCase {
+export class UserService {
     async create(createUserDto:CreateUserDto):Promise<User> {
         const {firstname, lastname, displayname, address, email, password} = createUserDto
         const user = await userRepository.create(firstname, lastname, displayname, address, email, password);
@@ -15,7 +14,7 @@ export class UserService implements CreateUserUseCase {
     }
 
     async findAll():Promise<User[]> {
-        const users = userRepository.findAll();
+        const users = await userRepository.findAll();
         return users
     }
 
@@ -25,6 +24,6 @@ export class UserService implements CreateUserUseCase {
     }
 
     async delete(id:string) {
-        return userRepository.delete(id);
+        return await userRepository.delete(id);
     }
 }

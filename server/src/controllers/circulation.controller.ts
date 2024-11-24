@@ -1,16 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../utils/errorHandler";
-import db from "../config/prismaClient";
+import { CriculationService } from "../services/circulation.service";
+
+
+const criculationService = new CriculationService();
 
 export async function getPendingCheckin(req:Request, res:Response, next:NextFunction) {
-    // refactor this code
     try {
-        const circulationData = await db.circulation.findMany();
-        const pendingCheckout = circulationData.map(async(crc) => {
-            await db.patron.findMany({where: {
-                id: {equals: crc.patron_id}
-            }})
-        })
+        const pendingCheckout = await criculationService.findPendingCheckout();
         res.status(200).json({msg: 'success', data: pendingCheckout})
     } catch (error:any) {
         next(new CustomError(error.message, 500))

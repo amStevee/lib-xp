@@ -4,7 +4,7 @@ import { verifyUser } from "../middleware/verifyUser";
 
 const router = Router();
 
-router.route('/').get(verifyUser, getPendingCheckin);
+router.route('/').get(getPendingCheckin); // verifyUser, 
 router.route('/due-date').get(verifyUser, notifyDueDate);
 
 export default router;

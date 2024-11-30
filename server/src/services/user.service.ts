@@ -1,19 +1,19 @@
 import { CreateUserDto } from "../dtos/createUserDto";
-import { User } from "../entities/User";
 import { UserRepository } from "../repositories/user.repository";
+import { Patron } from "@prisma/client";
 
 const userRepository = new UserRepository();
 
 
 export class UserService {
-    async create(createUserDto:CreateUserDto):Promise<User> {
+    async create(createUserDto:CreateUserDto):Promise<Patron> {
         const {firstname, lastname, displayname, address, email, password} = createUserDto
         const user = await userRepository.create(firstname, lastname, displayname, address, email, password);
 
         return user
     }
 
-    async findAll():Promise<User[]> {
+    async findAll():Promise<Patron[]> {
         const users = await userRepository.findAll();
         return users
     }

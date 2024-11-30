@@ -22,5 +22,5 @@ export function crossCheckClientData<T extends {}>(reqBody:T, required = {}) {
     if (emptyFildArray.length) return new CustomError(`must provied ${emptyFildArray.toString()}`, 400);
 
 
-    return {...reqBody};
+    return {...reqBody} as Required<T>;
 }

@@ -37,3 +37,16 @@ export interface UserRepositoryInt {
     
     delete(id:string): Promise<Patron>;
 }
+
+// export interface User {
+//     id?: string;
+//     google_Id?: string; //unique
+//     firstname?: string;
+//     lastname?: string;
+//     displayname?: string;
+//     address?: string;
+//     contact?: string; //unique
+//     email: string; //unique
+//     password?: string;
+//     profile_img?: string;
+//   }

@@ -4,7 +4,7 @@ export class User {
       public google_Id?: string | null,
       public firstname?: string,
       public lastname?: string,
-      public displayname?: string | null,
+      public displayname?: string,
       public address?: string | null,
       public contact?: string,
       public email?: string,

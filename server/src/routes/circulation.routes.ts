@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { getPendingCheckin, notifyDueDate } from "../controllers/circulation.controller";
+import { checkin, getPendingCheckin, notifyDueDate } from "../controllers/circulation.controller";
 import { verifyUser } from "../middleware/verifyUser";
 
 const router = Router();
 
-router.route('/').get(verifyUser, getPendingCheckin);
-router.route('/due-date').get(verifyUser, notifyDueDate);
+router.route('/').get(getPendingCheckin);
+router.route('/due-date').get(notifyDueDate);
+router.route('/checkin').post(checkin);
 
 export default router;

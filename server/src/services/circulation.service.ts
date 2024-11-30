@@ -7,4 +7,13 @@ export class CriculationService {
         const circulationData = await criculationRepository.findPendingCheckout();
         return circulationData;
     }
+
+    async findCloseDueDate() {
+        const result = await criculationRepository.findCloseDueDate();
+        return result;
+    }
+
+    async checkin(book_id:string, patron_id:string, date_due:Date) {
+        return await criculationRepository.checkin(book_id, patron_id, date_due);
+    }
 }

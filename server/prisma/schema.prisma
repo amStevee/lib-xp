@@ -37,7 +37,7 @@ model Librarian {
 
   @@map("librarian")
 }
-
+// default available to true
 model Book {
   id String @default(uuid()) @unique
   title String

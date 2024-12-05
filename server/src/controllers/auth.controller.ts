@@ -7,6 +7,7 @@ import { crossCheckClientData } from '../utils/verifyClientData';
 import { User } from '../entities/User';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../interfaces/user';
+import { ReplacerFunc } from '../utils/replacerFun';
 
 
 const userServices = new UserService();
@@ -45,11 +46,13 @@ export class AuthController {
     
            // REMOVE 
            console.log(token)
+
+           const createdUser = ReplacerFunc({...newUser});
        
            res.setHeader('Authorization', `Bearer ${token}`);
            res.status(201).json({
                msg: 'account created successfully', 
-               data: {...newUser, password:null}
+               data: createdUser
            });
        } catch (error:any) {
            if (process.env.NODE_ENV === 'production' && error.message.includes('Invalid `db.patron.create()`')) {

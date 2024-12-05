@@ -1,6 +1,6 @@
 'use client'
 import axios from '@/lib/axios_config';
-import {Box, Button, FormControl, FormHelperText, Input, InputLabel, Typography} from '@mui/material'
+import {Button, FormControl, FormHelperText, Input, InputLabel} from '@mui/material'
 import {ChangeEvent, useRef, useState } from "react";
 
 interface FormSate {
@@ -20,8 +20,8 @@ export default function Home() {
     console.log(formState)
     try {
       await axios.post('/oauth2/signin', JSON.stringify(formState))
-    } catch (error) {
-      
+    } catch (error:unknown) {
+      throw new Error(`${(error as Error).message}`);
     }
   }
 

@@ -1,10 +1,5 @@
 import { Request } from "express";
 
-export interface CreateError extends Error {
-    statusCode:number,
-    status: string
-}
-
 export interface CustomRequest extends Request {
   user: Record<string, any>
 }

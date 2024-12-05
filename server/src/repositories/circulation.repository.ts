@@ -1,3 +1,4 @@
+import { FieldRef } from "@prisma/client/runtime/library";
 import db from "../config/prismaClient";
 import { CustomError } from "../utils/errorHandler";
 
@@ -13,6 +14,17 @@ export class CriculationRepository {
     }
     async findCloseDueDate() {
         return db.circulation.findMany();
+    }
+
+    async findAllBorrowedBooks() {
+        let booksArr: string[] | FieldRef<"Book", "String[]"> | undefined = [];
+        (await db.circulation.findMany()).map(bkd => {
+            booksArr.push(bkd.book_id)
+        });
+
+        return db.book.findMany({where: {id: {in: booksArr}}});
+        
+
     }
 
     async checkin(book_id:string, patron_id:string, date_due:Date) {
@@ -35,8 +47,8 @@ export class CriculationRepository {
             throw new CustomError('Unauthorize', 403);
         
         return db.$transaction([
-            db.circulation.delete({where: {book_id}}),
             db.book.update({where: {id: book_id}, data: {availability: true}}),
+            db.circulation.delete({where: {book_id}}),
         ])
     }
 }

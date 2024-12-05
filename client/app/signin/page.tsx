@@ -28,7 +28,7 @@ export default function Home() {
         <FormControl required>
             <InputLabel htmlFor="email">Email address</InputLabel>
             <Input id="email" name='email' aria-describedby="my-helper-text" onChange={e => changeFormState(e)} />
-            <FormHelperText id="my-helper-text">We'll never share your email.</FormHelperText>
+            <FormHelperText id="my-helper-text">We&aps;ll never share your email.</FormHelperText>
         </FormControl>
         <FormControl required>
             <InputLabel htmlFor="password">Password</InputLabel>

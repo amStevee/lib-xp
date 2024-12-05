@@ -2,7 +2,7 @@ import db from "../config/prismaClient";
 import * as bcrypt from 'bcrypt';
 import { CustomError } from "../utils/errorHandler";
 import { Patron } from "@prisma/client";
-import { UserRepositoryInt } from "../interfaces/User.interface";
+import { UserRepositoryInt } from "../interfaces/user";
 
 export class UserRepository implements UserRepositoryInt {
     async create(

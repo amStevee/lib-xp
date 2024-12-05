@@ -6,7 +6,8 @@ import passport from 'passport';
 import { crossCheckClientData } from '../utils/verifyClientData';
 import { User } from '../entities/User';
 import { UserService } from '../services/user.service';
-import { CreateUserDto } from '../dtos/createUserDto';
+import { CreateUserDto } from '../interfaces/user';
+
 
 const userServices = new UserService();
 

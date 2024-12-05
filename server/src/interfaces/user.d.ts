@@ -38,6 +38,15 @@ export interface UserRepositoryInt {
     delete(id:string): Promise<Patron>;
 }
 
+export interface CreateUserDto {
+    firstname: string,
+    lastname: string,
+    displayname: string,
+    address: string,
+    email: string,
+    password: string
+}
+
 // export interface User {
 //     id?: string;
 //     google_Id?: string; //unique

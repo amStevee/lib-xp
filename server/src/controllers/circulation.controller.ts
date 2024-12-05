@@ -14,6 +14,16 @@ export class CirculationController {
             next(new CustomError(error.message, 500));
         }
     }
+
+    async borrowedBooks(req:Request, res:Response, next:NextFunction) {
+        try {
+            const borrowedBooksArr = await criculationService.findAllBorrowedBooks();
+            res.status(200).json({mag: 'success', data: borrowedBooksArr});
+        } catch (error:any) {
+            next(new CustomError(error.message, 500));
+        }
+    }
+
     async checkout(req:Request, res:Response, next:NextFunction) {
         const {book_id, patron_id} = req.params;
         if (!book_id || !patron_id) return next(new CustomError('book_id not found', 404));

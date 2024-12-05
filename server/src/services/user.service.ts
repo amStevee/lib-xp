@@ -1,4 +1,4 @@
-import { CreateUserDto } from "../dtos/createUserDto";
+import { CreateUserDto } from "../interfaces/user";
 import { UserRepository } from "../repositories/user.repository";
 import { Patron } from "@prisma/client";
 

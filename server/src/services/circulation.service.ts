@@ -4,13 +4,15 @@ const criculationRepository = new CriculationRepository()
 
 export class CriculationService {
     async findPendingCheckout() {
-        const circulationData = await criculationRepository.findPendingCheckout();
-        return circulationData;
+        return await criculationRepository.findPendingCheckout();    
     }
 
     async findCloseDueDate() {
-        const result = await criculationRepository.findCloseDueDate();
-        return result;
+        return await criculationRepository.findCloseDueDate();   
+    }
+
+    async findAllBorrowedBooks() {
+        return await criculationRepository.findAllBorrowedBooks();
     }
 
     async checkin(book_id:string, patron_id:string, date_due:Date) {

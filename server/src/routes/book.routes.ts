@@ -1,6 +1,5 @@
 import express from 'express';
 
-import checkoutStatus from '../middleware/checkUserCirculationStatus'
 import { verifyUser } from '../middleware/verifyUser';
 import { BookController } from '../controllers/book.controller';
 
@@ -11,7 +10,7 @@ const router = express.Router();
 router.route('/').get(bookContorller.getAllBooks);
 router.route('/book').post(verifyUser,  bookContorller.addNewBook);
 router.route('/book/:id').get(verifyUser, bookContorller.getBook).delete(verifyUser, bookContorller.deleteBook);
-router.route('/like/book/:book_id').get(verifyUser, bookContorller.toggleBookLike);
+router.route('/like/book/:book_id').put(verifyUser, bookContorller.toggleBookLike);
 
 
 

@@ -3,12 +3,12 @@ import axios from '@/lib/axios_config';
 import {Button, FormControl, FormHelperText, Input, InputLabel} from '@mui/material'
 import {ChangeEvent, useRef, useState } from "react";
 
-interface FormSate {
+interface FormState {
   email: string | null; password:string | null;
 }
 
 export default function Home() {
-  const [formState, setFormState] = useState<FormSate>({email: null, password:null})
+  const [formState, setFormState] = useState<FormState>({email: null, password:null})
   const formRef = useRef<HTMLFormElement | null>(null);
 
   function changeFormState(e:ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
@@ -16,7 +16,7 @@ export default function Home() {
     setFormState(prev => ({...prev, [name]: value}));
   }
 
-  async function handleSignin(formState:FormSate) {
+  async function handleSignin(formState:FormState) {
     console.log(formState)
     try {
       await axios.post('/oauth2/signin', JSON.stringify(formState))

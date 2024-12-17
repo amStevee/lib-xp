@@ -3,9 +3,10 @@ import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 
 import db from './prismaClient';
 import dotenv from 'dotenv';
+import { CustomError } from '../utils/errorHandler';
 dotenv.config()
 
-if (!process.env.SESSION_SECRET)  throw new Error('Session secret required');
+if (!process.env.SESSION_SECRET)  throw new CustomError('session secret not provided', 403);
 
 const Session = expressSession({
     cookie: {

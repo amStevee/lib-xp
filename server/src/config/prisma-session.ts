@@ -2,11 +2,8 @@ import expressSession from 'express-session';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 
 import db from './prismaClient';
-import { CustomError } from '../utils/errorHandler';
 import dotenv from 'dotenv';
 dotenv.config()
-
-
 
 
 const Session = expressSession({

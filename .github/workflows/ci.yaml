@@ -40,6 +40,14 @@ jobs:
 
       # Run tests in the server
       - name: Run server tests
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+          API_URL: ${{ secrets.API_URL }}
         id: server-tests
         run: |
           if ! docker compose -f compose.dev.yaml exec server pnpm test; then

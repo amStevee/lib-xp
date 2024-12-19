@@ -19,7 +19,7 @@ passport.deserializeUser((id:string, done) => {
 
 const passportMiddleware = () => {
   if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
-    throw new Error('passport client_id and secret required');
+    return
   }
   return passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,

@@ -5,6 +5,7 @@ import db from './prismaClient';
 import dotenv from 'dotenv';
 dotenv.config()
 
+// if (!process.env.SESSION_SECRET)  throw new CustomError('session secret not provided', 403);
 
 const Session = expressSession({
     cookie: {

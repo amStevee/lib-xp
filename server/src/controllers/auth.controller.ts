@@ -17,7 +17,8 @@ export class AuthController {
 
     public google_redirect = async function (req:Request, res:Response) {
             // res.redirect(FRONTEND_BASE_URL);
-            res.redirect('/');
+            const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL || 'http://localhost:3000';
+            res.redirect(FRONTEND_BASE_URL);
           }
 
     async signup(req:Request, res:Response, next:NextFunction) {

@@ -14,13 +14,13 @@ jobs:
       # Set up environment variables
       - name: Set up environment variables
         run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
-          echo "SESSION_SECRET=${{ secrets.SESSION_SECRET }}" >> .env
-          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
-          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
-          echo "API_URL=${{ secrets.API_URL }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
+          echo "SESSION_SECRET=${{ secrets.SESSION_SECRET }}"
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}"
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}"
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}"
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}"
+          echo "API_URL=${{ secrets.API_URL }}"
 
       # Set up Docker and bring up the services
       - name: Set up Docker

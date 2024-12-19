@@ -1,8 +1,8 @@
 FROM node:20-alpine
 
-# Install necessary dependencies including OpenSSL
+# Install necessary dependencies including OpenSSL, libc6-compat, and bash
 RUN apk add --no-cache \
-  openssl1.1 \
+  openssl \
   libc6-compat \
   bash
 

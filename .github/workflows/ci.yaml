@@ -11,7 +11,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      # Set up environment variables
+
+      # Set up environment variables in GitHub Actions
       - name: Set up environment variables
         run: |
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
@@ -22,9 +23,8 @@ jobs:
           echo "NODE_ENV=${{ secrets.NODE_ENV }}"
           echo "API_URL=${{ secrets.API_URL }}"
           echo "FRONTEND_BASE_URL=${{ secrets.FRONTEND_BASE_URL }}"
-
       # Set up Docker and bring up the services
-      - name: Set up Docker
+      - name: Set up Docker and bring up the services
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
@@ -35,11 +35,10 @@ jobs:
           API_URL: ${{ secrets.API_URL }}
         run: |
           docker compose -f compose.dev.yaml up -d --build
-        - name: Wait for server to be ready
+      # Wait for server to be ready (if needed)
+      - name: Wait for server to be ready
         run: |
-          sleep 30
-
-
+          sleep 5
       # Run tests in the server
       - name: Run server tests
         env:
@@ -57,7 +56,6 @@ jobs:
             docker compose -f compose.dev.yaml logs server
             exit 1
           fi
-      
       # Run tests in the client
       - name: Run client tests
         id: client-tests
@@ -69,7 +67,7 @@ jobs:
           fi
         continue-on-error: true
 
-      # stop and remove containers after tests
+      # Tear down Docker containers after tests
       - name: Tear down Docker
         run: docker compose -f compose.dev.yaml down
 
@@ -81,8 +79,8 @@ jobs:
       id-token: write
 
     steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v4
 
-    - name: Deploy
-      uses: DefangLabs/defang-github-action@v1.1.0
+      - name: Deploy
+        uses: DefangLabs/defang-github-action@v1.1.0

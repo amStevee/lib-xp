@@ -21,7 +21,6 @@ jobs:
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}"
           echo "NODE_ENV=${{ secrets.NODE_ENV }}"
           echo "API_URL=${{ secrets.API_URL }}"
-          echo "FRONTEND_BASE_URL=${{ secrets.FRONTEND_BASE_URL }}"
       # Set up Docker and bring up the services
       - name: Set up Docker
         env:
@@ -34,9 +33,8 @@ jobs:
           API_URL: ${{ secrets.API_URL }}
         run: |
           docker compose -f compose.dev.yaml up -d --build
-      - name: Wait for services to be ready
-        run: |
-          sleep 30 
+        # sleep 30 
+        # Wait for services to be ready
 
       # Run tests in the server
       - name: Run server tests

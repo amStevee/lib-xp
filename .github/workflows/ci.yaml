@@ -22,6 +22,8 @@ jobs:
           echo "NODE_ENV=${{ secrets.NODE_ENV }}"
       # Set up Docker and bring up the services
       - name: Set up Docker
+        run: |
+          docker compose -f compose.dev.yaml up -d --build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
@@ -30,8 +32,6 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           NODE_ENV: ${{ secrets.NODE_ENV }}
           API_URL: ${{ secrets.API_URL }}
-        run: |
-          docker compose -f compose.dev.yaml up -d --build
       - name:  Wait for services to be ready
         run: |
          sleep 30 

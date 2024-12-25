@@ -35,8 +35,10 @@ jobs:
           API_URL: ${{ secrets.API_URL }}
         run: |
           docker compose -f compose.dev.yaml up -d --build
-        # sleep 30 
-        # Wait for services to be ready
+        - name: Wait for server to be ready
+        run: |
+          sleep 30
+
 
       # Run tests in the server
       - name: Run server tests

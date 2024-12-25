@@ -20,7 +20,6 @@ jobs:
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}"
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}"
           echo "NODE_ENV=${{ secrets.NODE_ENV }}"
-          echo "API_URL=${{ secrets.API_URL }}"
       # Set up Docker and bring up the services
       - name: Set up Docker
         env:

@@ -30,12 +30,12 @@ services:
       - "3010:3010"
     command: pnpm start:docker
     environment:
-     - DATABASE_URL: ${DATABASE_URL}
-     - SESSION_SECRET: ${SESSION_SECRET}
-     - GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-     - GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-     - PORT: 3010 
-     - NODE_ENV: production   # To use your production database connection string, use `defang config set DATABASE_URL`
+      DATABASE_URL: ${DATABASE_URL}
+      SESSION_SECRET: ${SESSION_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      PORT: 3010 
+      NODE_ENV: production   # To use your production database connection string, use `defang config set DATABASE_URL`
     deploy:
      resources:
        reservations:

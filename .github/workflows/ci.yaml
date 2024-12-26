@@ -11,21 +11,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      # Set up environment variables
-      - name: Set up environment variables
-        run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
-          echo "SESSION_SECRET=${{ secrets.SESSION_SECRET }}"
-          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}"
-          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}"
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}"
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}"
+
       # Set up Docker and bring up the services
       - name: Set up Docker
         run: |
           docker compose -f compose.dev.yaml up -d --build
 
-        # Verify that the environment variables are passed correctly to the Docker containers
+          # Verify that the environment variables are passed correctly to the Docker containers
           echo "Verifying environment variables in the server container:"
           docker compose exec server printenv | grep DATABASE_URL
           docker compose exec server printenv | grep SESSION_SECRET
@@ -39,9 +31,10 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           NODE_ENV: ${{ secrets.NODE_ENV }}
           API_URL: ${{ secrets.API_URL }}
-      - name:  Wait for services to be ready
+
+      - name: Wait for services to be ready
         run: |
-         sleep 30 
+          sleep 30 
 
       # Run tests in the server
       - name: Run server tests
@@ -52,7 +45,7 @@ jobs:
             docker compose -f compose.dev.yaml logs server
             exit 1
           fi
-      
+
       # Run tests in the client
       - name: Run client tests
         id: client-tests
@@ -64,7 +57,7 @@ jobs:
           fi
         continue-on-error: true
 
-      # stop and remove containers after tests
+      # Stop and remove containers after tests
       - name: Tear down Docker
         run: docker compose -f compose.dev.yaml down
 

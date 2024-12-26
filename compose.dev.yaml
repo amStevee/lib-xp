@@ -20,7 +20,6 @@ services:
       SESSION_SECRET: ${SESSION_SECRET}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      NODE_ENV: ${NODE_ENV}
     volumes:
       - "./client:/code"
       - /code/node_modules

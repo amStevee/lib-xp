@@ -4,7 +4,7 @@ FROM node:20-alpine
 #Install pnpm
 RUN npm install -g pnpm
 
-RUN pnpm add jest-environment-jsdom
+# RUN pnpm add jest-environment-jsdom
 
 
 # Set the working directory

@@ -11,7 +11,7 @@ services:
     deploy:
       resources:
         reservations:
-          memory: 2GB
+          memory: 1GB
     depends_on:
       - server
     healthcheck:

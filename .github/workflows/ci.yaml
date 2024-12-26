@@ -52,7 +52,7 @@ jobs:
         run: |
           if ! docker compose -f compose.dev.yaml exec web pnpm test; then
             echo "Client tests failed. Fetching logs..."
-            docker compose -f compose.dev.yaml logs client
+            docker compose -f compose.dev.yaml logs web
             exit 1
           fi
         continue-on-error: true

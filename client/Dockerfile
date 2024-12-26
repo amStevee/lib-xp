@@ -4,7 +4,8 @@ FROM node:20-alpine
 #Install pnpm
 RUN npm install -g pnpm
 
-# RUN pnpm add jest-environment-jsdom
+# As of Jest 28 "jest-environment-jsdom" is no longer shipped by default, this make sure to install it separately.
+RUN pnpm add jest-environment-jsdom
 
 
 # Set the working directory

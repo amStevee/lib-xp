@@ -10,12 +10,12 @@ const bookService = new BookService();
 export class BookController {
     async  addNewBook(req:Request, res:Response, next:NextFunction) {
        const qdata = crossCheckClientData<Book>(req.body);
-    
+
        if (qdata instanceof CustomError) return next(qdata);
     
        const newBook = await bookService.create(qdata);
     
-       res.status(200).json({...newBook});
+       res.status(201).json({...newBook});
     
     }
     

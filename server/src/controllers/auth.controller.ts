@@ -76,6 +76,8 @@ export class AuthController {
            const expTimeFrame = process.env.NODE_ENV === 'dev' ? "60d" : "1h";
            if (!process.env.JWT_SECRET) return next(new CustomError('secret_key needed', 400));
            const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: expTimeFrame});
+
+           console.log(token)
        
            const data = {id:user.id, email:user.email, firstname:user.firstname, lastname:user.lastname, profile_img: user.profile_img};
            

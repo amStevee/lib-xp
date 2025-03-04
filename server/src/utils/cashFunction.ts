@@ -4,7 +4,7 @@ import redisClient from '../config/Redis';
 
 import { DefaultArgs, DynamicQueryExtensionCbArgs, InternalArgs } from '@prisma/client/runtime/library';
 
- async function cachFunc<T extends DynamicQueryExtensionCbArgs<Prisma.TypeMap<InternalArgs & DefaultArgs, Prisma.PrismaClientOptions>, "model", string, "findMany">
+ async function cachFunc<T extends DynamicQueryExtensionCbArgs<Prisma.TypeMap<InternalArgs & DefaultArgs, Prisma.PrismaClientOptions>, "model", string, string>
 >({args, model, operation, query}:T) {
 
     const redisArgs = JSON.stringify({args, model, operation, query});

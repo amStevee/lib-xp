@@ -3,6 +3,8 @@ import * as bcrypt from 'bcrypt';
 import { CustomError } from "../utils/errorHandler";
 import { Patron } from "@prisma/client";
 import { UserRepositoryInt } from "../interfaces/user";
+import { sendVerificationEmail } from "../services/ses.services";
+import { randomBytes } from "crypto";
 
 export class UserRepository implements UserRepositoryInt {
     async create(
@@ -13,13 +15,32 @@ export class UserRepository implements UserRepositoryInt {
         email: string,
         password: string
     ):Promise<Patron>{
+        const verificationToken = randomBytes(32).toString('hex');
+        const verificationLink = `${process.env.API_URL}/verify?token=${verificationToken}&email=${encodeURIComponent(email)}`;
+        const emailBody = `
+            <html>
+                <body>
+                    <h1>Email verification</h1>
+                    <p>Click <a href="${verificationLink}">here</a> to verify your email.</p>
+                </body>
+            </html>
+        `
         // Check if user alredy exist
-        const isUser = await db.patron.findUnique({where: {email: email}});
+        try {
+            const isUser = await db.patron.findUnique({where: {email: email}});
         if (isUser) throw new CustomError('user already exist', 403);
 
-        // Verify user email before proceeding.
-        // 
-        // 
+        // save verification token
+        await db.emailVerificationToken.create({
+            data: {
+                email,
+                token: verificationToken,
+                expiresAt: new Date(Date.now() + 1 * 60 * 60 * 10000 ),
+            }
+        })
+
+        // send serification email.
+        await sendVerificationEmail({to: email, subject: 'verify email', body: emailBody});
         // //
 
         // Hash password
@@ -35,6 +56,9 @@ export class UserRepository implements UserRepositoryInt {
             displayname,
             password: hash
         }})
+        } catch (error) {
+            throw new CustomError((error as string), 409)
+        }
     }
 
     async findAll() {

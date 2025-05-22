@@ -4,7 +4,7 @@ import { CustomError } from '../utils/errorHandler';
 
 dotenv.config();
 
-const ses = new SES({region: 'us-east-1'});
+const ses = new SES({region: process.env.AWS_REGION || 'eu-north-1'});
 
 interface SendEmailParams {
     to:string;
@@ -12,23 +12,28 @@ interface SendEmailParams {
     body:string;
 }
 
-export async function sendEmail({to, subject, body}: SendEmailParams) {
+
+if (typeof process.env.SES_EMAIL_SOURCE == 'undefined') {
+  throw new CustomError('email source not found', 404)
+}
+
+export async function sendVerificationEmail({to, subject, body}: SendEmailParams) {
     const params = {
-        Source: process.env.SES_EMAIL_SOURCE!,
+        Source: process.env.SES_EMAIL_SOURCE ?? '',
         Destination: {
           ToAddresses: [to],
         },
         Message: {
           Subject: { Data: subject },
           Body: {
-            Text: { Data: body },
+            Html: { Data: body },
           },
         },
       };
     
     try {
         const result = await ses.sendEmail(params).promise();
-        console.log("Email sent:", result.MessageId);
+        return 'Verification email sent'
     } catch (error:any) {
         console.error("Error sending email:", error);
         throw new CustomError('Failed to send email', 500);

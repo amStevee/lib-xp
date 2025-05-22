@@ -67,6 +67,16 @@ model Book {
   @@map("book")
 }
 
+model EmailVerificationToken {
+  id String @default(uuid()) @unique
+  email String @unique
+  token String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("email_verification_token")
+}
+
 model Patron {
   id String @default(uuid()) @unique
   google_Id String? @unique
@@ -78,6 +88,7 @@ model Patron {
   password String?
   profile_img String?
   borrowed_books String[] @unique
+  isEmailVerified Boolean @default(false)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   book_likes Book_likes[]

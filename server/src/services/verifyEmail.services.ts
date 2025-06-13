@@ -4,7 +4,7 @@ import { CustomError } from '../utils/errorHandler';
 
 dotenv.config();
 
-const ses = new SES({region: process.env.AWS_REGION || 'eu-north-1'});
+const ses = new SES({region: process.env.AWS_REGION || ''});
 
 interface SendEmailParams {
     to:string;
@@ -33,6 +33,8 @@ export async function sendVerificationEmail({to, subject, body}: SendEmailParams
     
     try {
         const result = await ses.sendEmail(params).promise();
+        
+        if(!result) throw new CustomError('Failed to send email', 500)
         return 'Verification email sent'
     } catch (error:any) {
         console.error("Error sending email:", error);

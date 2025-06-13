@@ -1,6 +1,5 @@
 import db from "../config/prismaClient"
 import { CustomError } from "../utils/errorHandler";
-import {EmailVerificationToken} from "@prisma/client"
 
 export async function verifyEmail(email:string, token:string) {
     
@@ -22,6 +21,6 @@ export async function verifyEmail(email:string, token:string) {
 
     await db.emailVerificationToken.delete({where: {email, token}});
 
-    return "Email Verified Successfully"
+    console.log('User email verified')
 
 }

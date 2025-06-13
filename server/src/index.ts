@@ -9,6 +9,7 @@ import { globalErrorHandler, routeNotFound } from './utils/errorHandler';
 import authRoute from './routes/auth.routes';
 import bookRoute from './routes/book.routes';
 import usersRoute from './routes/users.routes';
+import verifyEmail from './routes/verifyEmail.routes';
 import circulationRoute from './routes/circulation.routes';
 import passportMiddleware from './config/passport-setup';
 import passport from 'passport';
@@ -40,6 +41,8 @@ app.use('/oauth2', authRoute);
 app.use('/books', bookRoute);
 app.use('/users', usersRoute);
 app.use('/circulation-status', circulationRoute);
+app.use('/user', verifyEmail);
+
 
 // Error handling
 app.all('*', routeNotFound);
@@ -47,6 +50,6 @@ app.use(globalErrorHandler);
 
 
 const port = process.env.PORT || 8000;
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`server is running on port ${port}`);
 })

@@ -17,7 +17,6 @@ export default function Home() {
   }
 
   async function handleSignin(formState:FormState) {
-    console.log(formState)
     try {
       await axios.post('/oauth2/signin', JSON.stringify(formState))
     } catch (error:unknown) {

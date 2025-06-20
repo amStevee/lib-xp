@@ -57,4 +57,3 @@ export default function VerifyEmailPage({ searchParams }: Props) {
     );
 }
 
-// To use this page in Next.js 13+ app directory, export a generateMetadata if needed.

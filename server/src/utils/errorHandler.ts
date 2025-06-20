@@ -1,15 +1,18 @@
 import { NextFunction, Request, Response } from "express";
 import dotenv from 'dotenv';
 import { CreateError } from "../interfaces/Error";
+import { logger } from "../logger";
 dotenv.config();
 
 process.on('uncaughtException', (err) => {
     // Come back to this************************
     if (!(err instanceof CustomError)) {
-        console.error(err);
+        logger.error('Uncaught Exception:', err);
+        console.error('Uncaught Exception:', err);
         process.exit(1)
     }
     console.error(err)
+    logger.error(err)
     throw new CustomError('something went wrong', 500)
 })
 

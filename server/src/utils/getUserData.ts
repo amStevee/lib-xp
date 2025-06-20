@@ -21,7 +21,7 @@ export default async function getUserData({email, password}:User) {
         
             const isPassword = await bcrypt.compare(password, user.password);
 
-            if (!isPassword) return new CustomError('Invalid cridentials', 400);
+            if (!isPassword) return new CustomError('Invalid cridentials', 403);
         }
             
         return {...user, password: null};

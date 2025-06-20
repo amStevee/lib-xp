@@ -1,4 +1,4 @@
-type GMD =  'Monograph' | 'Serial' | 'Palmphlet' | 'Dictionary';
+type GMD =  'Monograph' | 'Serial' | 'Palmphlet' | 'Dictionary'
 
 export class Book {
     constructor(

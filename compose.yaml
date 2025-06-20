@@ -1,4 +1,13 @@
 services:
+  # db:
+  #   image: postgres:16
+  #   restart: unless-stopped
+  #   environment:
+  #     - POSTGRES_DB:${POSTGRES_DB}
+  #     - POSTGRES_USER:${POSTGRES_USER}
+  #     - POSTGRES_PASSWORD:${POSTGRES_PASSWORD}
+  #   ports:
+  #     - 5432:5432
   web:
     restart: unless-stopped
     build:
@@ -40,6 +49,8 @@ services:
      resources:
        reservations:
          memory: 256M
+    # depends_on:
+    #   - db
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/"]
       interval: 30s

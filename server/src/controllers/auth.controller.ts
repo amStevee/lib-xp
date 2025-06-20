@@ -12,11 +12,12 @@ import { ReplacerFunc } from '../utils/replacerFun';
 
 const userServices = new UserService();
 
+
 export class AuthController {
     public signin_google = passport.authenticate('google');
 
     public google_redirect = async function (req:Request, res:Response) {
-            // res.redirect(FRONTEND_BASE_URL);
+            
             const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL || 'http://localhost:3000';
             res.redirect(FRONTEND_BASE_URL);
           }
@@ -34,25 +35,18 @@ export class AuthController {
        if (userData instanceof CustomError) return next(userData);
     
        try {
-           // Verify user email before proceeding.
-           // 
-           // 
-           // //
     
           const newUser = await userServices.create(userData)
        
            const expTimeFrame = process.env.NODE_ENV === 'development' ? "60d" : "1h";
            if (!process.env.JWT_SECRET) return next(new CustomError('secret_key needed', 400));
            const token = jwt.sign({...newUser, password: null}, process.env.JWT_SECRET, {expiresIn: expTimeFrame});
-    
-           // REMOVE 
-           console.log(token)
 
            const createdUser = ReplacerFunc({...newUser});
        
            res.setHeader('Authorization', `Bearer ${token}`);
            res.status(201).json({
-               msg: 'account created successfully', 
+               msg: 'account created successfully. Please check your email to verify your account.', 
                data: createdUser
            });
        } catch (error:any) {
@@ -74,15 +68,15 @@ export class AuthController {
            if(user instanceof CustomError) return next(user);
            
            const expTimeFrame = process.env.NODE_ENV === 'dev' ? "60d" : "1h";
-           if (!process.env.JWT_SECRET) return next(new CustomError('secret_key needed', 400));
+           if (!process.env.JWT_SECRET) return next(new CustomError('secret_key needed', 403));
            const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: expTimeFrame});
 
            console.log(token)//DEVELOPMENT
        
-           const data = {id:user.id, email:user.email, firstname:user.firstname, lastname:user.lastname, profile_img: user.profile_img};
+           const data = ReplacerFunc(user);
            
            res.setHeader("Authorization", `Bearer ${token}`);
-           res.status(200).json({msg: 'Signed in', data: {...data}});
+           res.status(200).json({msg: 'Signed in', data});
        } catch (error:any) {
            next(new CustomError(error.message, 500))
        }
@@ -90,11 +84,25 @@ export class AuthController {
     
     async signout(req:Request, res:Response, next:NextFunction) {
        req.logout((err) => {
-           if (err) {
-             return res.status(500).send('Failed to log out');
-           }
+           if (err) return res.status(500).send('Failed to log out');
            res.redirect('/'); 
          });
+    }
+
+    async verifyEmail(req:Request, res:Response, next:NextFunction) {
+                const {email, token} = req.query;
+        
+                if (!email || token === 'undefined') {
+                    res.status(400).json({ status: 'fail', msg: 'User ID is required' });
+                }
+        
+                try {
+                    await userServices.verifyEmail((email as string), (token as string))
+                    if (!userServices.verifyEmail) next(new CustomError('Invalid or expired verification token', 400));
+                    res.redirect(`${process.env.FRONTEND_BASE_URL || 'http://127.0.0.1:3000'}/verify-email?status=success&email=${encodeURIComponent(email as string)}`);
+                } catch (error) {
+                    next(new CustomError((error as Error).message, 500));
+                }
     }
 
 }

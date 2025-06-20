@@ -13,6 +13,11 @@ export class UserService {
         return user
     }
 
+    async verifyEmail(email:string, token:string):Promise<{ isEmailVerified: boolean; } | null> {
+        const result = await userRepository.verifyEmail(email, token);
+        return result;
+    }
+
     async findAll():Promise<Patron[]> {
         const users = await userRepository.findAll();
         return users

@@ -5,13 +5,20 @@ FROM node:20-alpine
 RUN apk add --no-cache \
   openssl \
   libc6-compat \
-  bash
+  bash python3 \
+  make \
+  g++
 
 RUN npm install -g pnpm
 
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies and rebuild native modules
+RUN pnpm install && \
+    pnpm rebuild bcrypt --update-binary
+
 RUN pnpm install
 
 COPY prisma/schema.prisma ./prisma/

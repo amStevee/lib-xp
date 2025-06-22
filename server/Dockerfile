@@ -16,10 +16,9 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies and rebuild native modules
-RUN pnpm install && \
-    pnpm rebuild bcrypt --update-binary
-
 RUN pnpm install
+
+RUN pnpm rebuild bcrypt
 
 COPY prisma/schema.prisma ./prisma/
 RUN npx prisma generate

@@ -3,62 +3,206 @@
  * Client
 **/
 
-import * as runtime from './runtime/library.js';
+import * as runtime from './runtime/library';
 import $Types = runtime.Types // general types
 import $Public = runtime.Types.Public
 import $Utils = runtime.Types.Utils
 import $Extensions = runtime.Types.Extensions
-import $Result = runtime.Types.Result
 
 export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
+
+export type SessionPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "Session"
+  objects: {}
+  scalars: $Extensions.GetResult<{
+    id: string
+    sid: string
+    data: string
+    expiresAt: Date
+  }, ExtArgs["result"]["session"]>
+  composites: {}
+}
 
 /**
  * Model Session
  * 
  */
-export type Session = $Result.DefaultSelection<Prisma.$SessionPayload>
+export type Session = runtime.Types.DefaultSelection<SessionPayload>
+export type LibrarianPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "Librarian"
+  objects: {}
+  scalars: $Extensions.GetResult<{
+    id: string
+    firstname: string
+    lastname: string
+    displayname: string
+    email: string
+    password: string
+    profile_img: string
+    address: string
+    contact: string
+    rank: number
+    books_entered: string[]
+    created_at: Date
+    updated_at: Date
+  }, ExtArgs["result"]["librarian"]>
+  composites: {}
+}
+
 /**
  * Model Librarian
  * 
  */
-export type Librarian = $Result.DefaultSelection<Prisma.$LibrarianPayload>
+export type Librarian = runtime.Types.DefaultSelection<LibrarianPayload>
+export type BookPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "Book"
+  objects: {
+    book_likes: Book_likesPayload<ExtArgs>[]
+    book_consulted: Book_consultedPayload<ExtArgs>[]
+    circulation: CirculationPayload<ExtArgs>[]
+  }
+  scalars: $Extensions.GetResult<{
+    id: string
+    title: string
+    author: string
+    subject: string[]
+    imprint: string
+    collation: string
+    G_M_D: GMD
+    book_cover: string
+    material_number: string
+    availability: boolean
+    bibilography: string
+    Keywords: string[]
+    other_Title: string | null
+    co_author: string | null
+    editor: string | null
+    edition: string | null
+    series: string | null
+    web_address: string | null
+    entered_at: Date
+  }, ExtArgs["result"]["book"]>
+  composites: {}
+}
+
 /**
  * Model Book
  * 
  */
-export type Book = $Result.DefaultSelection<Prisma.$BookPayload>
+export type Book = runtime.Types.DefaultSelection<BookPayload>
+export type EmailVerificationTokenPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "EmailVerificationToken"
+  objects: {}
+  scalars: $Extensions.GetResult<{
+    id: string
+    email: string
+    token: string
+    expiresAt: Date
+    createdAt: Date
+  }, ExtArgs["result"]["emailVerificationToken"]>
+  composites: {}
+}
+
 /**
  * Model EmailVerificationToken
  * 
  */
-export type EmailVerificationToken = $Result.DefaultSelection<Prisma.$EmailVerificationTokenPayload>
+export type EmailVerificationToken = runtime.Types.DefaultSelection<EmailVerificationTokenPayload>
+export type PatronPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "Patron"
+  objects: {
+    book_likes: Book_likesPayload<ExtArgs>[]
+    book_consulted: Book_consultedPayload<ExtArgs>[]
+    circulation: CirculationPayload<ExtArgs>[]
+  }
+  scalars: $Extensions.GetResult<{
+    id: string
+    google_Id: string | null
+    firstname: string
+    lastname: string
+    displayname: string | null
+    address: string | null
+    email: string
+    password: string | null
+    profile_img: string | null
+    borrowed_books: string[]
+    isEmailVerified: boolean
+    created_at: Date
+    updated_at: Date
+  }, ExtArgs["result"]["patron"]>
+  composites: {}
+}
+
 /**
  * Model Patron
  * 
  */
-export type Patron = $Result.DefaultSelection<Prisma.$PatronPayload>
+export type Patron = runtime.Types.DefaultSelection<PatronPayload>
+export type Book_likesPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "Book_likes"
+  objects: {
+    book: BookPayload<ExtArgs>
+    patron: PatronPayload<ExtArgs>
+  }
+  scalars: $Extensions.GetResult<{
+    book_id: string
+    patron_id: string
+    liked_at: Date
+  }, ExtArgs["result"]["book_likes"]>
+  composites: {}
+}
+
 /**
  * Model Book_likes
  * 
  */
-export type Book_likes = $Result.DefaultSelection<Prisma.$Book_likesPayload>
+export type Book_likes = runtime.Types.DefaultSelection<Book_likesPayload>
+export type Book_consultedPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "Book_consulted"
+  objects: {
+    book: BookPayload<ExtArgs>
+    patron: PatronPayload<ExtArgs>
+  }
+  scalars: $Extensions.GetResult<{
+    book_id: string
+    patron_id: string
+    consulted_at: Date
+  }, ExtArgs["result"]["book_consulted"]>
+  composites: {}
+}
+
 /**
  * Model Book_consulted
  * 
  */
-export type Book_consulted = $Result.DefaultSelection<Prisma.$Book_consultedPayload>
+export type Book_consulted = runtime.Types.DefaultSelection<Book_consultedPayload>
+export type CirculationPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "Circulation"
+  objects: {
+    book: BookPayload<ExtArgs>
+    patron: PatronPayload<ExtArgs>
+  }
+  scalars: $Extensions.GetResult<{
+    book_id: string
+    patron_id: string
+    checkout: Date
+    date_due: Date
+  }, ExtArgs["result"]["circulation"]>
+  composites: {}
+}
+
 /**
  * Model Circulation
  * 
  */
-export type Circulation = $Result.DefaultSelection<Prisma.$CirculationPayload>
+export type Circulation = runtime.Types.DefaultSelection<CirculationPayload>
 
 /**
  * Enums
  */
-export namespace $Enums {
-  export const GMD: {
+
+export const GMD: {
   Monograph: 'Monograph',
   Serial: 'Serial',
   Palmphlet: 'Palmphlet',
@@ -67,15 +211,10 @@ export namespace $Enums {
 
 export type GMD = (typeof GMD)[keyof typeof GMD]
 
-}
-
-export type GMD = $Enums.GMD
-
-export const GMD: typeof $Enums.GMD
 
 /**
  * ##  Prisma Client ʲˢ
- *
+ * 
  * Type-safe database client for TypeScript & Node.js
  * @example
  * ```
@@ -84,19 +223,22 @@ export const GMD: typeof $Enums.GMD
  * const sessions = await prisma.session.findMany()
  * ```
  *
- *
+ * 
  * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
  */
 export class PrismaClient<
-  ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
-  ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
+  T extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
+  U = 'log' extends keyof T ? T['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<T['log']> : never : never,
+  GlobalReject extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined = 'rejectOnNotFound' extends keyof T
+    ? T['rejectOnNotFound']
+    : false,
+  ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
 
     /**
    * ##  Prisma Client ʲˢ
-   *
+   * 
    * Type-safe database client for TypeScript & Node.js
    * @example
    * ```
@@ -105,22 +247,22 @@ export class PrismaClient<
    * const sessions = await prisma.session.findMany()
    * ```
    *
-   *
+   * 
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
    */
 
-  constructor(optionsArg ?: Prisma.Subset<ClientOptions, Prisma.PrismaClientOptions>);
-  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): PrismaClient;
+  constructor(optionsArg ?: Prisma.Subset<T, Prisma.PrismaClientOptions>);
+  $on<V extends (U | 'beforeExit')>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : V extends 'beforeExit' ? () => Promise<void> : Prisma.LogEvent) => void): void;
 
   /**
    * Connect with the database
    */
-  $connect(): $Utils.JsPromise<void>;
+  $connect(): Promise<void>;
 
   /**
    * Disconnect from the database
    */
-  $disconnect(): $Utils.JsPromise<void>;
+  $disconnect(): Promise<void>;
 
   /**
    * Add a middleware
@@ -135,7 +277,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
    * ```
-   *
+   * 
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
@@ -147,7 +289,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
    * ```
-   *
+   * 
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
@@ -158,7 +300,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
    * ```
-   *
+   * 
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
@@ -170,11 +312,10 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
    * ```
-   *
+   * 
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
-
 
   /**
    * Allows the running of a sequence of read/write operations that are guaranteed to either succeed or fail as a whole.
@@ -189,14 +330,12 @@ export class PrismaClient<
    * 
    * Read more in our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/transactions).
    */
-  $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
+  $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { isolationLevel?: Prisma.TransactionIsolationLevel }): Promise<runtime.Types.Utils.UnwrapTuple<P>>
 
-  $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => $Utils.JsPromise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<R>
+  $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => Promise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): Promise<R>
 
 
-  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb<ClientOptions>, ExtArgs, $Utils.Call<Prisma.TypeMapCb<ClientOptions>, {
-    extArgs: ExtArgs
-  }>>
+  $extends: $Extensions.ExtendsHook<'extends', Prisma.TypeMapCb, ExtArgs>
 
       /**
    * `prisma.session`: Exposes CRUD operations for the **Session** model.
@@ -206,7 +345,7 @@ export class PrismaClient<
     * const sessions = await prisma.session.findMany()
     * ```
     */
-  get session(): Prisma.SessionDelegate<ExtArgs, ClientOptions>;
+  get session(): Prisma.SessionDelegate<GlobalReject, ExtArgs>;
 
   /**
    * `prisma.librarian`: Exposes CRUD operations for the **Librarian** model.
@@ -216,7 +355,7 @@ export class PrismaClient<
     * const librarians = await prisma.librarian.findMany()
     * ```
     */
-  get librarian(): Prisma.LibrarianDelegate<ExtArgs, ClientOptions>;
+  get librarian(): Prisma.LibrarianDelegate<GlobalReject, ExtArgs>;
 
   /**
    * `prisma.book`: Exposes CRUD operations for the **Book** model.
@@ -226,7 +365,7 @@ export class PrismaClient<
     * const books = await prisma.book.findMany()
     * ```
     */
-  get book(): Prisma.BookDelegate<ExtArgs, ClientOptions>;
+  get book(): Prisma.BookDelegate<GlobalReject, ExtArgs>;
 
   /**
    * `prisma.emailVerificationToken`: Exposes CRUD operations for the **EmailVerificationToken** model.
@@ -236,7 +375,7 @@ export class PrismaClient<
     * const emailVerificationTokens = await prisma.emailVerificationToken.findMany()
     * ```
     */
-  get emailVerificationToken(): Prisma.EmailVerificationTokenDelegate<ExtArgs, ClientOptions>;
+  get emailVerificationToken(): Prisma.EmailVerificationTokenDelegate<GlobalReject, ExtArgs>;
 
   /**
    * `prisma.patron`: Exposes CRUD operations for the **Patron** model.
@@ -246,7 +385,7 @@ export class PrismaClient<
     * const patrons = await prisma.patron.findMany()
     * ```
     */
-  get patron(): Prisma.PatronDelegate<ExtArgs, ClientOptions>;
+  get patron(): Prisma.PatronDelegate<GlobalReject, ExtArgs>;
 
   /**
    * `prisma.book_likes`: Exposes CRUD operations for the **Book_likes** model.
@@ -256,7 +395,7 @@ export class PrismaClient<
     * const book_likes = await prisma.book_likes.findMany()
     * ```
     */
-  get book_likes(): Prisma.Book_likesDelegate<ExtArgs, ClientOptions>;
+  get book_likes(): Prisma.Book_likesDelegate<GlobalReject, ExtArgs>;
 
   /**
    * `prisma.book_consulted`: Exposes CRUD operations for the **Book_consulted** model.
@@ -266,7 +405,7 @@ export class PrismaClient<
     * const book_consulteds = await prisma.book_consulted.findMany()
     * ```
     */
-  get book_consulted(): Prisma.Book_consultedDelegate<ExtArgs, ClientOptions>;
+  get book_consulted(): Prisma.Book_consultedDelegate<GlobalReject, ExtArgs>;
 
   /**
    * `prisma.circulation`: Exposes CRUD operations for the **Circulation** model.
@@ -276,7 +415,7 @@ export class PrismaClient<
     * const circulations = await prisma.circulation.findMany()
     * ```
     */
-  get circulation(): Prisma.CirculationDelegate<ExtArgs, ClientOptions>;
+  get circulation(): Prisma.CirculationDelegate<GlobalReject, ExtArgs>;
 }
 
 export namespace Prisma {
@@ -297,6 +436,7 @@ export namespace Prisma {
   export import PrismaClientRustPanicError = runtime.PrismaClientRustPanicError
   export import PrismaClientInitializationError = runtime.PrismaClientInitializationError
   export import PrismaClientValidationError = runtime.PrismaClientValidationError
+  export import NotFoundError = runtime.NotFoundError
 
   /**
    * Re-export of sql-template-tag
@@ -307,8 +447,6 @@ export namespace Prisma {
   export import raw = runtime.raw
   export import Sql = runtime.Sql
 
-
-
   /**
    * Decimal.js
    */
@@ -317,7 +455,7 @@ export namespace Prisma {
   export type DecimalJsLike = runtime.DecimalJsLike
 
   /**
-   * Metrics
+   * Metrics 
    */
   export type Metrics = runtime.Metrics
   export type Metric<T> = runtime.Metric<T>
@@ -327,46 +465,84 @@ export namespace Prisma {
   /**
   * Extensions
   */
-  export import Extension = $Extensions.UserArgs
+  export type Extension = $Extensions.UserArgs
   export import getExtensionContext = runtime.Extensions.getExtensionContext
-  export import Args = $Public.Args
-  export import Payload = $Public.Payload
-  export import Result = $Public.Result
-  export import Exact = $Public.Exact
+  export type Args<T, F extends $Public.Operation> = $Public.Args<T, F>
+  export type Payload<T, F extends $Public.Operation> = $Public.Payload<T, F>
+  export type Result<T, A, F extends $Public.Operation> = $Public.Result<T, A, F>
+  export type Exact<T, W> = $Public.Exact<T, W>
 
   /**
-   * Prisma Client JS version: 6.7.0
-   * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
+   * Prisma Client JS version: 4.16.2
+   * Query Engine version: 4bc8b6e1b66cb932731fb1bdbbc550d1e010de81
    */
   export type PrismaVersion = {
     client: string
   }
 
-  export const prismaVersion: PrismaVersion
+  export const prismaVersion: PrismaVersion 
 
   /**
    * Utility Types
    */
 
+  /**
+   * From https://github.com/sindresorhus/type-fest/
+   * Matches a JSON object.
+   * This type can be useful to enforce some input to be JSON-compatible or as a super-type to be extended from. 
+   */
+  export type JsonObject = {[Key in string]?: JsonValue}
 
-  export import JsonObject = runtime.JsonObject
-  export import JsonArray = runtime.JsonArray
-  export import JsonValue = runtime.JsonValue
-  export import InputJsonObject = runtime.InputJsonObject
-  export import InputJsonArray = runtime.InputJsonArray
-  export import InputJsonValue = runtime.InputJsonValue
+  /**
+   * From https://github.com/sindresorhus/type-fest/
+   * Matches a JSON array.
+   */
+  export interface JsonArray extends Array<JsonValue> {}
+
+  /**
+   * From https://github.com/sindresorhus/type-fest/
+   * Matches any valid JSON value.
+   */
+  export type JsonValue = string | number | boolean | JsonObject | JsonArray | null
+
+  /**
+   * Matches a JSON object.
+   * Unlike `JsonObject`, this type allows undefined and read-only properties.
+   */
+  export type InputJsonObject = {readonly [Key in string]?: InputJsonValue | null}
+
+  /**
+   * Matches a JSON array.
+   * Unlike `JsonArray`, readonly arrays are assignable to this type.
+   */
+  export interface InputJsonArray extends ReadonlyArray<InputJsonValue | null> {}
+
+  /**
+   * Matches any valid value that can be used as an input for operations like
+   * create and update as the value of a JSON field. Unlike `JsonValue`, this
+   * type allows read-only arrays and read-only object properties and disallows
+   * `null` at the top level.
+   *
+   * `null` cannot be used as the value of a JSON field because its meaning
+   * would be ambiguous. Use `Prisma.JsonNull` to store the JSON null value or
+   * `Prisma.DbNull` to clear the JSON value and set the field to the database
+   * NULL value instead.
+   *
+   * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
+   */
+  export type InputJsonValue = string | number | boolean | InputJsonObject | InputJsonArray
 
   /**
    * Types of the values used to represent different kinds of `null` values when working with JSON fields.
-   *
+   * 
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   namespace NullTypes {
     /**
     * Type of `Prisma.DbNull`.
-    *
+    * 
     * You cannot use other instances of this class. Please use the `Prisma.DbNull` value.
-    *
+    * 
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class DbNull {
@@ -376,9 +552,9 @@ export namespace Prisma {
 
     /**
     * Type of `Prisma.JsonNull`.
-    *
+    * 
     * You cannot use other instances of this class. Please use the `Prisma.JsonNull` value.
-    *
+    * 
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class JsonNull {
@@ -388,9 +564,9 @@ export namespace Prisma {
 
     /**
     * Type of `Prisma.AnyNull`.
-    *
+    * 
     * You cannot use other instances of this class. Please use the `Prisma.AnyNull` value.
-    *
+    * 
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class AnyNull {
@@ -401,21 +577,21 @@ export namespace Prisma {
 
   /**
    * Helper for filtering JSON entries that have `null` on the database (empty on the db)
-   *
+   * 
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const DbNull: NullTypes.DbNull
 
   /**
    * Helper for filtering JSON entries that have JSON `null` values (not empty on the db)
-   *
+   * 
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const JsonNull: NullTypes.JsonNull
 
   /**
    * Helper for filtering JSON entries that are `Prisma.DbNull` or `Prisma.JsonNull`
-   *
+   * 
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const AnyNull: NullTypes.AnyNull
@@ -424,11 +600,19 @@ export namespace Prisma {
     select: any
     include: any
   }
-
-  type SelectAndOmit = {
+  type HasSelect = {
     select: any
-    omit: any
   }
+  type HasInclude = {
+    include: any
+  }
+  type CheckSelect<T, S, U> = T extends SelectAndInclude
+    ? 'Please either choose `select` or `include`'
+    : T extends HasSelect
+    ? U
+    : T extends HasInclude
+    ? U
+    : S
 
   /**
    * Get the type of the value, that the Promise holds.
@@ -438,7 +622,7 @@ export namespace Prisma {
   /**
    * Get the return type of a function which returns a Promise.
    */
-  export type PromiseReturnType<T extends (...args: any) => $Utils.JsPromise<any>> = PromiseType<ReturnType<T>>
+  export type PromiseReturnType<T extends (...args: any) => Promise<any>> = PromiseType<ReturnType<T>>
 
   /**
    * From T, pick a set of properties whose keys are in the union K
@@ -478,9 +662,7 @@ export namespace Prisma {
   } &
     (T extends SelectAndInclude
       ? 'Please either choose `select` or `include`.'
-      : T extends SelectAndOmit
-        ? 'Please either choose `select` or `omit`.'
-        : {})
+      : {})
 
   /**
    * Subset + Intersection
@@ -603,7 +785,7 @@ export namespace Prisma {
   type AtLeast<O extends object, K extends string> = NoExpand<
     O extends unknown
     ? | (K extends keyof O ? { [P in K]: O[P] } & O : O)
-      | {[P in keyof O as P extends K ? P : never]-?: O[P]} & O
+      | {[P in keyof O as P extends K ? K : never]-?: O[P]} & O
     : never>;
 
   type _Strict<U, _U = U> = U extends unknown ? U & OptionalFlat<_Record<Exclude<Keys<_U>, keyof U>, never>> : never;
@@ -701,9 +883,9 @@ export namespace Prisma {
   type MaybeTupleToUnion<T> = T extends any[] ? TupleToUnion<T> : T
 
   /**
-   * Like `Pick`, but additionally can also accept an array of keys
+   * Like `Pick`, but with an array
    */
-  type PickEnumerable<T, K extends Enumerable<keyof T> | keyof T> = Prisma__Pick<T, MaybeTupleToUnion<K>>
+  type PickArray<T, K extends Array<keyof T>> = Prisma__Pick<T, TupleToUnion<K>>
 
   /**
    * Exclude all keys with underscores
@@ -734,607 +916,533 @@ export namespace Prisma {
     db?: Datasource
   }
 
-  interface TypeMapCb<ClientOptions = {}> extends $Utils.Fn<{extArgs: $Extensions.InternalArgs }, $Utils.Record<string, any>> {
-    returns: Prisma.TypeMap<this['params']['extArgs'], ClientOptions extends { omit: infer OmitOptions } ? OmitOptions : {}>
+
+  interface TypeMapCb extends $Utils.Fn<{extArgs: $Extensions.Args}, $Utils.Record<string, any>> {
+    returns: Prisma.TypeMap<this['params']['extArgs']>
   }
 
-  export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> = {
-    globalOmitOptions: {
-      omit: GlobalOmitOptions
-    }
+  export type TypeMap<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: "session" | "librarian" | "book" | "emailVerificationToken" | "patron" | "book_likes" | "book_consulted" | "circulation"
+      modelProps: 'session' | 'librarian' | 'book' | 'emailVerificationToken' | 'patron' | 'book_likes' | 'book_consulted' | 'circulation'
       txIsolationLevel: Prisma.TransactionIsolationLevel
-    }
+    },
     model: {
       Session: {
-        payload: Prisma.$SessionPayload<ExtArgs>
-        fields: Prisma.SessionFieldRefs
+        payload: SessionPayload<ExtArgs>
         operations: {
           findUnique: {
-            args: Prisma.SessionFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionPayload> | null
+            args: Prisma.SessionFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<SessionPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.SessionFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+            args: Prisma.SessionFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<SessionPayload>
           }
           findFirst: {
-            args: Prisma.SessionFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionPayload> | null
+            args: Prisma.SessionFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<SessionPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.SessionFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+            args: Prisma.SessionFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<SessionPayload>
           }
           findMany: {
-            args: Prisma.SessionFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionPayload>[]
+            args: Prisma.SessionFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<SessionPayload>[]
           }
           create: {
-            args: Prisma.SessionCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+            args: Prisma.SessionCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<SessionPayload>
           }
           createMany: {
-            args: Prisma.SessionCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.SessionCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionPayload>[]
+            args: Prisma.SessionCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           delete: {
-            args: Prisma.SessionDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+            args: Prisma.SessionDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<SessionPayload>
           }
           update: {
-            args: Prisma.SessionUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+            args: Prisma.SessionUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<SessionPayload>
           }
           deleteMany: {
-            args: Prisma.SessionDeleteManyArgs<ExtArgs>
-            result: BatchPayload
+            args: Prisma.SessionDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           updateMany: {
-            args: Prisma.SessionUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.SessionUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionPayload>[]
+            args: Prisma.SessionUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           upsert: {
-            args: Prisma.SessionUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+            args: Prisma.SessionUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<SessionPayload>
           }
           aggregate: {
-            args: Prisma.SessionAggregateArgs<ExtArgs>
+            args: Prisma.SessionAggregateArgs<ExtArgs>,
             result: $Utils.Optional<AggregateSession>
           }
           groupBy: {
-            args: Prisma.SessionGroupByArgs<ExtArgs>
+            args: Prisma.SessionGroupByArgs<ExtArgs>,
             result: $Utils.Optional<SessionGroupByOutputType>[]
           }
           count: {
-            args: Prisma.SessionCountArgs<ExtArgs>
+            args: Prisma.SessionCountArgs<ExtArgs>,
             result: $Utils.Optional<SessionCountAggregateOutputType> | number
           }
         }
       }
       Librarian: {
-        payload: Prisma.$LibrarianPayload<ExtArgs>
-        fields: Prisma.LibrarianFieldRefs
+        payload: LibrarianPayload<ExtArgs>
         operations: {
           findUnique: {
-            args: Prisma.LibrarianFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LibrarianPayload> | null
+            args: Prisma.LibrarianFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<LibrarianPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.LibrarianFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LibrarianPayload>
+            args: Prisma.LibrarianFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<LibrarianPayload>
           }
           findFirst: {
-            args: Prisma.LibrarianFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LibrarianPayload> | null
+            args: Prisma.LibrarianFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<LibrarianPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.LibrarianFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LibrarianPayload>
+            args: Prisma.LibrarianFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<LibrarianPayload>
           }
           findMany: {
-            args: Prisma.LibrarianFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LibrarianPayload>[]
+            args: Prisma.LibrarianFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<LibrarianPayload>[]
           }
           create: {
-            args: Prisma.LibrarianCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LibrarianPayload>
+            args: Prisma.LibrarianCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<LibrarianPayload>
           }
           createMany: {
-            args: Prisma.LibrarianCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.LibrarianCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LibrarianPayload>[]
+            args: Prisma.LibrarianCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           delete: {
-            args: Prisma.LibrarianDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LibrarianPayload>
+            args: Prisma.LibrarianDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<LibrarianPayload>
           }
           update: {
-            args: Prisma.LibrarianUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LibrarianPayload>
+            args: Prisma.LibrarianUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<LibrarianPayload>
           }
           deleteMany: {
-            args: Prisma.LibrarianDeleteManyArgs<ExtArgs>
-            result: BatchPayload
+            args: Prisma.LibrarianDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           updateMany: {
-            args: Prisma.LibrarianUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.LibrarianUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LibrarianPayload>[]
+            args: Prisma.LibrarianUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           upsert: {
-            args: Prisma.LibrarianUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LibrarianPayload>
+            args: Prisma.LibrarianUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<LibrarianPayload>
           }
           aggregate: {
-            args: Prisma.LibrarianAggregateArgs<ExtArgs>
+            args: Prisma.LibrarianAggregateArgs<ExtArgs>,
             result: $Utils.Optional<AggregateLibrarian>
           }
           groupBy: {
-            args: Prisma.LibrarianGroupByArgs<ExtArgs>
+            args: Prisma.LibrarianGroupByArgs<ExtArgs>,
             result: $Utils.Optional<LibrarianGroupByOutputType>[]
           }
           count: {
-            args: Prisma.LibrarianCountArgs<ExtArgs>
+            args: Prisma.LibrarianCountArgs<ExtArgs>,
             result: $Utils.Optional<LibrarianCountAggregateOutputType> | number
           }
         }
       }
       Book: {
-        payload: Prisma.$BookPayload<ExtArgs>
-        fields: Prisma.BookFieldRefs
+        payload: BookPayload<ExtArgs>
         operations: {
           findUnique: {
-            args: Prisma.BookFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BookPayload> | null
+            args: Prisma.BookFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<BookPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.BookFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BookPayload>
+            args: Prisma.BookFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<BookPayload>
           }
           findFirst: {
-            args: Prisma.BookFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BookPayload> | null
+            args: Prisma.BookFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<BookPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.BookFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BookPayload>
+            args: Prisma.BookFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<BookPayload>
           }
           findMany: {
-            args: Prisma.BookFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BookPayload>[]
+            args: Prisma.BookFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<BookPayload>[]
           }
           create: {
-            args: Prisma.BookCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BookPayload>
+            args: Prisma.BookCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<BookPayload>
           }
           createMany: {
-            args: Prisma.BookCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.BookCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BookPayload>[]
+            args: Prisma.BookCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           delete: {
-            args: Prisma.BookDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BookPayload>
+            args: Prisma.BookDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<BookPayload>
           }
           update: {
-            args: Prisma.BookUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BookPayload>
+            args: Prisma.BookUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<BookPayload>
           }
           deleteMany: {
-            args: Prisma.BookDeleteManyArgs<ExtArgs>
-            result: BatchPayload
+            args: Prisma.BookDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           updateMany: {
-            args: Prisma.BookUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.BookUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BookPayload>[]
+            args: Prisma.BookUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           upsert: {
-            args: Prisma.BookUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BookPayload>
+            args: Prisma.BookUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<BookPayload>
           }
           aggregate: {
-            args: Prisma.BookAggregateArgs<ExtArgs>
+            args: Prisma.BookAggregateArgs<ExtArgs>,
             result: $Utils.Optional<AggregateBook>
           }
           groupBy: {
-            args: Prisma.BookGroupByArgs<ExtArgs>
+            args: Prisma.BookGroupByArgs<ExtArgs>,
             result: $Utils.Optional<BookGroupByOutputType>[]
           }
           count: {
-            args: Prisma.BookCountArgs<ExtArgs>
+            args: Prisma.BookCountArgs<ExtArgs>,
             result: $Utils.Optional<BookCountAggregateOutputType> | number
           }
         }
       }
       EmailVerificationToken: {
-        payload: Prisma.$EmailVerificationTokenPayload<ExtArgs>
-        fields: Prisma.EmailVerificationTokenFieldRefs
+        payload: EmailVerificationTokenPayload<ExtArgs>
         operations: {
           findUnique: {
-            args: Prisma.EmailVerificationTokenFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmailVerificationTokenPayload> | null
+            args: Prisma.EmailVerificationTokenFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<EmailVerificationTokenPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.EmailVerificationTokenFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmailVerificationTokenPayload>
+            args: Prisma.EmailVerificationTokenFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<EmailVerificationTokenPayload>
           }
           findFirst: {
-            args: Prisma.EmailVerificationTokenFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmailVerificationTokenPayload> | null
+            args: Prisma.EmailVerificationTokenFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<EmailVerificationTokenPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.EmailVerificationTokenFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmailVerificationTokenPayload>
+            args: Prisma.EmailVerificationTokenFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<EmailVerificationTokenPayload>
           }
           findMany: {
-            args: Prisma.EmailVerificationTokenFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmailVerificationTokenPayload>[]
+            args: Prisma.EmailVerificationTokenFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<EmailVerificationTokenPayload>[]
           }
           create: {
-            args: Prisma.EmailVerificationTokenCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmailVerificationTokenPayload>
+            args: Prisma.EmailVerificationTokenCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<EmailVerificationTokenPayload>
           }
           createMany: {
-            args: Prisma.EmailVerificationTokenCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.EmailVerificationTokenCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmailVerificationTokenPayload>[]
+            args: Prisma.EmailVerificationTokenCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           delete: {
-            args: Prisma.EmailVerificationTokenDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmailVerificationTokenPayload>
+            args: Prisma.EmailVerificationTokenDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<EmailVerificationTokenPayload>
           }
           update: {
-            args: Prisma.EmailVerificationTokenUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmailVerificationTokenPayload>
+            args: Prisma.EmailVerificationTokenUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<EmailVerificationTokenPayload>
           }
           deleteMany: {
-            args: Prisma.EmailVerificationTokenDeleteManyArgs<ExtArgs>
-            result: BatchPayload
+            args: Prisma.EmailVerificationTokenDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           updateMany: {
-            args: Prisma.EmailVerificationTokenUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.EmailVerificationTokenUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmailVerificationTokenPayload>[]
+            args: Prisma.EmailVerificationTokenUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           upsert: {
-            args: Prisma.EmailVerificationTokenUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmailVerificationTokenPayload>
+            args: Prisma.EmailVerificationTokenUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<EmailVerificationTokenPayload>
           }
           aggregate: {
-            args: Prisma.EmailVerificationTokenAggregateArgs<ExtArgs>
+            args: Prisma.EmailVerificationTokenAggregateArgs<ExtArgs>,
             result: $Utils.Optional<AggregateEmailVerificationToken>
           }
           groupBy: {
-            args: Prisma.EmailVerificationTokenGroupByArgs<ExtArgs>
+            args: Prisma.EmailVerificationTokenGroupByArgs<ExtArgs>,
             result: $Utils.Optional<EmailVerificationTokenGroupByOutputType>[]
           }
           count: {
-            args: Prisma.EmailVerificationTokenCountArgs<ExtArgs>
+            args: Prisma.EmailVerificationTokenCountArgs<ExtArgs>,
             result: $Utils.Optional<EmailVerificationTokenCountAggregateOutputType> | number
           }
         }
       }
       Patron: {
-        payload: Prisma.$PatronPayload<ExtArgs>
-        fields: Prisma.PatronFieldRefs
+        payload: PatronPayload<ExtArgs>
         operations: {
           findUnique: {
-            args: Prisma.PatronFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PatronPayload> | null
+            args: Prisma.PatronFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<PatronPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.PatronFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PatronPayload>
+            args: Prisma.PatronFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<PatronPayload>
           }
           findFirst: {
-            args: Prisma.PatronFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PatronPayload> | null
+            args: Prisma.PatronFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<PatronPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.PatronFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PatronPayload>
+            args: Prisma.PatronFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<PatronPayload>
           }
           findMany: {
-            args: Prisma.PatronFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PatronPayload>[]
+            args: Prisma.PatronFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<PatronPayload>[]
           }
           create: {
-            args: Prisma.PatronCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PatronPayload>
+            args: Prisma.PatronCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<PatronPayload>
           }
           createMany: {
-            args: Prisma.PatronCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.PatronCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PatronPayload>[]
+            args: Prisma.PatronCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           delete: {
-            args: Prisma.PatronDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PatronPayload>
+            args: Prisma.PatronDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<PatronPayload>
           }
           update: {
-            args: Prisma.PatronUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PatronPayload>
+            args: Prisma.PatronUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<PatronPayload>
           }
           deleteMany: {
-            args: Prisma.PatronDeleteManyArgs<ExtArgs>
-            result: BatchPayload
+            args: Prisma.PatronDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           updateMany: {
-            args: Prisma.PatronUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.PatronUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PatronPayload>[]
+            args: Prisma.PatronUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           upsert: {
-            args: Prisma.PatronUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PatronPayload>
+            args: Prisma.PatronUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<PatronPayload>
           }
           aggregate: {
-            args: Prisma.PatronAggregateArgs<ExtArgs>
+            args: Prisma.PatronAggregateArgs<ExtArgs>,
             result: $Utils.Optional<AggregatePatron>
           }
           groupBy: {
-            args: Prisma.PatronGroupByArgs<ExtArgs>
+            args: Prisma.PatronGroupByArgs<ExtArgs>,
             result: $Utils.Optional<PatronGroupByOutputType>[]
           }
           count: {
-            args: Prisma.PatronCountArgs<ExtArgs>
+            args: Prisma.PatronCountArgs<ExtArgs>,
             result: $Utils.Optional<PatronCountAggregateOutputType> | number
           }
         }
       }
       Book_likes: {
-        payload: Prisma.$Book_likesPayload<ExtArgs>
-        fields: Prisma.Book_likesFieldRefs
+        payload: Book_likesPayload<ExtArgs>
         operations: {
           findUnique: {
-            args: Prisma.Book_likesFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_likesPayload> | null
+            args: Prisma.Book_likesFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_likesPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.Book_likesFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_likesPayload>
+            args: Prisma.Book_likesFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_likesPayload>
           }
           findFirst: {
-            args: Prisma.Book_likesFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_likesPayload> | null
+            args: Prisma.Book_likesFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_likesPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.Book_likesFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_likesPayload>
+            args: Prisma.Book_likesFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_likesPayload>
           }
           findMany: {
-            args: Prisma.Book_likesFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_likesPayload>[]
+            args: Prisma.Book_likesFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_likesPayload>[]
           }
           create: {
-            args: Prisma.Book_likesCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_likesPayload>
+            args: Prisma.Book_likesCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_likesPayload>
           }
           createMany: {
-            args: Prisma.Book_likesCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.Book_likesCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_likesPayload>[]
+            args: Prisma.Book_likesCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           delete: {
-            args: Prisma.Book_likesDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_likesPayload>
+            args: Prisma.Book_likesDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_likesPayload>
           }
           update: {
-            args: Prisma.Book_likesUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_likesPayload>
+            args: Prisma.Book_likesUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_likesPayload>
           }
           deleteMany: {
-            args: Prisma.Book_likesDeleteManyArgs<ExtArgs>
-            result: BatchPayload
+            args: Prisma.Book_likesDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           updateMany: {
-            args: Prisma.Book_likesUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.Book_likesUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_likesPayload>[]
+            args: Prisma.Book_likesUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           upsert: {
-            args: Prisma.Book_likesUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_likesPayload>
+            args: Prisma.Book_likesUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_likesPayload>
           }
           aggregate: {
-            args: Prisma.Book_likesAggregateArgs<ExtArgs>
+            args: Prisma.Book_likesAggregateArgs<ExtArgs>,
             result: $Utils.Optional<AggregateBook_likes>
           }
           groupBy: {
-            args: Prisma.Book_likesGroupByArgs<ExtArgs>
+            args: Prisma.Book_likesGroupByArgs<ExtArgs>,
             result: $Utils.Optional<Book_likesGroupByOutputType>[]
           }
           count: {
-            args: Prisma.Book_likesCountArgs<ExtArgs>
+            args: Prisma.Book_likesCountArgs<ExtArgs>,
             result: $Utils.Optional<Book_likesCountAggregateOutputType> | number
           }
         }
       }
       Book_consulted: {
-        payload: Prisma.$Book_consultedPayload<ExtArgs>
-        fields: Prisma.Book_consultedFieldRefs
+        payload: Book_consultedPayload<ExtArgs>
         operations: {
           findUnique: {
-            args: Prisma.Book_consultedFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_consultedPayload> | null
+            args: Prisma.Book_consultedFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_consultedPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.Book_consultedFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_consultedPayload>
+            args: Prisma.Book_consultedFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_consultedPayload>
           }
           findFirst: {
-            args: Prisma.Book_consultedFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_consultedPayload> | null
+            args: Prisma.Book_consultedFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_consultedPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.Book_consultedFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_consultedPayload>
+            args: Prisma.Book_consultedFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_consultedPayload>
           }
           findMany: {
-            args: Prisma.Book_consultedFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_consultedPayload>[]
+            args: Prisma.Book_consultedFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_consultedPayload>[]
           }
           create: {
-            args: Prisma.Book_consultedCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_consultedPayload>
+            args: Prisma.Book_consultedCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_consultedPayload>
           }
           createMany: {
-            args: Prisma.Book_consultedCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.Book_consultedCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_consultedPayload>[]
+            args: Prisma.Book_consultedCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           delete: {
-            args: Prisma.Book_consultedDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_consultedPayload>
+            args: Prisma.Book_consultedDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_consultedPayload>
           }
           update: {
-            args: Prisma.Book_consultedUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_consultedPayload>
+            args: Prisma.Book_consultedUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_consultedPayload>
           }
           deleteMany: {
-            args: Prisma.Book_consultedDeleteManyArgs<ExtArgs>
-            result: BatchPayload
+            args: Prisma.Book_consultedDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           updateMany: {
-            args: Prisma.Book_consultedUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.Book_consultedUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_consultedPayload>[]
+            args: Prisma.Book_consultedUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           upsert: {
-            args: Prisma.Book_consultedUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$Book_consultedPayload>
+            args: Prisma.Book_consultedUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Book_consultedPayload>
           }
           aggregate: {
-            args: Prisma.Book_consultedAggregateArgs<ExtArgs>
+            args: Prisma.Book_consultedAggregateArgs<ExtArgs>,
             result: $Utils.Optional<AggregateBook_consulted>
           }
           groupBy: {
-            args: Prisma.Book_consultedGroupByArgs<ExtArgs>
+            args: Prisma.Book_consultedGroupByArgs<ExtArgs>,
             result: $Utils.Optional<Book_consultedGroupByOutputType>[]
           }
           count: {
-            args: Prisma.Book_consultedCountArgs<ExtArgs>
+            args: Prisma.Book_consultedCountArgs<ExtArgs>,
             result: $Utils.Optional<Book_consultedCountAggregateOutputType> | number
           }
         }
       }
       Circulation: {
-        payload: Prisma.$CirculationPayload<ExtArgs>
-        fields: Prisma.CirculationFieldRefs
+        payload: CirculationPayload<ExtArgs>
         operations: {
           findUnique: {
-            args: Prisma.CirculationFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CirculationPayload> | null
+            args: Prisma.CirculationFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<CirculationPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.CirculationFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CirculationPayload>
+            args: Prisma.CirculationFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<CirculationPayload>
           }
           findFirst: {
-            args: Prisma.CirculationFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CirculationPayload> | null
+            args: Prisma.CirculationFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<CirculationPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.CirculationFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CirculationPayload>
+            args: Prisma.CirculationFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<CirculationPayload>
           }
           findMany: {
-            args: Prisma.CirculationFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CirculationPayload>[]
+            args: Prisma.CirculationFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<CirculationPayload>[]
           }
           create: {
-            args: Prisma.CirculationCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CirculationPayload>
+            args: Prisma.CirculationCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<CirculationPayload>
           }
           createMany: {
-            args: Prisma.CirculationCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.CirculationCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CirculationPayload>[]
+            args: Prisma.CirculationCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           delete: {
-            args: Prisma.CirculationDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CirculationPayload>
+            args: Prisma.CirculationDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<CirculationPayload>
           }
           update: {
-            args: Prisma.CirculationUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CirculationPayload>
+            args: Prisma.CirculationUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<CirculationPayload>
           }
           deleteMany: {
-            args: Prisma.CirculationDeleteManyArgs<ExtArgs>
-            result: BatchPayload
+            args: Prisma.CirculationDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           updateMany: {
-            args: Prisma.CirculationUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.CirculationUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CirculationPayload>[]
+            args: Prisma.CirculationUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
           }
           upsert: {
-            args: Prisma.CirculationUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CirculationPayload>
+            args: Prisma.CirculationUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<CirculationPayload>
           }
           aggregate: {
-            args: Prisma.CirculationAggregateArgs<ExtArgs>
+            args: Prisma.CirculationAggregateArgs<ExtArgs>,
             result: $Utils.Optional<AggregateCirculation>
           }
           groupBy: {
-            args: Prisma.CirculationGroupByArgs<ExtArgs>
+            args: Prisma.CirculationGroupByArgs<ExtArgs>,
             result: $Utils.Optional<CirculationGroupByOutputType>[]
           }
           count: {
-            args: Prisma.CirculationCountArgs<ExtArgs>
+            args: Prisma.CirculationCountArgs<ExtArgs>,
             result: $Utils.Optional<CirculationCountAggregateOutputType> | number
           }
         }
@@ -1344,15 +1452,11 @@ export namespace Prisma {
     other: {
       payload: any
       operations: {
-        $executeRaw: {
-          args: [query: TemplateStringsArray | Prisma.Sql, ...values: any[]],
-          result: any
-        }
         $executeRawUnsafe: {
           args: [query: string, ...values: any[]],
           result: any
         }
-        $queryRaw: {
+        $executeRaw: {
           args: [query: TemplateStringsArray | Prisma.Sql, ...values: any[]],
           result: any
         }
@@ -1360,25 +1464,64 @@ export namespace Prisma {
           args: [query: string, ...values: any[]],
           result: any
         }
+        $queryRaw: {
+          args: [query: TemplateStringsArray | Prisma.Sql, ...values: any[]],
+          result: any
+        }
       }
     }
   }
-  export const defineExtension: $Extensions.ExtendsHook<"define", Prisma.TypeMapCb, $Extensions.DefaultArgs>
+  export const defineExtension: $Extensions.ExtendsHook<'define', Prisma.TypeMapCb, $Extensions.DefaultArgs>
   export type DefaultPrismaClient = PrismaClient
+  export type RejectOnNotFound = boolean | ((error: Error) => Error)
+  export type RejectPerModel = { [P in ModelName]?: RejectOnNotFound }
+  export type RejectPerOperation =  { [P in "findUnique" | "findFirst"]?: RejectPerModel | RejectOnNotFound } 
+  type IsReject<T> = T extends true ? True : T extends (err: Error) => Error ? True : False
+  export type HasReject<
+    GlobalRejectSettings extends Prisma.PrismaClientOptions['rejectOnNotFound'],
+    LocalRejectSettings,
+    Action extends PrismaAction,
+    Model extends ModelName
+  > = LocalRejectSettings extends RejectOnNotFound
+    ? IsReject<LocalRejectSettings>
+    : GlobalRejectSettings extends RejectPerOperation
+    ? Action extends keyof GlobalRejectSettings
+      ? GlobalRejectSettings[Action] extends RejectOnNotFound
+        ? IsReject<GlobalRejectSettings[Action]>
+        : GlobalRejectSettings[Action] extends RejectPerModel
+        ? Model extends keyof GlobalRejectSettings[Action]
+          ? IsReject<GlobalRejectSettings[Action][Model]>
+          : False
+        : False
+      : False
+    : IsReject<GlobalRejectSettings>
   export type ErrorFormat = 'pretty' | 'colorless' | 'minimal'
+
   export interface PrismaClientOptions {
+    /**
+     * Configure findUnique/findFirst to throw an error if the query returns null. 
+     * @deprecated since 4.0.0. Use `findUniqueOrThrow`/`findFirstOrThrow` methods instead.
+     * @example
+     * ```
+     * // Reject on both findUnique/findFirst
+     * rejectOnNotFound: true
+     * // Reject only on findFirst with a custom error
+     * rejectOnNotFound: { findFirst: (err) => new Error("Custom Error")}
+     * // Reject on user.findUnique with a custom error
+     * rejectOnNotFound: { findUnique: {User: (err) => new Error("User not found")}}
+     * ```
+     */
+    rejectOnNotFound?: RejectOnNotFound | RejectPerOperation
     /**
      * Overwrites the datasource url from your schema.prisma file
      */
     datasources?: Datasources
-    /**
-     * Overwrites the datasource url from your schema.prisma file
-     */
-    datasourceUrl?: string
+
     /**
      * @default "colorless"
      */
     errorFormat?: ErrorFormat
+
     /**
      * @example
      * ```
@@ -1387,50 +1530,15 @@ export namespace Prisma {
      * 
      * // Emit as events
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
      * ]
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
-    log?: (LogLevel | LogDefinition)[]
-    /**
-     * The default values for transactionOptions
-     * maxWait ?= 2000
-     * timeout ?= 5000
-     */
-    transactionOptions?: {
-      maxWait?: number
-      timeout?: number
-      isolationLevel?: Prisma.TransactionIsolationLevel
-    }
-    /**
-     * Global configuration for omitting model fields by default.
-     * 
-     * @example
-     * ```
-     * const prisma = new PrismaClient({
-     *   omit: {
-     *     user: {
-     *       password: true
-     *     }
-     *   }
-     * })
-     * ```
-     */
-    omit?: Prisma.GlobalOmitConfig
-  }
-  export type GlobalOmitConfig = {
-    session?: SessionOmit
-    librarian?: LibrarianOmit
-    book?: BookOmit
-    emailVerificationToken?: EmailVerificationTokenOmit
-    patron?: PatronOmit
-    book_likes?: Book_likesOmit
-    book_consulted?: Book_consultedOmit
-    circulation?: CirculationOmit
+    log?: Array<LogLevel | LogDefinition>
   }
 
   /* Types for Logging */
@@ -1463,16 +1571,12 @@ export namespace Prisma {
 
   export type PrismaAction =
     | 'findUnique'
-    | 'findUniqueOrThrow'
     | 'findMany'
     | 'findFirst'
-    | 'findFirstOrThrow'
     | 'create'
     | 'createMany'
-    | 'createManyAndReturn'
     | 'update'
     | 'updateMany'
-    | 'updateManyAndReturn'
     | 'upsert'
     | 'delete'
     | 'deleteMany'
@@ -1482,7 +1586,6 @@ export namespace Prisma {
     | 'count'
     | 'runCommandRaw'
     | 'findRaw'
-    | 'groupBy'
 
   /**
    * These options are being passed into the middleware as "params"
@@ -1500,8 +1603,8 @@ export namespace Prisma {
    */
   export type Middleware<T = any> = (
     params: MiddlewareParams,
-    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
-  ) => $Utils.JsPromise<T>
+    next: (params: MiddlewareParams) => Promise<T>,
+  ) => Promise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -1524,54 +1627,61 @@ export namespace Prisma {
    * Count Type BookCountOutputType
    */
 
+
   export type BookCountOutputType = {
     book_likes: number
     book_consulted: number
     circulation: number
   }
 
-  export type BookCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookCountOutputTypeSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     book_likes?: boolean | BookCountOutputTypeCountBook_likesArgs
     book_consulted?: boolean | BookCountOutputTypeCountBook_consultedArgs
     circulation?: boolean | BookCountOutputTypeCountCirculationArgs
   }
 
   // Custom InputTypes
+
   /**
    * BookCountOutputType without action
    */
-  export type BookCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookCountOutputTypeArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the BookCountOutputType
      */
     select?: BookCountOutputTypeSelect<ExtArgs> | null
   }
 
+
   /**
    * BookCountOutputType without action
    */
-  export type BookCountOutputTypeCountBook_likesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookCountOutputTypeCountBook_likesArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: Book_likesWhereInput
   }
 
-  /**
-   * BookCountOutputType without action
-   */
-  export type BookCountOutputTypeCountBook_consultedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: Book_consultedWhereInput
-  }
 
   /**
    * BookCountOutputType without action
    */
-  export type BookCountOutputTypeCountCirculationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookCountOutputTypeCountBook_consultedArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: Book_consultedWhereInput
+  }
+
+
+  /**
+   * BookCountOutputType without action
+   */
+  export type BookCountOutputTypeCountCirculationArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: CirculationWhereInput
   }
+
 
 
   /**
    * Count Type PatronCountOutputType
    */
+
 
   export type PatronCountOutputType = {
     book_likes: number
@@ -1579,43 +1689,48 @@ export namespace Prisma {
     circulation: number
   }
 
-  export type PatronCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronCountOutputTypeSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     book_likes?: boolean | PatronCountOutputTypeCountBook_likesArgs
     book_consulted?: boolean | PatronCountOutputTypeCountBook_consultedArgs
     circulation?: boolean | PatronCountOutputTypeCountCirculationArgs
   }
 
   // Custom InputTypes
+
   /**
    * PatronCountOutputType without action
    */
-  export type PatronCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronCountOutputTypeArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the PatronCountOutputType
      */
     select?: PatronCountOutputTypeSelect<ExtArgs> | null
   }
 
+
   /**
    * PatronCountOutputType without action
    */
-  export type PatronCountOutputTypeCountBook_likesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronCountOutputTypeCountBook_likesArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: Book_likesWhereInput
   }
 
-  /**
-   * PatronCountOutputType without action
-   */
-  export type PatronCountOutputTypeCountBook_consultedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: Book_consultedWhereInput
-  }
 
   /**
    * PatronCountOutputType without action
    */
-  export type PatronCountOutputTypeCountCirculationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronCountOutputTypeCountBook_consultedArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: Book_consultedWhereInput
+  }
+
+
+  /**
+   * PatronCountOutputType without action
+   */
+  export type PatronCountOutputTypeCountCirculationArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: CirculationWhereInput
   }
+
 
 
   /**
@@ -1625,6 +1740,7 @@ export namespace Prisma {
   /**
    * Model Session
    */
+
 
   export type AggregateSession = {
     _count: SessionCountAggregateOutputType | null
@@ -1677,7 +1793,7 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type SessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Session to aggregate.
      */
@@ -1687,7 +1803,7 @@ export namespace Prisma {
      * 
      * Determine the order of Sessions to fetch.
      */
-    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
+    orderBy?: Enumerable<SessionOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -1737,10 +1853,10 @@ export namespace Prisma {
 
 
 
-  export type SessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: SessionWhereInput
-    orderBy?: SessionOrderByWithAggregationInput | SessionOrderByWithAggregationInput[]
-    by: SessionScalarFieldEnum[] | SessionScalarFieldEnum
+    orderBy?: Enumerable<SessionOrderByWithAggregationInput>
+    by: SessionScalarFieldEnum[]
     having?: SessionScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -1748,6 +1864,7 @@ export namespace Prisma {
     _min?: SessionMinAggregateInputType
     _max?: SessionMaxAggregateInputType
   }
+
 
   export type SessionGroupByOutputType = {
     id: string
@@ -1761,7 +1878,7 @@ export namespace Prisma {
 
   type GetSessionGroupByPayload<T extends SessionGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<SessionGroupByOutputType, T['by']> &
+      PickArray<SessionGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof SessionGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -1773,21 +1890,7 @@ export namespace Prisma {
     >
 
 
-  export type SessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    sid?: boolean
-    data?: boolean
-    expiresAt?: boolean
-  }, ExtArgs["result"]["session"]>
-
-  export type SessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    sid?: boolean
-    data?: boolean
-    expiresAt?: boolean
-  }, ExtArgs["result"]["session"]>
-
-  export type SessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type SessionSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     sid?: boolean
     data?: boolean
@@ -1801,28 +1904,15 @@ export namespace Prisma {
     expiresAt?: boolean
   }
 
-  export type SessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sid" | "data" | "expiresAt", ExtArgs["result"]["session"]>
 
-  export type $SessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Session"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      sid: string
-      data: string
-      expiresAt: Date
-    }, ExtArgs["result"]["session"]>
-    composites: {}
-  }
+  type SessionGetPayload<S extends boolean | null | undefined | SessionArgs> = $Types.GetResult<SessionPayload, S>
 
-  type SessionGetPayload<S extends boolean | null | undefined | SessionDefaultArgs> = $Result.GetResult<Prisma.$SessionPayload, S>
-
-  type SessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<SessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type SessionCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<SessionFindManyArgs, 'select' | 'include'> & {
       select?: SessionCountAggregateInputType | true
     }
 
-  export interface SessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface SessionDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Session'], meta: { name: 'Session' } }
     /**
      * Find zero or one Session that matches the filter.
@@ -1834,12 +1924,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUnique<T extends SessionFindUniqueArgs>(args: SelectSubset<T, SessionFindUniqueArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findUnique<T extends SessionFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, SessionFindUniqueArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Session'> extends True ? Prisma__SessionClient<$Types.GetResult<SessionPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__SessionClient<$Types.GetResult<SessionPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
 
     /**
-     * Find one Session that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
+     * Find one Session that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
      * @param {SessionFindUniqueOrThrowArgs} args - Arguments to find a Session
      * @example
      * // Get one Session
@@ -1848,8 +1940,10 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUniqueOrThrow<T extends SessionFindUniqueOrThrowArgs>(args: SelectSubset<T, SessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findUniqueOrThrow<T extends SessionFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, SessionFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__SessionClient<$Types.GetResult<SessionPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
 
     /**
      * Find the first Session that matches the filter.
@@ -1863,12 +1957,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirst<T extends SessionFindFirstArgs>(args?: SelectSubset<T, SessionFindFirstArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirst<T extends SessionFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, SessionFindFirstArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Session'> extends True ? Prisma__SessionClient<$Types.GetResult<SessionPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__SessionClient<$Types.GetResult<SessionPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
 
     /**
      * Find the first Session that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {SessionFindFirstOrThrowArgs} args - Arguments to find a Session
@@ -1879,14 +1975,16 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirstOrThrow<T extends SessionFindFirstOrThrowArgs>(args?: SelectSubset<T, SessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirstOrThrow<T extends SessionFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, SessionFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__SessionClient<$Types.GetResult<SessionPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
 
     /**
      * Find zero or more Sessions that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {SessionFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
      * // Get all Sessions
      * const sessions = await prisma.session.findMany()
@@ -1897,8 +1995,10 @@ export namespace Prisma {
      * // Only select the `id`
      * const sessionWithIdOnly = await prisma.session.findMany({ select: { id: true } })
      * 
-     */
-    findMany<T extends SessionFindManyArgs>(args?: SelectSubset<T, SessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    **/
+    findMany<T extends SessionFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, SessionFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<SessionPayload<ExtArgs>, T, 'findMany', never>>
 
     /**
      * Create a Session.
@@ -1911,46 +2011,26 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    create<T extends SessionCreateArgs>(args: SelectSubset<T, SessionCreateArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    create<T extends SessionCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, SessionCreateArgs<ExtArgs>>
+    ): Prisma__SessionClient<$Types.GetResult<SessionPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
 
     /**
      * Create many Sessions.
-     * @param {SessionCreateManyArgs} args - Arguments to create many Sessions.
-     * @example
-     * // Create many Sessions
-     * const session = await prisma.session.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
+     *     @param {SessionCreateManyArgs} args - Arguments to create many Sessions.
+     *     @example
+     *     // Create many Sessions
+     *     const session = await prisma.session.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
      *     
-     */
-    createMany<T extends SessionCreateManyArgs>(args?: SelectSubset<T, SessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Sessions and returns the data saved in the database.
-     * @param {SessionCreateManyAndReturnArgs} args - Arguments to create many Sessions.
-     * @example
-     * // Create many Sessions
-     * const session = await prisma.session.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Sessions and only return the `id`
-     * const sessionWithIdOnly = await prisma.session.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends SessionCreateManyAndReturnArgs>(args?: SelectSubset<T, SessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    **/
+    createMany<T extends SessionCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, SessionCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a Session.
@@ -1963,8 +2043,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    delete<T extends SessionDeleteArgs>(args: SelectSubset<T, SessionDeleteArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    delete<T extends SessionDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, SessionDeleteArgs<ExtArgs>>
+    ): Prisma__SessionClient<$Types.GetResult<SessionPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
 
     /**
      * Update one Session.
@@ -1980,8 +2062,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    update<T extends SessionUpdateArgs>(args: SelectSubset<T, SessionUpdateArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    update<T extends SessionUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, SessionUpdateArgs<ExtArgs>>
+    ): Prisma__SessionClient<$Types.GetResult<SessionPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
 
     /**
      * Delete zero or more Sessions.
@@ -1994,8 +2078,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    deleteMany<T extends SessionDeleteManyArgs>(args?: SelectSubset<T, SessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    **/
+    deleteMany<T extends SessionDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, SessionDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Update zero or more Sessions.
@@ -2013,38 +2099,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    updateMany<T extends SessionUpdateManyArgs>(args: SelectSubset<T, SessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Sessions and returns the data updated in the database.
-     * @param {SessionUpdateManyAndReturnArgs} args - Arguments to update many Sessions.
-     * @example
-     * // Update many Sessions
-     * const session = await prisma.session.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Sessions and only return the `id`
-     * const sessionWithIdOnly = await prisma.session.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends SessionUpdateManyAndReturnArgs>(args: SelectSubset<T, SessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    **/
+    updateMany<T extends SessionUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, SessionUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Create or update one Session.
@@ -2062,9 +2120,10 @@ export namespace Prisma {
      *     // ... the filter for the Session we want to update
      *   }
      * })
-     */
-    upsert<T extends SessionUpsertArgs>(args: SelectSubset<T, SessionUpsertArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
+    **/
+    upsert<T extends SessionUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, SessionUpsertArgs<ExtArgs>>
+    ): Prisma__SessionClient<$Types.GetResult<SessionPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
 
     /**
      * Count the number of Sessions.
@@ -2143,7 +2202,7 @@ export namespace Prisma {
         ? { orderBy: SessionGroupByArgs['orderBy'] }
         : { orderBy?: SessionGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -2191,10 +2250,7 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, SessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Session model
-   */
-  readonly fields: SessionFieldRefs;
+
   }
 
   /**
@@ -2203,141 +2259,154 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
+  export class Prisma__SessionClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+
+    private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
     /**
      * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
      * resolved value cannot be modified from the callback.
      * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
      * @returns A Promise for the completion of the callback.
      */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
   }
 
 
-
-
-  /**
-   * Fields of the Session model
-   */
-  interface SessionFieldRefs {
-    readonly id: FieldRef<"Session", 'String'>
-    readonly sid: FieldRef<"Session", 'String'>
-    readonly data: FieldRef<"Session", 'String'>
-    readonly expiresAt: FieldRef<"Session", 'DateTime'>
-  }
-    
 
   // Custom InputTypes
+
   /**
-   * Session findUnique
+   * Session base type for findUnique actions
    */
-  export type SessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Session
      */
     select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
-    /**
      * Filter, which Session to fetch.
      */
     where: SessionWhereUniqueInput
   }
+
+  /**
+   * Session findUnique
+   */
+  export interface SessionFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends SessionFindUniqueArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
 
   /**
    * Session findUniqueOrThrow
    */
-  export type SessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Session
      */
     select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
-    /**
      * Filter, which Session to fetch.
      */
     where: SessionWhereUniqueInput
+  }
+
+
+  /**
+   * Session base type for findFirst actions
+   */
+  export type SessionFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Filter, which Session to fetch.
+     */
+    where?: SessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sessions to fetch.
+     */
+    orderBy?: Enumerable<SessionOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Sessions.
+     */
+    cursor?: SessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Sessions.
+     */
+    distinct?: Enumerable<SessionScalarFieldEnum>
   }
 
   /**
    * Session findFirst
    */
-  export type SessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
-    /**
-     * Filter, which Session to fetch.
-     */
-    where?: SessionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Sessions to fetch.
-     */
-    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Sessions.
-     */
-    cursor?: SessionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Sessions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Sessions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Sessions.
-     */
-    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  export interface SessionFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends SessionFindFirstArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
   }
+      
 
   /**
    * Session findFirstOrThrow
    */
-  export type SessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Session
      */
     select?: SessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
     /**
      * Filter, which Session to fetch.
      */
@@ -2347,7 +2416,7 @@ export namespace Prisma {
      * 
      * Determine the order of Sessions to fetch.
      */
-    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
+    orderBy?: Enumerable<SessionOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -2371,21 +2440,18 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of Sessions.
      */
-    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+    distinct?: Enumerable<SessionScalarFieldEnum>
   }
+
 
   /**
    * Session findMany
    */
-  export type SessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Session
      */
     select?: SessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
     /**
      * Filter, which Sessions to fetch.
      */
@@ -2395,7 +2461,7 @@ export namespace Prisma {
      * 
      * Determine the order of Sessions to fetch.
      */
-    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
+    orderBy?: Enumerable<SessionOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -2414,69 +2480,45 @@ export namespace Prisma {
      * Skip the first `n` Sessions.
      */
     skip?: number
-    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+    distinct?: Enumerable<SessionScalarFieldEnum>
   }
+
 
   /**
    * Session create
    */
-  export type SessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Session
      */
     select?: SessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
     /**
      * The data needed to create a Session.
      */
     data: XOR<SessionCreateInput, SessionUncheckedCreateInput>
   }
 
+
   /**
    * Session createMany
    */
-  export type SessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to create many Sessions.
      */
-    data: SessionCreateManyInput | SessionCreateManyInput[]
+    data: Enumerable<SessionCreateManyInput>
     skipDuplicates?: boolean
   }
 
-  /**
-   * Session createManyAndReturn
-   */
-  export type SessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
-    /**
-     * The data used to create many Sessions.
-     */
-    data: SessionCreateManyInput | SessionCreateManyInput[]
-    skipDuplicates?: boolean
-  }
 
   /**
    * Session update
    */
-  export type SessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Session
      */
     select?: SessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
     /**
      * The data needed to update a Session.
      */
@@ -2487,10 +2529,11 @@ export namespace Prisma {
     where: SessionWhereUniqueInput
   }
 
+
   /**
    * Session updateMany
    */
-  export type SessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to update Sessions.
      */
@@ -2499,50 +2542,17 @@ export namespace Prisma {
      * Filter which Sessions to update
      */
     where?: SessionWhereInput
-    /**
-     * Limit how many Sessions to update.
-     */
-    limit?: number
   }
 
-  /**
-   * Session updateManyAndReturn
-   */
-  export type SessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
-    /**
-     * The data used to update Sessions.
-     */
-    data: XOR<SessionUpdateManyMutationInput, SessionUncheckedUpdateManyInput>
-    /**
-     * Filter which Sessions to update
-     */
-    where?: SessionWhereInput
-    /**
-     * Limit how many Sessions to update.
-     */
-    limit?: number
-  }
 
   /**
    * Session upsert
    */
-  export type SessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Session
      */
     select?: SessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
     /**
      * The filter to search for the Session to update in case it exists.
      */
@@ -2557,56 +2567,49 @@ export namespace Prisma {
     update: XOR<SessionUpdateInput, SessionUncheckedUpdateInput>
   }
 
+
   /**
    * Session delete
    */
-  export type SessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Session
      */
     select?: SessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
     /**
      * Filter which Session to delete.
      */
     where: SessionWhereUniqueInput
   }
 
+
   /**
    * Session deleteMany
    */
-  export type SessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Sessions to delete
      */
     where?: SessionWhereInput
-    /**
-     * Limit how many Sessions to delete.
-     */
-    limit?: number
   }
+
 
   /**
    * Session without action
    */
-  export type SessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Session
      */
     select?: SessionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Session
-     */
-    omit?: SessionOmit<ExtArgs> | null
   }
+
 
 
   /**
    * Model Librarian
    */
+
 
   export type AggregateLibrarian = {
     _count: LibrarianCountAggregateOutputType | null
@@ -2727,7 +2730,7 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type LibrarianAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Librarian to aggregate.
      */
@@ -2737,7 +2740,7 @@ export namespace Prisma {
      * 
      * Determine the order of Librarians to fetch.
      */
-    orderBy?: LibrarianOrderByWithRelationInput | LibrarianOrderByWithRelationInput[]
+    orderBy?: Enumerable<LibrarianOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -2799,10 +2802,10 @@ export namespace Prisma {
 
 
 
-  export type LibrarianGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: LibrarianWhereInput
-    orderBy?: LibrarianOrderByWithAggregationInput | LibrarianOrderByWithAggregationInput[]
-    by: LibrarianScalarFieldEnum[] | LibrarianScalarFieldEnum
+    orderBy?: Enumerable<LibrarianOrderByWithAggregationInput>
+    by: LibrarianScalarFieldEnum[]
     having?: LibrarianScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -2812,6 +2815,7 @@ export namespace Prisma {
     _min?: LibrarianMinAggregateInputType
     _max?: LibrarianMaxAggregateInputType
   }
+
 
   export type LibrarianGroupByOutputType = {
     id: string
@@ -2836,7 +2840,7 @@ export namespace Prisma {
 
   type GetLibrarianGroupByPayload<T extends LibrarianGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<LibrarianGroupByOutputType, T['by']> &
+      PickArray<LibrarianGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof LibrarianGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -2848,39 +2852,7 @@ export namespace Prisma {
     >
 
 
-  export type LibrarianSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    firstname?: boolean
-    lastname?: boolean
-    displayname?: boolean
-    email?: boolean
-    password?: boolean
-    profile_img?: boolean
-    address?: boolean
-    contact?: boolean
-    rank?: boolean
-    books_entered?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }, ExtArgs["result"]["librarian"]>
-
-  export type LibrarianSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    firstname?: boolean
-    lastname?: boolean
-    displayname?: boolean
-    email?: boolean
-    password?: boolean
-    profile_img?: boolean
-    address?: boolean
-    contact?: boolean
-    rank?: boolean
-    books_entered?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }, ExtArgs["result"]["librarian"]>
-
-  export type LibrarianSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type LibrarianSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     firstname?: boolean
     lastname?: boolean
@@ -2912,37 +2884,15 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type LibrarianOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstname" | "lastname" | "displayname" | "email" | "password" | "profile_img" | "address" | "contact" | "rank" | "books_entered" | "created_at" | "updated_at", ExtArgs["result"]["librarian"]>
 
-  export type $LibrarianPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Librarian"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      firstname: string
-      lastname: string
-      displayname: string
-      email: string
-      password: string
-      profile_img: string
-      address: string
-      contact: string
-      rank: number
-      books_entered: string[]
-      created_at: Date
-      updated_at: Date
-    }, ExtArgs["result"]["librarian"]>
-    composites: {}
-  }
+  type LibrarianGetPayload<S extends boolean | null | undefined | LibrarianArgs> = $Types.GetResult<LibrarianPayload, S>
 
-  type LibrarianGetPayload<S extends boolean | null | undefined | LibrarianDefaultArgs> = $Result.GetResult<Prisma.$LibrarianPayload, S>
-
-  type LibrarianCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<LibrarianFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type LibrarianCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<LibrarianFindManyArgs, 'select' | 'include'> & {
       select?: LibrarianCountAggregateInputType | true
     }
 
-  export interface LibrarianDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface LibrarianDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Librarian'], meta: { name: 'Librarian' } }
     /**
      * Find zero or one Librarian that matches the filter.
@@ -2954,12 +2904,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUnique<T extends LibrarianFindUniqueArgs>(args: SelectSubset<T, LibrarianFindUniqueArgs<ExtArgs>>): Prisma__LibrarianClient<$Result.GetResult<Prisma.$LibrarianPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findUnique<T extends LibrarianFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, LibrarianFindUniqueArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Librarian'> extends True ? Prisma__LibrarianClient<$Types.GetResult<LibrarianPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__LibrarianClient<$Types.GetResult<LibrarianPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
 
     /**
-     * Find one Librarian that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
+     * Find one Librarian that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
      * @param {LibrarianFindUniqueOrThrowArgs} args - Arguments to find a Librarian
      * @example
      * // Get one Librarian
@@ -2968,8 +2920,10 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUniqueOrThrow<T extends LibrarianFindUniqueOrThrowArgs>(args: SelectSubset<T, LibrarianFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LibrarianClient<$Result.GetResult<Prisma.$LibrarianPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findUniqueOrThrow<T extends LibrarianFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, LibrarianFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__LibrarianClient<$Types.GetResult<LibrarianPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
 
     /**
      * Find the first Librarian that matches the filter.
@@ -2983,12 +2937,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirst<T extends LibrarianFindFirstArgs>(args?: SelectSubset<T, LibrarianFindFirstArgs<ExtArgs>>): Prisma__LibrarianClient<$Result.GetResult<Prisma.$LibrarianPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirst<T extends LibrarianFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, LibrarianFindFirstArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Librarian'> extends True ? Prisma__LibrarianClient<$Types.GetResult<LibrarianPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__LibrarianClient<$Types.GetResult<LibrarianPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
 
     /**
      * Find the first Librarian that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {LibrarianFindFirstOrThrowArgs} args - Arguments to find a Librarian
@@ -2999,14 +2955,16 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirstOrThrow<T extends LibrarianFindFirstOrThrowArgs>(args?: SelectSubset<T, LibrarianFindFirstOrThrowArgs<ExtArgs>>): Prisma__LibrarianClient<$Result.GetResult<Prisma.$LibrarianPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirstOrThrow<T extends LibrarianFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, LibrarianFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__LibrarianClient<$Types.GetResult<LibrarianPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
 
     /**
      * Find zero or more Librarians that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LibrarianFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {LibrarianFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
      * // Get all Librarians
      * const librarians = await prisma.librarian.findMany()
@@ -3017,8 +2975,10 @@ export namespace Prisma {
      * // Only select the `id`
      * const librarianWithIdOnly = await prisma.librarian.findMany({ select: { id: true } })
      * 
-     */
-    findMany<T extends LibrarianFindManyArgs>(args?: SelectSubset<T, LibrarianFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LibrarianPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    **/
+    findMany<T extends LibrarianFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, LibrarianFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<LibrarianPayload<ExtArgs>, T, 'findMany', never>>
 
     /**
      * Create a Librarian.
@@ -3031,46 +2991,26 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    create<T extends LibrarianCreateArgs>(args: SelectSubset<T, LibrarianCreateArgs<ExtArgs>>): Prisma__LibrarianClient<$Result.GetResult<Prisma.$LibrarianPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    create<T extends LibrarianCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, LibrarianCreateArgs<ExtArgs>>
+    ): Prisma__LibrarianClient<$Types.GetResult<LibrarianPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
 
     /**
      * Create many Librarians.
-     * @param {LibrarianCreateManyArgs} args - Arguments to create many Librarians.
-     * @example
-     * // Create many Librarians
-     * const librarian = await prisma.librarian.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
+     *     @param {LibrarianCreateManyArgs} args - Arguments to create many Librarians.
+     *     @example
+     *     // Create many Librarians
+     *     const librarian = await prisma.librarian.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
      *     
-     */
-    createMany<T extends LibrarianCreateManyArgs>(args?: SelectSubset<T, LibrarianCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Librarians and returns the data saved in the database.
-     * @param {LibrarianCreateManyAndReturnArgs} args - Arguments to create many Librarians.
-     * @example
-     * // Create many Librarians
-     * const librarian = await prisma.librarian.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Librarians and only return the `id`
-     * const librarianWithIdOnly = await prisma.librarian.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends LibrarianCreateManyAndReturnArgs>(args?: SelectSubset<T, LibrarianCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LibrarianPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    **/
+    createMany<T extends LibrarianCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, LibrarianCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a Librarian.
@@ -3083,8 +3023,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    delete<T extends LibrarianDeleteArgs>(args: SelectSubset<T, LibrarianDeleteArgs<ExtArgs>>): Prisma__LibrarianClient<$Result.GetResult<Prisma.$LibrarianPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    delete<T extends LibrarianDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, LibrarianDeleteArgs<ExtArgs>>
+    ): Prisma__LibrarianClient<$Types.GetResult<LibrarianPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
 
     /**
      * Update one Librarian.
@@ -3100,8 +3042,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    update<T extends LibrarianUpdateArgs>(args: SelectSubset<T, LibrarianUpdateArgs<ExtArgs>>): Prisma__LibrarianClient<$Result.GetResult<Prisma.$LibrarianPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    update<T extends LibrarianUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, LibrarianUpdateArgs<ExtArgs>>
+    ): Prisma__LibrarianClient<$Types.GetResult<LibrarianPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
 
     /**
      * Delete zero or more Librarians.
@@ -3114,8 +3058,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    deleteMany<T extends LibrarianDeleteManyArgs>(args?: SelectSubset<T, LibrarianDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    **/
+    deleteMany<T extends LibrarianDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, LibrarianDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Update zero or more Librarians.
@@ -3133,38 +3079,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    updateMany<T extends LibrarianUpdateManyArgs>(args: SelectSubset<T, LibrarianUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Librarians and returns the data updated in the database.
-     * @param {LibrarianUpdateManyAndReturnArgs} args - Arguments to update many Librarians.
-     * @example
-     * // Update many Librarians
-     * const librarian = await prisma.librarian.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Librarians and only return the `id`
-     * const librarianWithIdOnly = await prisma.librarian.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends LibrarianUpdateManyAndReturnArgs>(args: SelectSubset<T, LibrarianUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LibrarianPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    **/
+    updateMany<T extends LibrarianUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, LibrarianUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Create or update one Librarian.
@@ -3182,9 +3100,10 @@ export namespace Prisma {
      *     // ... the filter for the Librarian we want to update
      *   }
      * })
-     */
-    upsert<T extends LibrarianUpsertArgs>(args: SelectSubset<T, LibrarianUpsertArgs<ExtArgs>>): Prisma__LibrarianClient<$Result.GetResult<Prisma.$LibrarianPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
+    **/
+    upsert<T extends LibrarianUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, LibrarianUpsertArgs<ExtArgs>>
+    ): Prisma__LibrarianClient<$Types.GetResult<LibrarianPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
 
     /**
      * Count the number of Librarians.
@@ -3263,7 +3182,7 @@ export namespace Prisma {
         ? { orderBy: LibrarianGroupByArgs['orderBy'] }
         : { orderBy?: LibrarianGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -3311,10 +3230,7 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, LibrarianGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLibrarianGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Librarian model
-   */
-  readonly fields: LibrarianFieldRefs;
+
   }
 
   /**
@@ -3323,150 +3239,154 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__LibrarianClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
+  export class Prisma__LibrarianClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+
+    private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
     /**
      * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
      * resolved value cannot be modified from the callback.
      * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
      * @returns A Promise for the completion of the callback.
      */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
   }
 
 
-
-
-  /**
-   * Fields of the Librarian model
-   */
-  interface LibrarianFieldRefs {
-    readonly id: FieldRef<"Librarian", 'String'>
-    readonly firstname: FieldRef<"Librarian", 'String'>
-    readonly lastname: FieldRef<"Librarian", 'String'>
-    readonly displayname: FieldRef<"Librarian", 'String'>
-    readonly email: FieldRef<"Librarian", 'String'>
-    readonly password: FieldRef<"Librarian", 'String'>
-    readonly profile_img: FieldRef<"Librarian", 'String'>
-    readonly address: FieldRef<"Librarian", 'String'>
-    readonly contact: FieldRef<"Librarian", 'String'>
-    readonly rank: FieldRef<"Librarian", 'Int'>
-    readonly books_entered: FieldRef<"Librarian", 'String[]'>
-    readonly created_at: FieldRef<"Librarian", 'DateTime'>
-    readonly updated_at: FieldRef<"Librarian", 'DateTime'>
-  }
-    
 
   // Custom InputTypes
+
   /**
-   * Librarian findUnique
+   * Librarian base type for findUnique actions
    */
-  export type LibrarianFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Librarian
      */
     select?: LibrarianSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
-    /**
      * Filter, which Librarian to fetch.
      */
     where: LibrarianWhereUniqueInput
   }
+
+  /**
+   * Librarian findUnique
+   */
+  export interface LibrarianFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends LibrarianFindUniqueArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
 
   /**
    * Librarian findUniqueOrThrow
    */
-  export type LibrarianFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Librarian
      */
     select?: LibrarianSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
-    /**
      * Filter, which Librarian to fetch.
      */
     where: LibrarianWhereUniqueInput
+  }
+
+
+  /**
+   * Librarian base type for findFirst actions
+   */
+  export type LibrarianFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Librarian
+     */
+    select?: LibrarianSelect<ExtArgs> | null
+    /**
+     * Filter, which Librarian to fetch.
+     */
+    where?: LibrarianWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Librarians to fetch.
+     */
+    orderBy?: Enumerable<LibrarianOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Librarians.
+     */
+    cursor?: LibrarianWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Librarians from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Librarians.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Librarians.
+     */
+    distinct?: Enumerable<LibrarianScalarFieldEnum>
   }
 
   /**
    * Librarian findFirst
    */
-  export type LibrarianFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Librarian
-     */
-    select?: LibrarianSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
-    /**
-     * Filter, which Librarian to fetch.
-     */
-    where?: LibrarianWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Librarians to fetch.
-     */
-    orderBy?: LibrarianOrderByWithRelationInput | LibrarianOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Librarians.
-     */
-    cursor?: LibrarianWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Librarians from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Librarians.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Librarians.
-     */
-    distinct?: LibrarianScalarFieldEnum | LibrarianScalarFieldEnum[]
+  export interface LibrarianFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends LibrarianFindFirstArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
   }
+      
 
   /**
    * Librarian findFirstOrThrow
    */
-  export type LibrarianFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Librarian
      */
     select?: LibrarianSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
     /**
      * Filter, which Librarian to fetch.
      */
@@ -3476,7 +3396,7 @@ export namespace Prisma {
      * 
      * Determine the order of Librarians to fetch.
      */
-    orderBy?: LibrarianOrderByWithRelationInput | LibrarianOrderByWithRelationInput[]
+    orderBy?: Enumerable<LibrarianOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -3500,21 +3420,18 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of Librarians.
      */
-    distinct?: LibrarianScalarFieldEnum | LibrarianScalarFieldEnum[]
+    distinct?: Enumerable<LibrarianScalarFieldEnum>
   }
+
 
   /**
    * Librarian findMany
    */
-  export type LibrarianFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Librarian
      */
     select?: LibrarianSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
     /**
      * Filter, which Librarians to fetch.
      */
@@ -3524,7 +3441,7 @@ export namespace Prisma {
      * 
      * Determine the order of Librarians to fetch.
      */
-    orderBy?: LibrarianOrderByWithRelationInput | LibrarianOrderByWithRelationInput[]
+    orderBy?: Enumerable<LibrarianOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -3543,69 +3460,45 @@ export namespace Prisma {
      * Skip the first `n` Librarians.
      */
     skip?: number
-    distinct?: LibrarianScalarFieldEnum | LibrarianScalarFieldEnum[]
+    distinct?: Enumerable<LibrarianScalarFieldEnum>
   }
+
 
   /**
    * Librarian create
    */
-  export type LibrarianCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Librarian
      */
     select?: LibrarianSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
     /**
      * The data needed to create a Librarian.
      */
     data: XOR<LibrarianCreateInput, LibrarianUncheckedCreateInput>
   }
 
+
   /**
    * Librarian createMany
    */
-  export type LibrarianCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to create many Librarians.
      */
-    data: LibrarianCreateManyInput | LibrarianCreateManyInput[]
+    data: Enumerable<LibrarianCreateManyInput>
     skipDuplicates?: boolean
   }
 
-  /**
-   * Librarian createManyAndReturn
-   */
-  export type LibrarianCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Librarian
-     */
-    select?: LibrarianSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
-    /**
-     * The data used to create many Librarians.
-     */
-    data: LibrarianCreateManyInput | LibrarianCreateManyInput[]
-    skipDuplicates?: boolean
-  }
 
   /**
    * Librarian update
    */
-  export type LibrarianUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Librarian
      */
     select?: LibrarianSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
     /**
      * The data needed to update a Librarian.
      */
@@ -3616,10 +3509,11 @@ export namespace Prisma {
     where: LibrarianWhereUniqueInput
   }
 
+
   /**
    * Librarian updateMany
    */
-  export type LibrarianUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to update Librarians.
      */
@@ -3628,50 +3522,17 @@ export namespace Prisma {
      * Filter which Librarians to update
      */
     where?: LibrarianWhereInput
-    /**
-     * Limit how many Librarians to update.
-     */
-    limit?: number
   }
 
-  /**
-   * Librarian updateManyAndReturn
-   */
-  export type LibrarianUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Librarian
-     */
-    select?: LibrarianSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
-    /**
-     * The data used to update Librarians.
-     */
-    data: XOR<LibrarianUpdateManyMutationInput, LibrarianUncheckedUpdateManyInput>
-    /**
-     * Filter which Librarians to update
-     */
-    where?: LibrarianWhereInput
-    /**
-     * Limit how many Librarians to update.
-     */
-    limit?: number
-  }
 
   /**
    * Librarian upsert
    */
-  export type LibrarianUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Librarian
      */
     select?: LibrarianSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
     /**
      * The filter to search for the Librarian to update in case it exists.
      */
@@ -3686,56 +3547,49 @@ export namespace Prisma {
     update: XOR<LibrarianUpdateInput, LibrarianUncheckedUpdateInput>
   }
 
+
   /**
    * Librarian delete
    */
-  export type LibrarianDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Librarian
      */
     select?: LibrarianSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
     /**
      * Filter which Librarian to delete.
      */
     where: LibrarianWhereUniqueInput
   }
 
+
   /**
    * Librarian deleteMany
    */
-  export type LibrarianDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Librarians to delete
      */
     where?: LibrarianWhereInput
-    /**
-     * Limit how many Librarians to delete.
-     */
-    limit?: number
   }
+
 
   /**
    * Librarian without action
    */
-  export type LibrarianDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LibrarianArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Librarian
      */
     select?: LibrarianSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Librarian
-     */
-    omit?: LibrarianOmit<ExtArgs> | null
   }
+
 
 
   /**
    * Model Book
    */
+
 
   export type AggregateBook = {
     _count: BookCountAggregateOutputType | null
@@ -3749,7 +3603,7 @@ export namespace Prisma {
     author: string | null
     imprint: string | null
     collation: string | null
-    G_M_D: $Enums.GMD | null
+    G_M_D: GMD | null
     book_cover: string | null
     material_number: string | null
     availability: boolean | null
@@ -3769,7 +3623,7 @@ export namespace Prisma {
     author: string | null
     imprint: string | null
     collation: string | null
-    G_M_D: $Enums.GMD | null
+    G_M_D: GMD | null
     book_cover: string | null
     material_number: string | null
     availability: boolean | null
@@ -3870,7 +3724,7 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type BookAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Book to aggregate.
      */
@@ -3880,7 +3734,7 @@ export namespace Prisma {
      * 
      * Determine the order of Books to fetch.
      */
-    orderBy?: BookOrderByWithRelationInput | BookOrderByWithRelationInput[]
+    orderBy?: Enumerable<BookOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -3930,10 +3784,10 @@ export namespace Prisma {
 
 
 
-  export type BookGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: BookWhereInput
-    orderBy?: BookOrderByWithAggregationInput | BookOrderByWithAggregationInput[]
-    by: BookScalarFieldEnum[] | BookScalarFieldEnum
+    orderBy?: Enumerable<BookOrderByWithAggregationInput>
+    by: BookScalarFieldEnum[]
     having?: BookScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -3942,6 +3796,7 @@ export namespace Prisma {
     _max?: BookMaxAggregateInputType
   }
 
+
   export type BookGroupByOutputType = {
     id: string
     title: string
@@ -3949,7 +3804,7 @@ export namespace Prisma {
     subject: string[]
     imprint: string
     collation: string
-    G_M_D: $Enums.GMD
+    G_M_D: GMD
     book_cover: string
     material_number: string
     availability: boolean
@@ -3969,7 +3824,7 @@ export namespace Prisma {
 
   type GetBookGroupByPayload<T extends BookGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<BookGroupByOutputType, T['by']> &
+      PickArray<BookGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof BookGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -3981,7 +3836,7 @@ export namespace Prisma {
     >
 
 
-  export type BookSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type BookSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
     author?: boolean
@@ -4004,51 +3859,7 @@ export namespace Prisma {
     book_likes?: boolean | Book$book_likesArgs<ExtArgs>
     book_consulted?: boolean | Book$book_consultedArgs<ExtArgs>
     circulation?: boolean | Book$circulationArgs<ExtArgs>
-    _count?: boolean | BookCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["book"]>
-
-  export type BookSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    title?: boolean
-    author?: boolean
-    subject?: boolean
-    imprint?: boolean
-    collation?: boolean
-    G_M_D?: boolean
-    book_cover?: boolean
-    material_number?: boolean
-    availability?: boolean
-    bibilography?: boolean
-    Keywords?: boolean
-    other_Title?: boolean
-    co_author?: boolean
-    editor?: boolean
-    edition?: boolean
-    series?: boolean
-    web_address?: boolean
-    entered_at?: boolean
-  }, ExtArgs["result"]["book"]>
-
-  export type BookSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    title?: boolean
-    author?: boolean
-    subject?: boolean
-    imprint?: boolean
-    collation?: boolean
-    G_M_D?: boolean
-    book_cover?: boolean
-    material_number?: boolean
-    availability?: boolean
-    bibilography?: boolean
-    Keywords?: boolean
-    other_Title?: boolean
-    co_author?: boolean
-    editor?: boolean
-    edition?: boolean
-    series?: boolean
-    web_address?: boolean
-    entered_at?: boolean
+    _count?: boolean | BookCountOutputTypeArgs<ExtArgs>
   }, ExtArgs["result"]["book"]>
 
   export type BookSelectScalar = {
@@ -4073,55 +3884,22 @@ export namespace Prisma {
     entered_at?: boolean
   }
 
-  export type BookOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "author" | "subject" | "imprint" | "collation" | "G_M_D" | "book_cover" | "material_number" | "availability" | "bibilography" | "Keywords" | "other_Title" | "co_author" | "editor" | "edition" | "series" | "web_address" | "entered_at", ExtArgs["result"]["book"]>
-  export type BookInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     book_likes?: boolean | Book$book_likesArgs<ExtArgs>
     book_consulted?: boolean | Book$book_consultedArgs<ExtArgs>
     circulation?: boolean | Book$circulationArgs<ExtArgs>
-    _count?: boolean | BookCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type BookIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type BookIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $BookPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Book"
-    objects: {
-      book_likes: Prisma.$Book_likesPayload<ExtArgs>[]
-      book_consulted: Prisma.$Book_consultedPayload<ExtArgs>[]
-      circulation: Prisma.$CirculationPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      title: string
-      author: string
-      subject: string[]
-      imprint: string
-      collation: string
-      G_M_D: $Enums.GMD
-      book_cover: string
-      material_number: string
-      availability: boolean
-      bibilography: string
-      Keywords: string[]
-      other_Title: string | null
-      co_author: string | null
-      editor: string | null
-      edition: string | null
-      series: string | null
-      web_address: string | null
-      entered_at: Date
-    }, ExtArgs["result"]["book"]>
-    composites: {}
+    _count?: boolean | BookCountOutputTypeArgs<ExtArgs>
   }
 
-  type BookGetPayload<S extends boolean | null | undefined | BookDefaultArgs> = $Result.GetResult<Prisma.$BookPayload, S>
 
-  type BookCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<BookFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type BookGetPayload<S extends boolean | null | undefined | BookArgs> = $Types.GetResult<BookPayload, S>
+
+  type BookCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<BookFindManyArgs, 'select' | 'include'> & {
       select?: BookCountAggregateInputType | true
     }
 
-  export interface BookDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface BookDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Book'], meta: { name: 'Book' } }
     /**
      * Find zero or one Book that matches the filter.
@@ -4133,12 +3911,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUnique<T extends BookFindUniqueArgs>(args: SelectSubset<T, BookFindUniqueArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findUnique<T extends BookFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, BookFindUniqueArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Book'> extends True ? Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
 
     /**
-     * Find one Book that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
+     * Find one Book that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
      * @param {BookFindUniqueOrThrowArgs} args - Arguments to find a Book
      * @example
      * // Get one Book
@@ -4147,8 +3927,10 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUniqueOrThrow<T extends BookFindUniqueOrThrowArgs>(args: SelectSubset<T, BookFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findUniqueOrThrow<T extends BookFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, BookFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
 
     /**
      * Find the first Book that matches the filter.
@@ -4162,12 +3944,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirst<T extends BookFindFirstArgs>(args?: SelectSubset<T, BookFindFirstArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirst<T extends BookFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, BookFindFirstArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Book'> extends True ? Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
 
     /**
      * Find the first Book that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {BookFindFirstOrThrowArgs} args - Arguments to find a Book
@@ -4178,14 +3962,16 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirstOrThrow<T extends BookFindFirstOrThrowArgs>(args?: SelectSubset<T, BookFindFirstOrThrowArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirstOrThrow<T extends BookFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, BookFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
 
     /**
      * Find zero or more Books that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BookFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {BookFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
      * // Get all Books
      * const books = await prisma.book.findMany()
@@ -4196,8 +3982,10 @@ export namespace Prisma {
      * // Only select the `id`
      * const bookWithIdOnly = await prisma.book.findMany({ select: { id: true } })
      * 
-     */
-    findMany<T extends BookFindManyArgs>(args?: SelectSubset<T, BookFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    **/
+    findMany<T extends BookFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, BookFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<BookPayload<ExtArgs>, T, 'findMany', never>>
 
     /**
      * Create a Book.
@@ -4210,46 +3998,26 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    create<T extends BookCreateArgs>(args: SelectSubset<T, BookCreateArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    create<T extends BookCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, BookCreateArgs<ExtArgs>>
+    ): Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
 
     /**
      * Create many Books.
-     * @param {BookCreateManyArgs} args - Arguments to create many Books.
-     * @example
-     * // Create many Books
-     * const book = await prisma.book.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
+     *     @param {BookCreateManyArgs} args - Arguments to create many Books.
+     *     @example
+     *     // Create many Books
+     *     const book = await prisma.book.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
      *     
-     */
-    createMany<T extends BookCreateManyArgs>(args?: SelectSubset<T, BookCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Books and returns the data saved in the database.
-     * @param {BookCreateManyAndReturnArgs} args - Arguments to create many Books.
-     * @example
-     * // Create many Books
-     * const book = await prisma.book.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Books and only return the `id`
-     * const bookWithIdOnly = await prisma.book.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends BookCreateManyAndReturnArgs>(args?: SelectSubset<T, BookCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    **/
+    createMany<T extends BookCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, BookCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a Book.
@@ -4262,8 +4030,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    delete<T extends BookDeleteArgs>(args: SelectSubset<T, BookDeleteArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    delete<T extends BookDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, BookDeleteArgs<ExtArgs>>
+    ): Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
 
     /**
      * Update one Book.
@@ -4279,8 +4049,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    update<T extends BookUpdateArgs>(args: SelectSubset<T, BookUpdateArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    update<T extends BookUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, BookUpdateArgs<ExtArgs>>
+    ): Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
 
     /**
      * Delete zero or more Books.
@@ -4293,8 +4065,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    deleteMany<T extends BookDeleteManyArgs>(args?: SelectSubset<T, BookDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    **/
+    deleteMany<T extends BookDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, BookDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Update zero or more Books.
@@ -4312,38 +4086,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    updateMany<T extends BookUpdateManyArgs>(args: SelectSubset<T, BookUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Books and returns the data updated in the database.
-     * @param {BookUpdateManyAndReturnArgs} args - Arguments to update many Books.
-     * @example
-     * // Update many Books
-     * const book = await prisma.book.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Books and only return the `id`
-     * const bookWithIdOnly = await prisma.book.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends BookUpdateManyAndReturnArgs>(args: SelectSubset<T, BookUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    **/
+    updateMany<T extends BookUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, BookUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Create or update one Book.
@@ -4361,9 +4107,10 @@ export namespace Prisma {
      *     // ... the filter for the Book we want to update
      *   }
      * })
-     */
-    upsert<T extends BookUpsertArgs>(args: SelectSubset<T, BookUpsertArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
+    **/
+    upsert<T extends BookUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, BookUpsertArgs<ExtArgs>>
+    ): Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
 
     /**
      * Count the number of Books.
@@ -4442,7 +4189,7 @@ export namespace Prisma {
         ? { orderBy: BookGroupByArgs['orderBy'] }
         : { orderBy?: BookGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -4490,10 +4237,7 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, BookGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBookGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Book model
-   */
-  readonly fields: BookFieldRefs;
+
   }
 
   /**
@@ -4502,77 +4246,64 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__BookClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    book_likes<T extends Book$book_likesArgs<ExtArgs> = {}>(args?: Subset<T, Book$book_likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    book_consulted<T extends Book$book_consultedArgs<ExtArgs> = {}>(args?: Subset<T, Book$book_consultedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    circulation<T extends Book$circulationArgs<ExtArgs> = {}>(args?: Subset<T, Book$circulationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  export class Prisma__BookClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    book_likes<T extends Book$book_likesArgs<ExtArgs> = {}>(args?: Subset<T, Book$book_likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'findMany', never>| Null>;
+
+    book_consulted<T extends Book$book_consultedArgs<ExtArgs> = {}>(args?: Subset<T, Book$book_consultedArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'findMany', never>| Null>;
+
+    circulation<T extends Book$circulationArgs<ExtArgs> = {}>(args?: Subset<T, Book$circulationArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'findMany', never>| Null>;
+
+    private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
     /**
      * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
      * resolved value cannot be modified from the callback.
      * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
      * @returns A Promise for the completion of the callback.
      */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
   }
 
 
-
-
-  /**
-   * Fields of the Book model
-   */
-  interface BookFieldRefs {
-    readonly id: FieldRef<"Book", 'String'>
-    readonly title: FieldRef<"Book", 'String'>
-    readonly author: FieldRef<"Book", 'String'>
-    readonly subject: FieldRef<"Book", 'String[]'>
-    readonly imprint: FieldRef<"Book", 'String'>
-    readonly collation: FieldRef<"Book", 'String'>
-    readonly G_M_D: FieldRef<"Book", 'GMD'>
-    readonly book_cover: FieldRef<"Book", 'String'>
-    readonly material_number: FieldRef<"Book", 'String'>
-    readonly availability: FieldRef<"Book", 'Boolean'>
-    readonly bibilography: FieldRef<"Book", 'String'>
-    readonly Keywords: FieldRef<"Book", 'String[]'>
-    readonly other_Title: FieldRef<"Book", 'String'>
-    readonly co_author: FieldRef<"Book", 'String'>
-    readonly editor: FieldRef<"Book", 'String'>
-    readonly edition: FieldRef<"Book", 'String'>
-    readonly series: FieldRef<"Book", 'String'>
-    readonly web_address: FieldRef<"Book", 'String'>
-    readonly entered_at: FieldRef<"Book", 'DateTime'>
-  }
-    
 
   // Custom InputTypes
+
   /**
-   * Book findUnique
+   * Book base type for findUnique actions
    */
-  export type BookFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book
      */
     select?: BookSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: BookInclude<ExtArgs> | null
     /**
@@ -4580,95 +4311,108 @@ export namespace Prisma {
      */
     where: BookWhereUniqueInput
   }
+
+  /**
+   * Book findUnique
+   */
+  export interface BookFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends BookFindUniqueArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
 
   /**
    * Book findUniqueOrThrow
    */
-  export type BookFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book
      */
     select?: BookSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: BookInclude<ExtArgs> | null
     /**
      * Filter, which Book to fetch.
      */
     where: BookWhereUniqueInput
+  }
+
+
+  /**
+   * Book base type for findFirst actions
+   */
+  export type BookFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Book
+     */
+    select?: BookSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: BookInclude<ExtArgs> | null
+    /**
+     * Filter, which Book to fetch.
+     */
+    where?: BookWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Books to fetch.
+     */
+    orderBy?: Enumerable<BookOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Books.
+     */
+    cursor?: BookWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Books from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Books.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Books.
+     */
+    distinct?: Enumerable<BookScalarFieldEnum>
   }
 
   /**
    * Book findFirst
    */
-  export type BookFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Book
-     */
-    select?: BookSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: BookInclude<ExtArgs> | null
-    /**
-     * Filter, which Book to fetch.
-     */
-    where?: BookWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Books to fetch.
-     */
-    orderBy?: BookOrderByWithRelationInput | BookOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Books.
-     */
-    cursor?: BookWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Books from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Books.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Books.
-     */
-    distinct?: BookScalarFieldEnum | BookScalarFieldEnum[]
+  export interface BookFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends BookFindFirstArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
   }
+      
 
   /**
    * Book findFirstOrThrow
    */
-  export type BookFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book
      */
     select?: BookSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: BookInclude<ExtArgs> | null
     /**
@@ -4680,7 +4424,7 @@ export namespace Prisma {
      * 
      * Determine the order of Books to fetch.
      */
-    orderBy?: BookOrderByWithRelationInput | BookOrderByWithRelationInput[]
+    orderBy?: Enumerable<BookOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -4704,23 +4448,20 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of Books.
      */
-    distinct?: BookScalarFieldEnum | BookScalarFieldEnum[]
+    distinct?: Enumerable<BookScalarFieldEnum>
   }
+
 
   /**
    * Book findMany
    */
-  export type BookFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book
      */
     select?: BookSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: BookInclude<ExtArgs> | null
     /**
@@ -4732,7 +4473,7 @@ export namespace Prisma {
      * 
      * Determine the order of Books to fetch.
      */
-    orderBy?: BookOrderByWithRelationInput | BookOrderByWithRelationInput[]
+    orderBy?: Enumerable<BookOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -4751,23 +4492,20 @@ export namespace Prisma {
      * Skip the first `n` Books.
      */
     skip?: number
-    distinct?: BookScalarFieldEnum | BookScalarFieldEnum[]
+    distinct?: Enumerable<BookScalarFieldEnum>
   }
+
 
   /**
    * Book create
    */
-  export type BookCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book
      */
     select?: BookSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: BookInclude<ExtArgs> | null
     /**
@@ -4776,50 +4514,29 @@ export namespace Prisma {
     data: XOR<BookCreateInput, BookUncheckedCreateInput>
   }
 
+
   /**
    * Book createMany
    */
-  export type BookCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to create many Books.
      */
-    data: BookCreateManyInput | BookCreateManyInput[]
+    data: Enumerable<BookCreateManyInput>
     skipDuplicates?: boolean
   }
 
-  /**
-   * Book createManyAndReturn
-   */
-  export type BookCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Book
-     */
-    select?: BookSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * The data used to create many Books.
-     */
-    data: BookCreateManyInput | BookCreateManyInput[]
-    skipDuplicates?: boolean
-  }
 
   /**
    * Book update
    */
-  export type BookUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book
      */
     select?: BookSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: BookInclude<ExtArgs> | null
     /**
@@ -4832,10 +4549,11 @@ export namespace Prisma {
     where: BookWhereUniqueInput
   }
 
+
   /**
    * Book updateMany
    */
-  export type BookUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to update Books.
      */
@@ -4844,52 +4562,19 @@ export namespace Prisma {
      * Filter which Books to update
      */
     where?: BookWhereInput
-    /**
-     * Limit how many Books to update.
-     */
-    limit?: number
   }
 
-  /**
-   * Book updateManyAndReturn
-   */
-  export type BookUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Book
-     */
-    select?: BookSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * The data used to update Books.
-     */
-    data: XOR<BookUpdateManyMutationInput, BookUncheckedUpdateManyInput>
-    /**
-     * Filter which Books to update
-     */
-    where?: BookWhereInput
-    /**
-     * Limit how many Books to update.
-     */
-    limit?: number
-  }
 
   /**
    * Book upsert
    */
-  export type BookUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book
      */
     select?: BookSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: BookInclude<ExtArgs> | null
     /**
@@ -4906,20 +4591,17 @@ export namespace Prisma {
     update: XOR<BookUpdateInput, BookUncheckedUpdateInput>
   }
 
+
   /**
    * Book delete
    */
-  export type BookDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book
      */
     select?: BookSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: BookInclude<ExtArgs> | null
     /**
@@ -4928,114 +4610,101 @@ export namespace Prisma {
     where: BookWhereUniqueInput
   }
 
+
   /**
    * Book deleteMany
    */
-  export type BookDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Books to delete
      */
     where?: BookWhereInput
-    /**
-     * Limit how many Books to delete.
-     */
-    limit?: number
   }
+
 
   /**
    * Book.book_likes
    */
-  export type Book$book_likesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book$book_likesArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_likes
      */
     select?: Book_likesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_likesInclude<ExtArgs> | null
     where?: Book_likesWhereInput
-    orderBy?: Book_likesOrderByWithRelationInput | Book_likesOrderByWithRelationInput[]
+    orderBy?: Enumerable<Book_likesOrderByWithRelationInput>
     cursor?: Book_likesWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Book_likesScalarFieldEnum | Book_likesScalarFieldEnum[]
+    distinct?: Enumerable<Book_likesScalarFieldEnum>
   }
+
 
   /**
    * Book.book_consulted
    */
-  export type Book$book_consultedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book$book_consultedArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_consulted
      */
     select?: Book_consultedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_consultedInclude<ExtArgs> | null
     where?: Book_consultedWhereInput
-    orderBy?: Book_consultedOrderByWithRelationInput | Book_consultedOrderByWithRelationInput[]
+    orderBy?: Enumerable<Book_consultedOrderByWithRelationInput>
     cursor?: Book_consultedWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Book_consultedScalarFieldEnum | Book_consultedScalarFieldEnum[]
+    distinct?: Enumerable<Book_consultedScalarFieldEnum>
   }
+
 
   /**
    * Book.circulation
    */
-  export type Book$circulationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book$circulationArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Circulation
      */
     select?: CirculationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: CirculationInclude<ExtArgs> | null
     where?: CirculationWhereInput
-    orderBy?: CirculationOrderByWithRelationInput | CirculationOrderByWithRelationInput[]
+    orderBy?: Enumerable<CirculationOrderByWithRelationInput>
     cursor?: CirculationWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: CirculationScalarFieldEnum | CirculationScalarFieldEnum[]
+    distinct?: Enumerable<CirculationScalarFieldEnum>
   }
+
 
   /**
    * Book without action
    */
-  export type BookDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BookArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book
      */
     select?: BookSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book
-     */
-    omit?: BookOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: BookInclude<ExtArgs> | null
   }
 
 
+
   /**
    * Model EmailVerificationToken
    */
+
 
   export type AggregateEmailVerificationToken = {
     _count: EmailVerificationTokenCountAggregateOutputType | null
@@ -5094,7 +4763,7 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type EmailVerificationTokenAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which EmailVerificationToken to aggregate.
      */
@@ -5104,7 +4773,7 @@ export namespace Prisma {
      * 
      * Determine the order of EmailVerificationTokens to fetch.
      */
-    orderBy?: EmailVerificationTokenOrderByWithRelationInput | EmailVerificationTokenOrderByWithRelationInput[]
+    orderBy?: Enumerable<EmailVerificationTokenOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -5154,10 +4823,10 @@ export namespace Prisma {
 
 
 
-  export type EmailVerificationTokenGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: EmailVerificationTokenWhereInput
-    orderBy?: EmailVerificationTokenOrderByWithAggregationInput | EmailVerificationTokenOrderByWithAggregationInput[]
-    by: EmailVerificationTokenScalarFieldEnum[] | EmailVerificationTokenScalarFieldEnum
+    orderBy?: Enumerable<EmailVerificationTokenOrderByWithAggregationInput>
+    by: EmailVerificationTokenScalarFieldEnum[]
     having?: EmailVerificationTokenScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -5165,6 +4834,7 @@ export namespace Prisma {
     _min?: EmailVerificationTokenMinAggregateInputType
     _max?: EmailVerificationTokenMaxAggregateInputType
   }
+
 
   export type EmailVerificationTokenGroupByOutputType = {
     id: string
@@ -5179,7 +4849,7 @@ export namespace Prisma {
 
   type GetEmailVerificationTokenGroupByPayload<T extends EmailVerificationTokenGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<EmailVerificationTokenGroupByOutputType, T['by']> &
+      PickArray<EmailVerificationTokenGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof EmailVerificationTokenGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -5191,23 +4861,7 @@ export namespace Prisma {
     >
 
 
-  export type EmailVerificationTokenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    email?: boolean
-    token?: boolean
-    expiresAt?: boolean
-    createdAt?: boolean
-  }, ExtArgs["result"]["emailVerificationToken"]>
-
-  export type EmailVerificationTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    email?: boolean
-    token?: boolean
-    expiresAt?: boolean
-    createdAt?: boolean
-  }, ExtArgs["result"]["emailVerificationToken"]>
-
-  export type EmailVerificationTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type EmailVerificationTokenSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     email?: boolean
     token?: boolean
@@ -5223,29 +4877,15 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type EmailVerificationTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "token" | "expiresAt" | "createdAt", ExtArgs["result"]["emailVerificationToken"]>
 
-  export type $EmailVerificationTokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "EmailVerificationToken"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      email: string
-      token: string
-      expiresAt: Date
-      createdAt: Date
-    }, ExtArgs["result"]["emailVerificationToken"]>
-    composites: {}
-  }
+  type EmailVerificationTokenGetPayload<S extends boolean | null | undefined | EmailVerificationTokenArgs> = $Types.GetResult<EmailVerificationTokenPayload, S>
 
-  type EmailVerificationTokenGetPayload<S extends boolean | null | undefined | EmailVerificationTokenDefaultArgs> = $Result.GetResult<Prisma.$EmailVerificationTokenPayload, S>
-
-  type EmailVerificationTokenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<EmailVerificationTokenFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type EmailVerificationTokenCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<EmailVerificationTokenFindManyArgs, 'select' | 'include'> & {
       select?: EmailVerificationTokenCountAggregateInputType | true
     }
 
-  export interface EmailVerificationTokenDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface EmailVerificationTokenDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EmailVerificationToken'], meta: { name: 'EmailVerificationToken' } }
     /**
      * Find zero or one EmailVerificationToken that matches the filter.
@@ -5257,12 +4897,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUnique<T extends EmailVerificationTokenFindUniqueArgs>(args: SelectSubset<T, EmailVerificationTokenFindUniqueArgs<ExtArgs>>): Prisma__EmailVerificationTokenClient<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findUnique<T extends EmailVerificationTokenFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, EmailVerificationTokenFindUniqueArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'EmailVerificationToken'> extends True ? Prisma__EmailVerificationTokenClient<$Types.GetResult<EmailVerificationTokenPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__EmailVerificationTokenClient<$Types.GetResult<EmailVerificationTokenPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
 
     /**
-     * Find one EmailVerificationToken that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
+     * Find one EmailVerificationToken that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
      * @param {EmailVerificationTokenFindUniqueOrThrowArgs} args - Arguments to find a EmailVerificationToken
      * @example
      * // Get one EmailVerificationToken
@@ -5271,8 +4913,10 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUniqueOrThrow<T extends EmailVerificationTokenFindUniqueOrThrowArgs>(args: SelectSubset<T, EmailVerificationTokenFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmailVerificationTokenClient<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findUniqueOrThrow<T extends EmailVerificationTokenFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, EmailVerificationTokenFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__EmailVerificationTokenClient<$Types.GetResult<EmailVerificationTokenPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
 
     /**
      * Find the first EmailVerificationToken that matches the filter.
@@ -5286,12 +4930,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirst<T extends EmailVerificationTokenFindFirstArgs>(args?: SelectSubset<T, EmailVerificationTokenFindFirstArgs<ExtArgs>>): Prisma__EmailVerificationTokenClient<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirst<T extends EmailVerificationTokenFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, EmailVerificationTokenFindFirstArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'EmailVerificationToken'> extends True ? Prisma__EmailVerificationTokenClient<$Types.GetResult<EmailVerificationTokenPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__EmailVerificationTokenClient<$Types.GetResult<EmailVerificationTokenPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
 
     /**
      * Find the first EmailVerificationToken that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {EmailVerificationTokenFindFirstOrThrowArgs} args - Arguments to find a EmailVerificationToken
@@ -5302,14 +4948,16 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirstOrThrow<T extends EmailVerificationTokenFindFirstOrThrowArgs>(args?: SelectSubset<T, EmailVerificationTokenFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmailVerificationTokenClient<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirstOrThrow<T extends EmailVerificationTokenFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, EmailVerificationTokenFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__EmailVerificationTokenClient<$Types.GetResult<EmailVerificationTokenPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
 
     /**
      * Find zero or more EmailVerificationTokens that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmailVerificationTokenFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {EmailVerificationTokenFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
      * // Get all EmailVerificationTokens
      * const emailVerificationTokens = await prisma.emailVerificationToken.findMany()
@@ -5320,8 +4968,10 @@ export namespace Prisma {
      * // Only select the `id`
      * const emailVerificationTokenWithIdOnly = await prisma.emailVerificationToken.findMany({ select: { id: true } })
      * 
-     */
-    findMany<T extends EmailVerificationTokenFindManyArgs>(args?: SelectSubset<T, EmailVerificationTokenFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    **/
+    findMany<T extends EmailVerificationTokenFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, EmailVerificationTokenFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<EmailVerificationTokenPayload<ExtArgs>, T, 'findMany', never>>
 
     /**
      * Create a EmailVerificationToken.
@@ -5334,46 +4984,26 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    create<T extends EmailVerificationTokenCreateArgs>(args: SelectSubset<T, EmailVerificationTokenCreateArgs<ExtArgs>>): Prisma__EmailVerificationTokenClient<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    create<T extends EmailVerificationTokenCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, EmailVerificationTokenCreateArgs<ExtArgs>>
+    ): Prisma__EmailVerificationTokenClient<$Types.GetResult<EmailVerificationTokenPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
 
     /**
      * Create many EmailVerificationTokens.
-     * @param {EmailVerificationTokenCreateManyArgs} args - Arguments to create many EmailVerificationTokens.
-     * @example
-     * // Create many EmailVerificationTokens
-     * const emailVerificationToken = await prisma.emailVerificationToken.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
+     *     @param {EmailVerificationTokenCreateManyArgs} args - Arguments to create many EmailVerificationTokens.
+     *     @example
+     *     // Create many EmailVerificationTokens
+     *     const emailVerificationToken = await prisma.emailVerificationToken.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
      *     
-     */
-    createMany<T extends EmailVerificationTokenCreateManyArgs>(args?: SelectSubset<T, EmailVerificationTokenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many EmailVerificationTokens and returns the data saved in the database.
-     * @param {EmailVerificationTokenCreateManyAndReturnArgs} args - Arguments to create many EmailVerificationTokens.
-     * @example
-     * // Create many EmailVerificationTokens
-     * const emailVerificationToken = await prisma.emailVerificationToken.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many EmailVerificationTokens and only return the `id`
-     * const emailVerificationTokenWithIdOnly = await prisma.emailVerificationToken.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends EmailVerificationTokenCreateManyAndReturnArgs>(args?: SelectSubset<T, EmailVerificationTokenCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    **/
+    createMany<T extends EmailVerificationTokenCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, EmailVerificationTokenCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a EmailVerificationToken.
@@ -5386,8 +5016,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    delete<T extends EmailVerificationTokenDeleteArgs>(args: SelectSubset<T, EmailVerificationTokenDeleteArgs<ExtArgs>>): Prisma__EmailVerificationTokenClient<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    delete<T extends EmailVerificationTokenDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, EmailVerificationTokenDeleteArgs<ExtArgs>>
+    ): Prisma__EmailVerificationTokenClient<$Types.GetResult<EmailVerificationTokenPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
 
     /**
      * Update one EmailVerificationToken.
@@ -5403,8 +5035,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    update<T extends EmailVerificationTokenUpdateArgs>(args: SelectSubset<T, EmailVerificationTokenUpdateArgs<ExtArgs>>): Prisma__EmailVerificationTokenClient<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    update<T extends EmailVerificationTokenUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, EmailVerificationTokenUpdateArgs<ExtArgs>>
+    ): Prisma__EmailVerificationTokenClient<$Types.GetResult<EmailVerificationTokenPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
 
     /**
      * Delete zero or more EmailVerificationTokens.
@@ -5417,8 +5051,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    deleteMany<T extends EmailVerificationTokenDeleteManyArgs>(args?: SelectSubset<T, EmailVerificationTokenDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    **/
+    deleteMany<T extends EmailVerificationTokenDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, EmailVerificationTokenDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Update zero or more EmailVerificationTokens.
@@ -5436,38 +5072,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    updateMany<T extends EmailVerificationTokenUpdateManyArgs>(args: SelectSubset<T, EmailVerificationTokenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more EmailVerificationTokens and returns the data updated in the database.
-     * @param {EmailVerificationTokenUpdateManyAndReturnArgs} args - Arguments to update many EmailVerificationTokens.
-     * @example
-     * // Update many EmailVerificationTokens
-     * const emailVerificationToken = await prisma.emailVerificationToken.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more EmailVerificationTokens and only return the `id`
-     * const emailVerificationTokenWithIdOnly = await prisma.emailVerificationToken.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends EmailVerificationTokenUpdateManyAndReturnArgs>(args: SelectSubset<T, EmailVerificationTokenUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    **/
+    updateMany<T extends EmailVerificationTokenUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, EmailVerificationTokenUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Create or update one EmailVerificationToken.
@@ -5485,9 +5093,10 @@ export namespace Prisma {
      *     // ... the filter for the EmailVerificationToken we want to update
      *   }
      * })
-     */
-    upsert<T extends EmailVerificationTokenUpsertArgs>(args: SelectSubset<T, EmailVerificationTokenUpsertArgs<ExtArgs>>): Prisma__EmailVerificationTokenClient<$Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
+    **/
+    upsert<T extends EmailVerificationTokenUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, EmailVerificationTokenUpsertArgs<ExtArgs>>
+    ): Prisma__EmailVerificationTokenClient<$Types.GetResult<EmailVerificationTokenPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
 
     /**
      * Count the number of EmailVerificationTokens.
@@ -5566,7 +5175,7 @@ export namespace Prisma {
         ? { orderBy: EmailVerificationTokenGroupByArgs['orderBy'] }
         : { orderBy?: EmailVerificationTokenGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -5614,10 +5223,7 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, EmailVerificationTokenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmailVerificationTokenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the EmailVerificationToken model
-   */
-  readonly fields: EmailVerificationTokenFieldRefs;
+
   }
 
   /**
@@ -5626,142 +5232,154 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__EmailVerificationTokenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
+  export class Prisma__EmailVerificationTokenClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+
+    private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
     /**
      * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
      * resolved value cannot be modified from the callback.
      * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
      * @returns A Promise for the completion of the callback.
      */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
   }
 
 
-
-
-  /**
-   * Fields of the EmailVerificationToken model
-   */
-  interface EmailVerificationTokenFieldRefs {
-    readonly id: FieldRef<"EmailVerificationToken", 'String'>
-    readonly email: FieldRef<"EmailVerificationToken", 'String'>
-    readonly token: FieldRef<"EmailVerificationToken", 'String'>
-    readonly expiresAt: FieldRef<"EmailVerificationToken", 'DateTime'>
-    readonly createdAt: FieldRef<"EmailVerificationToken", 'DateTime'>
-  }
-    
 
   // Custom InputTypes
+
   /**
-   * EmailVerificationToken findUnique
+   * EmailVerificationToken base type for findUnique actions
    */
-  export type EmailVerificationTokenFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the EmailVerificationToken
      */
     select?: EmailVerificationTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
-    /**
      * Filter, which EmailVerificationToken to fetch.
      */
     where: EmailVerificationTokenWhereUniqueInput
   }
+
+  /**
+   * EmailVerificationToken findUnique
+   */
+  export interface EmailVerificationTokenFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends EmailVerificationTokenFindUniqueArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
 
   /**
    * EmailVerificationToken findUniqueOrThrow
    */
-  export type EmailVerificationTokenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the EmailVerificationToken
      */
     select?: EmailVerificationTokenSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
-    /**
      * Filter, which EmailVerificationToken to fetch.
      */
     where: EmailVerificationTokenWhereUniqueInput
+  }
+
+
+  /**
+   * EmailVerificationToken base type for findFirst actions
+   */
+  export type EmailVerificationTokenFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailVerificationToken
+     */
+    select?: EmailVerificationTokenSelect<ExtArgs> | null
+    /**
+     * Filter, which EmailVerificationToken to fetch.
+     */
+    where?: EmailVerificationTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailVerificationTokens to fetch.
+     */
+    orderBy?: Enumerable<EmailVerificationTokenOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmailVerificationTokens.
+     */
+    cursor?: EmailVerificationTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailVerificationTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailVerificationTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmailVerificationTokens.
+     */
+    distinct?: Enumerable<EmailVerificationTokenScalarFieldEnum>
   }
 
   /**
    * EmailVerificationToken findFirst
    */
-  export type EmailVerificationTokenFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the EmailVerificationToken
-     */
-    select?: EmailVerificationTokenSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
-    /**
-     * Filter, which EmailVerificationToken to fetch.
-     */
-    where?: EmailVerificationTokenWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of EmailVerificationTokens to fetch.
-     */
-    orderBy?: EmailVerificationTokenOrderByWithRelationInput | EmailVerificationTokenOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for EmailVerificationTokens.
-     */
-    cursor?: EmailVerificationTokenWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` EmailVerificationTokens from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` EmailVerificationTokens.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of EmailVerificationTokens.
-     */
-    distinct?: EmailVerificationTokenScalarFieldEnum | EmailVerificationTokenScalarFieldEnum[]
+  export interface EmailVerificationTokenFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends EmailVerificationTokenFindFirstArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
   }
+      
 
   /**
    * EmailVerificationToken findFirstOrThrow
    */
-  export type EmailVerificationTokenFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the EmailVerificationToken
      */
     select?: EmailVerificationTokenSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
     /**
      * Filter, which EmailVerificationToken to fetch.
      */
@@ -5771,7 +5389,7 @@ export namespace Prisma {
      * 
      * Determine the order of EmailVerificationTokens to fetch.
      */
-    orderBy?: EmailVerificationTokenOrderByWithRelationInput | EmailVerificationTokenOrderByWithRelationInput[]
+    orderBy?: Enumerable<EmailVerificationTokenOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -5795,21 +5413,18 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of EmailVerificationTokens.
      */
-    distinct?: EmailVerificationTokenScalarFieldEnum | EmailVerificationTokenScalarFieldEnum[]
+    distinct?: Enumerable<EmailVerificationTokenScalarFieldEnum>
   }
+
 
   /**
    * EmailVerificationToken findMany
    */
-  export type EmailVerificationTokenFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the EmailVerificationToken
      */
     select?: EmailVerificationTokenSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
     /**
      * Filter, which EmailVerificationTokens to fetch.
      */
@@ -5819,7 +5434,7 @@ export namespace Prisma {
      * 
      * Determine the order of EmailVerificationTokens to fetch.
      */
-    orderBy?: EmailVerificationTokenOrderByWithRelationInput | EmailVerificationTokenOrderByWithRelationInput[]
+    orderBy?: Enumerable<EmailVerificationTokenOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -5838,69 +5453,45 @@ export namespace Prisma {
      * Skip the first `n` EmailVerificationTokens.
      */
     skip?: number
-    distinct?: EmailVerificationTokenScalarFieldEnum | EmailVerificationTokenScalarFieldEnum[]
+    distinct?: Enumerable<EmailVerificationTokenScalarFieldEnum>
   }
+
 
   /**
    * EmailVerificationToken create
    */
-  export type EmailVerificationTokenCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the EmailVerificationToken
      */
     select?: EmailVerificationTokenSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
     /**
      * The data needed to create a EmailVerificationToken.
      */
     data: XOR<EmailVerificationTokenCreateInput, EmailVerificationTokenUncheckedCreateInput>
   }
 
+
   /**
    * EmailVerificationToken createMany
    */
-  export type EmailVerificationTokenCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to create many EmailVerificationTokens.
      */
-    data: EmailVerificationTokenCreateManyInput | EmailVerificationTokenCreateManyInput[]
+    data: Enumerable<EmailVerificationTokenCreateManyInput>
     skipDuplicates?: boolean
   }
 
-  /**
-   * EmailVerificationToken createManyAndReturn
-   */
-  export type EmailVerificationTokenCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the EmailVerificationToken
-     */
-    select?: EmailVerificationTokenSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
-    /**
-     * The data used to create many EmailVerificationTokens.
-     */
-    data: EmailVerificationTokenCreateManyInput | EmailVerificationTokenCreateManyInput[]
-    skipDuplicates?: boolean
-  }
 
   /**
    * EmailVerificationToken update
    */
-  export type EmailVerificationTokenUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the EmailVerificationToken
      */
     select?: EmailVerificationTokenSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
     /**
      * The data needed to update a EmailVerificationToken.
      */
@@ -5911,10 +5502,11 @@ export namespace Prisma {
     where: EmailVerificationTokenWhereUniqueInput
   }
 
+
   /**
    * EmailVerificationToken updateMany
    */
-  export type EmailVerificationTokenUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to update EmailVerificationTokens.
      */
@@ -5923,50 +5515,17 @@ export namespace Prisma {
      * Filter which EmailVerificationTokens to update
      */
     where?: EmailVerificationTokenWhereInput
-    /**
-     * Limit how many EmailVerificationTokens to update.
-     */
-    limit?: number
   }
 
-  /**
-   * EmailVerificationToken updateManyAndReturn
-   */
-  export type EmailVerificationTokenUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the EmailVerificationToken
-     */
-    select?: EmailVerificationTokenSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
-    /**
-     * The data used to update EmailVerificationTokens.
-     */
-    data: XOR<EmailVerificationTokenUpdateManyMutationInput, EmailVerificationTokenUncheckedUpdateManyInput>
-    /**
-     * Filter which EmailVerificationTokens to update
-     */
-    where?: EmailVerificationTokenWhereInput
-    /**
-     * Limit how many EmailVerificationTokens to update.
-     */
-    limit?: number
-  }
 
   /**
    * EmailVerificationToken upsert
    */
-  export type EmailVerificationTokenUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the EmailVerificationToken
      */
     select?: EmailVerificationTokenSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
     /**
      * The filter to search for the EmailVerificationToken to update in case it exists.
      */
@@ -5981,56 +5540,49 @@ export namespace Prisma {
     update: XOR<EmailVerificationTokenUpdateInput, EmailVerificationTokenUncheckedUpdateInput>
   }
 
+
   /**
    * EmailVerificationToken delete
    */
-  export type EmailVerificationTokenDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the EmailVerificationToken
      */
     select?: EmailVerificationTokenSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
     /**
      * Filter which EmailVerificationToken to delete.
      */
     where: EmailVerificationTokenWhereUniqueInput
   }
 
+
   /**
    * EmailVerificationToken deleteMany
    */
-  export type EmailVerificationTokenDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which EmailVerificationTokens to delete
      */
     where?: EmailVerificationTokenWhereInput
-    /**
-     * Limit how many EmailVerificationTokens to delete.
-     */
-    limit?: number
   }
+
 
   /**
    * EmailVerificationToken without action
    */
-  export type EmailVerificationTokenDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailVerificationTokenArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the EmailVerificationToken
      */
     select?: EmailVerificationTokenSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the EmailVerificationToken
-     */
-    omit?: EmailVerificationTokenOmit<ExtArgs> | null
   }
+
 
 
   /**
    * Model Patron
    */
+
 
   export type AggregatePatron = {
     _count: PatronCountAggregateOutputType | null
@@ -6133,7 +5685,7 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type PatronAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Patron to aggregate.
      */
@@ -6143,7 +5695,7 @@ export namespace Prisma {
      * 
      * Determine the order of Patrons to fetch.
      */
-    orderBy?: PatronOrderByWithRelationInput | PatronOrderByWithRelationInput[]
+    orderBy?: Enumerable<PatronOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -6193,10 +5745,10 @@ export namespace Prisma {
 
 
 
-  export type PatronGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: PatronWhereInput
-    orderBy?: PatronOrderByWithAggregationInput | PatronOrderByWithAggregationInput[]
-    by: PatronScalarFieldEnum[] | PatronScalarFieldEnum
+    orderBy?: Enumerable<PatronOrderByWithAggregationInput>
+    by: PatronScalarFieldEnum[]
     having?: PatronScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -6204,6 +5756,7 @@ export namespace Prisma {
     _min?: PatronMinAggregateInputType
     _max?: PatronMaxAggregateInputType
   }
+
 
   export type PatronGroupByOutputType = {
     id: string
@@ -6226,7 +5779,7 @@ export namespace Prisma {
 
   type GetPatronGroupByPayload<T extends PatronGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<PatronGroupByOutputType, T['by']> &
+      PickArray<PatronGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof PatronGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -6238,7 +5791,7 @@ export namespace Prisma {
     >
 
 
-  export type PatronSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PatronSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     google_Id?: boolean
     firstname?: boolean
@@ -6255,39 +5808,7 @@ export namespace Prisma {
     book_likes?: boolean | Patron$book_likesArgs<ExtArgs>
     book_consulted?: boolean | Patron$book_consultedArgs<ExtArgs>
     circulation?: boolean | Patron$circulationArgs<ExtArgs>
-    _count?: boolean | PatronCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["patron"]>
-
-  export type PatronSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    google_Id?: boolean
-    firstname?: boolean
-    lastname?: boolean
-    displayname?: boolean
-    address?: boolean
-    email?: boolean
-    password?: boolean
-    profile_img?: boolean
-    borrowed_books?: boolean
-    isEmailVerified?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }, ExtArgs["result"]["patron"]>
-
-  export type PatronSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    google_Id?: boolean
-    firstname?: boolean
-    lastname?: boolean
-    displayname?: boolean
-    address?: boolean
-    email?: boolean
-    password?: boolean
-    profile_img?: boolean
-    borrowed_books?: boolean
-    isEmailVerified?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    _count?: boolean | PatronCountOutputTypeArgs<ExtArgs>
   }, ExtArgs["result"]["patron"]>
 
   export type PatronSelectScalar = {
@@ -6306,49 +5827,22 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type PatronOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "google_Id" | "firstname" | "lastname" | "displayname" | "address" | "email" | "password" | "profile_img" | "borrowed_books" | "isEmailVerified" | "created_at" | "updated_at", ExtArgs["result"]["patron"]>
-  export type PatronInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     book_likes?: boolean | Patron$book_likesArgs<ExtArgs>
     book_consulted?: boolean | Patron$book_consultedArgs<ExtArgs>
     circulation?: boolean | Patron$circulationArgs<ExtArgs>
-    _count?: boolean | PatronCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type PatronIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type PatronIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $PatronPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Patron"
-    objects: {
-      book_likes: Prisma.$Book_likesPayload<ExtArgs>[]
-      book_consulted: Prisma.$Book_consultedPayload<ExtArgs>[]
-      circulation: Prisma.$CirculationPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      google_Id: string | null
-      firstname: string
-      lastname: string
-      displayname: string | null
-      address: string | null
-      email: string
-      password: string | null
-      profile_img: string | null
-      borrowed_books: string[]
-      isEmailVerified: boolean
-      created_at: Date
-      updated_at: Date
-    }, ExtArgs["result"]["patron"]>
-    composites: {}
+    _count?: boolean | PatronCountOutputTypeArgs<ExtArgs>
   }
 
-  type PatronGetPayload<S extends boolean | null | undefined | PatronDefaultArgs> = $Result.GetResult<Prisma.$PatronPayload, S>
 
-  type PatronCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<PatronFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type PatronGetPayload<S extends boolean | null | undefined | PatronArgs> = $Types.GetResult<PatronPayload, S>
+
+  type PatronCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<PatronFindManyArgs, 'select' | 'include'> & {
       select?: PatronCountAggregateInputType | true
     }
 
-  export interface PatronDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface PatronDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Patron'], meta: { name: 'Patron' } }
     /**
      * Find zero or one Patron that matches the filter.
@@ -6360,12 +5854,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUnique<T extends PatronFindUniqueArgs>(args: SelectSubset<T, PatronFindUniqueArgs<ExtArgs>>): Prisma__PatronClient<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findUnique<T extends PatronFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, PatronFindUniqueArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Patron'> extends True ? Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
 
     /**
-     * Find one Patron that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
+     * Find one Patron that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
      * @param {PatronFindUniqueOrThrowArgs} args - Arguments to find a Patron
      * @example
      * // Get one Patron
@@ -6374,8 +5870,10 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUniqueOrThrow<T extends PatronFindUniqueOrThrowArgs>(args: SelectSubset<T, PatronFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PatronClient<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findUniqueOrThrow<T extends PatronFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, PatronFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
 
     /**
      * Find the first Patron that matches the filter.
@@ -6389,12 +5887,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirst<T extends PatronFindFirstArgs>(args?: SelectSubset<T, PatronFindFirstArgs<ExtArgs>>): Prisma__PatronClient<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirst<T extends PatronFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, PatronFindFirstArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Patron'> extends True ? Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
 
     /**
      * Find the first Patron that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {PatronFindFirstOrThrowArgs} args - Arguments to find a Patron
@@ -6405,14 +5905,16 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirstOrThrow<T extends PatronFindFirstOrThrowArgs>(args?: SelectSubset<T, PatronFindFirstOrThrowArgs<ExtArgs>>): Prisma__PatronClient<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirstOrThrow<T extends PatronFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, PatronFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
 
     /**
      * Find zero or more Patrons that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PatronFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {PatronFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
      * // Get all Patrons
      * const patrons = await prisma.patron.findMany()
@@ -6423,8 +5925,10 @@ export namespace Prisma {
      * // Only select the `id`
      * const patronWithIdOnly = await prisma.patron.findMany({ select: { id: true } })
      * 
-     */
-    findMany<T extends PatronFindManyArgs>(args?: SelectSubset<T, PatronFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    **/
+    findMany<T extends PatronFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, PatronFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<PatronPayload<ExtArgs>, T, 'findMany', never>>
 
     /**
      * Create a Patron.
@@ -6437,46 +5941,26 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    create<T extends PatronCreateArgs>(args: SelectSubset<T, PatronCreateArgs<ExtArgs>>): Prisma__PatronClient<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    create<T extends PatronCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, PatronCreateArgs<ExtArgs>>
+    ): Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
 
     /**
      * Create many Patrons.
-     * @param {PatronCreateManyArgs} args - Arguments to create many Patrons.
-     * @example
-     * // Create many Patrons
-     * const patron = await prisma.patron.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
+     *     @param {PatronCreateManyArgs} args - Arguments to create many Patrons.
+     *     @example
+     *     // Create many Patrons
+     *     const patron = await prisma.patron.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
      *     
-     */
-    createMany<T extends PatronCreateManyArgs>(args?: SelectSubset<T, PatronCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Patrons and returns the data saved in the database.
-     * @param {PatronCreateManyAndReturnArgs} args - Arguments to create many Patrons.
-     * @example
-     * // Create many Patrons
-     * const patron = await prisma.patron.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Patrons and only return the `id`
-     * const patronWithIdOnly = await prisma.patron.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends PatronCreateManyAndReturnArgs>(args?: SelectSubset<T, PatronCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    **/
+    createMany<T extends PatronCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, PatronCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a Patron.
@@ -6489,8 +5973,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    delete<T extends PatronDeleteArgs>(args: SelectSubset<T, PatronDeleteArgs<ExtArgs>>): Prisma__PatronClient<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    delete<T extends PatronDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, PatronDeleteArgs<ExtArgs>>
+    ): Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
 
     /**
      * Update one Patron.
@@ -6506,8 +5992,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    update<T extends PatronUpdateArgs>(args: SelectSubset<T, PatronUpdateArgs<ExtArgs>>): Prisma__PatronClient<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    update<T extends PatronUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, PatronUpdateArgs<ExtArgs>>
+    ): Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
 
     /**
      * Delete zero or more Patrons.
@@ -6520,8 +6008,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    deleteMany<T extends PatronDeleteManyArgs>(args?: SelectSubset<T, PatronDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    **/
+    deleteMany<T extends PatronDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, PatronDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Update zero or more Patrons.
@@ -6539,38 +6029,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    updateMany<T extends PatronUpdateManyArgs>(args: SelectSubset<T, PatronUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Patrons and returns the data updated in the database.
-     * @param {PatronUpdateManyAndReturnArgs} args - Arguments to update many Patrons.
-     * @example
-     * // Update many Patrons
-     * const patron = await prisma.patron.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Patrons and only return the `id`
-     * const patronWithIdOnly = await prisma.patron.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends PatronUpdateManyAndReturnArgs>(args: SelectSubset<T, PatronUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    **/
+    updateMany<T extends PatronUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, PatronUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Create or update one Patron.
@@ -6588,9 +6050,10 @@ export namespace Prisma {
      *     // ... the filter for the Patron we want to update
      *   }
      * })
-     */
-    upsert<T extends PatronUpsertArgs>(args: SelectSubset<T, PatronUpsertArgs<ExtArgs>>): Prisma__PatronClient<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
+    **/
+    upsert<T extends PatronUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, PatronUpsertArgs<ExtArgs>>
+    ): Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
 
     /**
      * Count the number of Patrons.
@@ -6669,7 +6132,7 @@ export namespace Prisma {
         ? { orderBy: PatronGroupByArgs['orderBy'] }
         : { orderBy?: PatronGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -6717,10 +6180,7 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, PatronGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPatronGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Patron model
-   */
-  readonly fields: PatronFieldRefs;
+
   }
 
   /**
@@ -6729,71 +6189,64 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__PatronClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    book_likes<T extends Patron$book_likesArgs<ExtArgs> = {}>(args?: Subset<T, Patron$book_likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    book_consulted<T extends Patron$book_consultedArgs<ExtArgs> = {}>(args?: Subset<T, Patron$book_consultedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    circulation<T extends Patron$circulationArgs<ExtArgs> = {}>(args?: Subset<T, Patron$circulationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  export class Prisma__PatronClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    book_likes<T extends Patron$book_likesArgs<ExtArgs> = {}>(args?: Subset<T, Patron$book_likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'findMany', never>| Null>;
+
+    book_consulted<T extends Patron$book_consultedArgs<ExtArgs> = {}>(args?: Subset<T, Patron$book_consultedArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'findMany', never>| Null>;
+
+    circulation<T extends Patron$circulationArgs<ExtArgs> = {}>(args?: Subset<T, Patron$circulationArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'findMany', never>| Null>;
+
+    private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
     /**
      * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
      * resolved value cannot be modified from the callback.
      * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
      * @returns A Promise for the completion of the callback.
      */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
   }
 
 
-
-
-  /**
-   * Fields of the Patron model
-   */
-  interface PatronFieldRefs {
-    readonly id: FieldRef<"Patron", 'String'>
-    readonly google_Id: FieldRef<"Patron", 'String'>
-    readonly firstname: FieldRef<"Patron", 'String'>
-    readonly lastname: FieldRef<"Patron", 'String'>
-    readonly displayname: FieldRef<"Patron", 'String'>
-    readonly address: FieldRef<"Patron", 'String'>
-    readonly email: FieldRef<"Patron", 'String'>
-    readonly password: FieldRef<"Patron", 'String'>
-    readonly profile_img: FieldRef<"Patron", 'String'>
-    readonly borrowed_books: FieldRef<"Patron", 'String[]'>
-    readonly isEmailVerified: FieldRef<"Patron", 'Boolean'>
-    readonly created_at: FieldRef<"Patron", 'DateTime'>
-    readonly updated_at: FieldRef<"Patron", 'DateTime'>
-  }
-    
 
   // Custom InputTypes
+
   /**
-   * Patron findUnique
+   * Patron base type for findUnique actions
    */
-  export type PatronFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Patron
      */
     select?: PatronSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: PatronInclude<ExtArgs> | null
     /**
@@ -6801,95 +6254,108 @@ export namespace Prisma {
      */
     where: PatronWhereUniqueInput
   }
+
+  /**
+   * Patron findUnique
+   */
+  export interface PatronFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends PatronFindUniqueArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
 
   /**
    * Patron findUniqueOrThrow
    */
-  export type PatronFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Patron
      */
     select?: PatronSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: PatronInclude<ExtArgs> | null
     /**
      * Filter, which Patron to fetch.
      */
     where: PatronWhereUniqueInput
+  }
+
+
+  /**
+   * Patron base type for findFirst actions
+   */
+  export type PatronFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Patron
+     */
+    select?: PatronSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PatronInclude<ExtArgs> | null
+    /**
+     * Filter, which Patron to fetch.
+     */
+    where?: PatronWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Patrons to fetch.
+     */
+    orderBy?: Enumerable<PatronOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Patrons.
+     */
+    cursor?: PatronWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Patrons from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Patrons.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Patrons.
+     */
+    distinct?: Enumerable<PatronScalarFieldEnum>
   }
 
   /**
    * Patron findFirst
    */
-  export type PatronFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Patron
-     */
-    select?: PatronSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PatronInclude<ExtArgs> | null
-    /**
-     * Filter, which Patron to fetch.
-     */
-    where?: PatronWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Patrons to fetch.
-     */
-    orderBy?: PatronOrderByWithRelationInput | PatronOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Patrons.
-     */
-    cursor?: PatronWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Patrons from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Patrons.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Patrons.
-     */
-    distinct?: PatronScalarFieldEnum | PatronScalarFieldEnum[]
+  export interface PatronFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends PatronFindFirstArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
   }
+      
 
   /**
    * Patron findFirstOrThrow
    */
-  export type PatronFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Patron
      */
     select?: PatronSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: PatronInclude<ExtArgs> | null
     /**
@@ -6901,7 +6367,7 @@ export namespace Prisma {
      * 
      * Determine the order of Patrons to fetch.
      */
-    orderBy?: PatronOrderByWithRelationInput | PatronOrderByWithRelationInput[]
+    orderBy?: Enumerable<PatronOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -6925,23 +6391,20 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of Patrons.
      */
-    distinct?: PatronScalarFieldEnum | PatronScalarFieldEnum[]
+    distinct?: Enumerable<PatronScalarFieldEnum>
   }
+
 
   /**
    * Patron findMany
    */
-  export type PatronFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Patron
      */
     select?: PatronSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: PatronInclude<ExtArgs> | null
     /**
@@ -6953,7 +6416,7 @@ export namespace Prisma {
      * 
      * Determine the order of Patrons to fetch.
      */
-    orderBy?: PatronOrderByWithRelationInput | PatronOrderByWithRelationInput[]
+    orderBy?: Enumerable<PatronOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -6972,23 +6435,20 @@ export namespace Prisma {
      * Skip the first `n` Patrons.
      */
     skip?: number
-    distinct?: PatronScalarFieldEnum | PatronScalarFieldEnum[]
+    distinct?: Enumerable<PatronScalarFieldEnum>
   }
+
 
   /**
    * Patron create
    */
-  export type PatronCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Patron
      */
     select?: PatronSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: PatronInclude<ExtArgs> | null
     /**
@@ -6997,50 +6457,29 @@ export namespace Prisma {
     data: XOR<PatronCreateInput, PatronUncheckedCreateInput>
   }
 
+
   /**
    * Patron createMany
    */
-  export type PatronCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to create many Patrons.
      */
-    data: PatronCreateManyInput | PatronCreateManyInput[]
+    data: Enumerable<PatronCreateManyInput>
     skipDuplicates?: boolean
   }
 
-  /**
-   * Patron createManyAndReturn
-   */
-  export type PatronCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Patron
-     */
-    select?: PatronSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * The data used to create many Patrons.
-     */
-    data: PatronCreateManyInput | PatronCreateManyInput[]
-    skipDuplicates?: boolean
-  }
 
   /**
    * Patron update
    */
-  export type PatronUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Patron
      */
     select?: PatronSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: PatronInclude<ExtArgs> | null
     /**
@@ -7053,10 +6492,11 @@ export namespace Prisma {
     where: PatronWhereUniqueInput
   }
 
+
   /**
    * Patron updateMany
    */
-  export type PatronUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to update Patrons.
      */
@@ -7065,52 +6505,19 @@ export namespace Prisma {
      * Filter which Patrons to update
      */
     where?: PatronWhereInput
-    /**
-     * Limit how many Patrons to update.
-     */
-    limit?: number
   }
 
-  /**
-   * Patron updateManyAndReturn
-   */
-  export type PatronUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Patron
-     */
-    select?: PatronSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * The data used to update Patrons.
-     */
-    data: XOR<PatronUpdateManyMutationInput, PatronUncheckedUpdateManyInput>
-    /**
-     * Filter which Patrons to update
-     */
-    where?: PatronWhereInput
-    /**
-     * Limit how many Patrons to update.
-     */
-    limit?: number
-  }
 
   /**
    * Patron upsert
    */
-  export type PatronUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Patron
      */
     select?: PatronSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: PatronInclude<ExtArgs> | null
     /**
@@ -7127,20 +6534,17 @@ export namespace Prisma {
     update: XOR<PatronUpdateInput, PatronUncheckedUpdateInput>
   }
 
+
   /**
    * Patron delete
    */
-  export type PatronDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Patron
      */
     select?: PatronSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: PatronInclude<ExtArgs> | null
     /**
@@ -7149,114 +6553,101 @@ export namespace Prisma {
     where: PatronWhereUniqueInput
   }
 
+
   /**
    * Patron deleteMany
    */
-  export type PatronDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Patrons to delete
      */
     where?: PatronWhereInput
-    /**
-     * Limit how many Patrons to delete.
-     */
-    limit?: number
   }
+
 
   /**
    * Patron.book_likes
    */
-  export type Patron$book_likesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Patron$book_likesArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_likes
      */
     select?: Book_likesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_likesInclude<ExtArgs> | null
     where?: Book_likesWhereInput
-    orderBy?: Book_likesOrderByWithRelationInput | Book_likesOrderByWithRelationInput[]
+    orderBy?: Enumerable<Book_likesOrderByWithRelationInput>
     cursor?: Book_likesWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Book_likesScalarFieldEnum | Book_likesScalarFieldEnum[]
+    distinct?: Enumerable<Book_likesScalarFieldEnum>
   }
+
 
   /**
    * Patron.book_consulted
    */
-  export type Patron$book_consultedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Patron$book_consultedArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_consulted
      */
     select?: Book_consultedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_consultedInclude<ExtArgs> | null
     where?: Book_consultedWhereInput
-    orderBy?: Book_consultedOrderByWithRelationInput | Book_consultedOrderByWithRelationInput[]
+    orderBy?: Enumerable<Book_consultedOrderByWithRelationInput>
     cursor?: Book_consultedWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Book_consultedScalarFieldEnum | Book_consultedScalarFieldEnum[]
+    distinct?: Enumerable<Book_consultedScalarFieldEnum>
   }
+
 
   /**
    * Patron.circulation
    */
-  export type Patron$circulationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Patron$circulationArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Circulation
      */
     select?: CirculationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: CirculationInclude<ExtArgs> | null
     where?: CirculationWhereInput
-    orderBy?: CirculationOrderByWithRelationInput | CirculationOrderByWithRelationInput[]
+    orderBy?: Enumerable<CirculationOrderByWithRelationInput>
     cursor?: CirculationWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: CirculationScalarFieldEnum | CirculationScalarFieldEnum[]
+    distinct?: Enumerable<CirculationScalarFieldEnum>
   }
+
 
   /**
    * Patron without action
    */
-  export type PatronDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PatronArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Patron
      */
     select?: PatronSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Patron
-     */
-    omit?: PatronOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: PatronInclude<ExtArgs> | null
   }
 
 
+
   /**
    * Model Book_likes
    */
+
 
   export type AggregateBook_likes = {
     _count: Book_likesCountAggregateOutputType | null
@@ -7303,7 +6694,7 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type Book_likesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Book_likes to aggregate.
      */
@@ -7313,7 +6704,7 @@ export namespace Prisma {
      * 
      * Determine the order of Book_likes to fetch.
      */
-    orderBy?: Book_likesOrderByWithRelationInput | Book_likesOrderByWithRelationInput[]
+    orderBy?: Enumerable<Book_likesOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -7363,10 +6754,10 @@ export namespace Prisma {
 
 
 
-  export type Book_likesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: Book_likesWhereInput
-    orderBy?: Book_likesOrderByWithAggregationInput | Book_likesOrderByWithAggregationInput[]
-    by: Book_likesScalarFieldEnum[] | Book_likesScalarFieldEnum
+    orderBy?: Enumerable<Book_likesOrderByWithAggregationInput>
+    by: Book_likesScalarFieldEnum[]
     having?: Book_likesScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -7374,6 +6765,7 @@ export namespace Prisma {
     _min?: Book_likesMinAggregateInputType
     _max?: Book_likesMaxAggregateInputType
   }
+
 
   export type Book_likesGroupByOutputType = {
     book_id: string
@@ -7386,7 +6778,7 @@ export namespace Prisma {
 
   type GetBook_likesGroupByPayload<T extends Book_likesGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<Book_likesGroupByOutputType, T['by']> &
+      PickArray<Book_likesGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof Book_likesGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -7398,28 +6790,12 @@ export namespace Prisma {
     >
 
 
-  export type Book_likesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type Book_likesSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     book_id?: boolean
     patron_id?: boolean
     liked_at?: boolean
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["book_likes"]>
-
-  export type Book_likesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    book_id?: boolean
-    patron_id?: boolean
-    liked_at?: boolean
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["book_likes"]>
-
-  export type Book_likesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    book_id?: boolean
-    patron_id?: boolean
-    liked_at?: boolean
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
+    book?: boolean | BookArgs<ExtArgs>
+    patron?: boolean | PatronArgs<ExtArgs>
   }, ExtArgs["result"]["book_likes"]>
 
   export type Book_likesSelectScalar = {
@@ -7428,42 +6804,20 @@ export namespace Prisma {
     liked_at?: boolean
   }
 
-  export type Book_likesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"book_id" | "patron_id" | "liked_at", ExtArgs["result"]["book_likes"]>
-  export type Book_likesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }
-  export type Book_likesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }
-  export type Book_likesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
+  export type Book_likesInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    book?: boolean | BookArgs<ExtArgs>
+    patron?: boolean | PatronArgs<ExtArgs>
   }
 
-  export type $Book_likesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Book_likes"
-    objects: {
-      book: Prisma.$BookPayload<ExtArgs>
-      patron: Prisma.$PatronPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      book_id: string
-      patron_id: string
-      liked_at: Date
-    }, ExtArgs["result"]["book_likes"]>
-    composites: {}
-  }
 
-  type Book_likesGetPayload<S extends boolean | null | undefined | Book_likesDefaultArgs> = $Result.GetResult<Prisma.$Book_likesPayload, S>
+  type Book_likesGetPayload<S extends boolean | null | undefined | Book_likesArgs> = $Types.GetResult<Book_likesPayload, S>
 
-  type Book_likesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<Book_likesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type Book_likesCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<Book_likesFindManyArgs, 'select' | 'include'> & {
       select?: Book_likesCountAggregateInputType | true
     }
 
-  export interface Book_likesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface Book_likesDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Book_likes'], meta: { name: 'Book_likes' } }
     /**
      * Find zero or one Book_likes that matches the filter.
@@ -7475,12 +6829,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUnique<T extends Book_likesFindUniqueArgs>(args: SelectSubset<T, Book_likesFindUniqueArgs<ExtArgs>>): Prisma__Book_likesClient<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findUnique<T extends Book_likesFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, Book_likesFindUniqueArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Book_likes'> extends True ? Prisma__Book_likesClient<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__Book_likesClient<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
 
     /**
-     * Find one Book_likes that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
+     * Find one Book_likes that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
      * @param {Book_likesFindUniqueOrThrowArgs} args - Arguments to find a Book_likes
      * @example
      * // Get one Book_likes
@@ -7489,8 +6845,10 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUniqueOrThrow<T extends Book_likesFindUniqueOrThrowArgs>(args: SelectSubset<T, Book_likesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__Book_likesClient<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findUniqueOrThrow<T extends Book_likesFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, Book_likesFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__Book_likesClient<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
 
     /**
      * Find the first Book_likes that matches the filter.
@@ -7504,12 +6862,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirst<T extends Book_likesFindFirstArgs>(args?: SelectSubset<T, Book_likesFindFirstArgs<ExtArgs>>): Prisma__Book_likesClient<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirst<T extends Book_likesFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, Book_likesFindFirstArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Book_likes'> extends True ? Prisma__Book_likesClient<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__Book_likesClient<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
 
     /**
      * Find the first Book_likes that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {Book_likesFindFirstOrThrowArgs} args - Arguments to find a Book_likes
@@ -7520,14 +6880,16 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirstOrThrow<T extends Book_likesFindFirstOrThrowArgs>(args?: SelectSubset<T, Book_likesFindFirstOrThrowArgs<ExtArgs>>): Prisma__Book_likesClient<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirstOrThrow<T extends Book_likesFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, Book_likesFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__Book_likesClient<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
 
     /**
      * Find zero or more Book_likes that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {Book_likesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {Book_likesFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
      * // Get all Book_likes
      * const book_likes = await prisma.book_likes.findMany()
@@ -7538,8 +6900,10 @@ export namespace Prisma {
      * // Only select the `book_id`
      * const book_likesWithBook_idOnly = await prisma.book_likes.findMany({ select: { book_id: true } })
      * 
-     */
-    findMany<T extends Book_likesFindManyArgs>(args?: SelectSubset<T, Book_likesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    **/
+    findMany<T extends Book_likesFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, Book_likesFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'findMany', never>>
 
     /**
      * Create a Book_likes.
@@ -7552,46 +6916,26 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    create<T extends Book_likesCreateArgs>(args: SelectSubset<T, Book_likesCreateArgs<ExtArgs>>): Prisma__Book_likesClient<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    create<T extends Book_likesCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, Book_likesCreateArgs<ExtArgs>>
+    ): Prisma__Book_likesClient<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
 
     /**
      * Create many Book_likes.
-     * @param {Book_likesCreateManyArgs} args - Arguments to create many Book_likes.
-     * @example
-     * // Create many Book_likes
-     * const book_likes = await prisma.book_likes.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
+     *     @param {Book_likesCreateManyArgs} args - Arguments to create many Book_likes.
+     *     @example
+     *     // Create many Book_likes
+     *     const book_likes = await prisma.book_likes.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
      *     
-     */
-    createMany<T extends Book_likesCreateManyArgs>(args?: SelectSubset<T, Book_likesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Book_likes and returns the data saved in the database.
-     * @param {Book_likesCreateManyAndReturnArgs} args - Arguments to create many Book_likes.
-     * @example
-     * // Create many Book_likes
-     * const book_likes = await prisma.book_likes.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Book_likes and only return the `book_id`
-     * const book_likesWithBook_idOnly = await prisma.book_likes.createManyAndReturn({
-     *   select: { book_id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends Book_likesCreateManyAndReturnArgs>(args?: SelectSubset<T, Book_likesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    **/
+    createMany<T extends Book_likesCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, Book_likesCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a Book_likes.
@@ -7604,8 +6948,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    delete<T extends Book_likesDeleteArgs>(args: SelectSubset<T, Book_likesDeleteArgs<ExtArgs>>): Prisma__Book_likesClient<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    delete<T extends Book_likesDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, Book_likesDeleteArgs<ExtArgs>>
+    ): Prisma__Book_likesClient<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
 
     /**
      * Update one Book_likes.
@@ -7621,8 +6967,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    update<T extends Book_likesUpdateArgs>(args: SelectSubset<T, Book_likesUpdateArgs<ExtArgs>>): Prisma__Book_likesClient<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    update<T extends Book_likesUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, Book_likesUpdateArgs<ExtArgs>>
+    ): Prisma__Book_likesClient<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
 
     /**
      * Delete zero or more Book_likes.
@@ -7635,8 +6983,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    deleteMany<T extends Book_likesDeleteManyArgs>(args?: SelectSubset<T, Book_likesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    **/
+    deleteMany<T extends Book_likesDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, Book_likesDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Update zero or more Book_likes.
@@ -7654,38 +7004,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    updateMany<T extends Book_likesUpdateManyArgs>(args: SelectSubset<T, Book_likesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Book_likes and returns the data updated in the database.
-     * @param {Book_likesUpdateManyAndReturnArgs} args - Arguments to update many Book_likes.
-     * @example
-     * // Update many Book_likes
-     * const book_likes = await prisma.book_likes.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Book_likes and only return the `book_id`
-     * const book_likesWithBook_idOnly = await prisma.book_likes.updateManyAndReturn({
-     *   select: { book_id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends Book_likesUpdateManyAndReturnArgs>(args: SelectSubset<T, Book_likesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    **/
+    updateMany<T extends Book_likesUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, Book_likesUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Create or update one Book_likes.
@@ -7703,9 +7025,10 @@ export namespace Prisma {
      *     // ... the filter for the Book_likes we want to update
      *   }
      * })
-     */
-    upsert<T extends Book_likesUpsertArgs>(args: SelectSubset<T, Book_likesUpsertArgs<ExtArgs>>): Prisma__Book_likesClient<$Result.GetResult<Prisma.$Book_likesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
+    **/
+    upsert<T extends Book_likesUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, Book_likesUpsertArgs<ExtArgs>>
+    ): Prisma__Book_likesClient<$Types.GetResult<Book_likesPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
 
     /**
      * Count the number of Book_likes.
@@ -7784,7 +7107,7 @@ export namespace Prisma {
         ? { orderBy: Book_likesGroupByArgs['orderBy'] }
         : { orderBy?: Book_likesGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -7832,10 +7155,7 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, Book_likesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBook_likesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Book_likes model
-   */
-  readonly fields: Book_likesFieldRefs;
+
   }
 
   /**
@@ -7844,60 +7164,62 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__Book_likesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    book<T extends BookDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BookDefaultArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    patron<T extends PatronDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatronDefaultArgs<ExtArgs>>): Prisma__PatronClient<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  export class Prisma__Book_likesClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    book<T extends BookArgs<ExtArgs> = {}>(args?: Subset<T, BookArgs<ExtArgs>>): Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+
+    patron<T extends PatronArgs<ExtArgs> = {}>(args?: Subset<T, PatronArgs<ExtArgs>>): Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+
+    private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
     /**
      * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
      * resolved value cannot be modified from the callback.
      * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
      * @returns A Promise for the completion of the callback.
      */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
   }
 
 
-
-
-  /**
-   * Fields of the Book_likes model
-   */
-  interface Book_likesFieldRefs {
-    readonly book_id: FieldRef<"Book_likes", 'String'>
-    readonly patron_id: FieldRef<"Book_likes", 'String'>
-    readonly liked_at: FieldRef<"Book_likes", 'DateTime'>
-  }
-    
 
   // Custom InputTypes
+
   /**
-   * Book_likes findUnique
+   * Book_likes base type for findUnique actions
    */
-  export type Book_likesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_likes
      */
     select?: Book_likesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_likesInclude<ExtArgs> | null
     /**
@@ -7905,95 +7227,108 @@ export namespace Prisma {
      */
     where: Book_likesWhereUniqueInput
   }
+
+  /**
+   * Book_likes findUnique
+   */
+  export interface Book_likesFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Book_likesFindUniqueArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
 
   /**
    * Book_likes findUniqueOrThrow
    */
-  export type Book_likesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_likes
      */
     select?: Book_likesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_likesInclude<ExtArgs> | null
     /**
      * Filter, which Book_likes to fetch.
      */
     where: Book_likesWhereUniqueInput
+  }
+
+
+  /**
+   * Book_likes base type for findFirst actions
+   */
+  export type Book_likesFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Book_likes
+     */
+    select?: Book_likesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: Book_likesInclude<ExtArgs> | null
+    /**
+     * Filter, which Book_likes to fetch.
+     */
+    where?: Book_likesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Book_likes to fetch.
+     */
+    orderBy?: Enumerable<Book_likesOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Book_likes.
+     */
+    cursor?: Book_likesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Book_likes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Book_likes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Book_likes.
+     */
+    distinct?: Enumerable<Book_likesScalarFieldEnum>
   }
 
   /**
    * Book_likes findFirst
    */
-  export type Book_likesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Book_likes
-     */
-    select?: Book_likesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: Book_likesInclude<ExtArgs> | null
-    /**
-     * Filter, which Book_likes to fetch.
-     */
-    where?: Book_likesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Book_likes to fetch.
-     */
-    orderBy?: Book_likesOrderByWithRelationInput | Book_likesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Book_likes.
-     */
-    cursor?: Book_likesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Book_likes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Book_likes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Book_likes.
-     */
-    distinct?: Book_likesScalarFieldEnum | Book_likesScalarFieldEnum[]
+  export interface Book_likesFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Book_likesFindFirstArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
   }
+      
 
   /**
    * Book_likes findFirstOrThrow
    */
-  export type Book_likesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_likes
      */
     select?: Book_likesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_likesInclude<ExtArgs> | null
     /**
@@ -8005,7 +7340,7 @@ export namespace Prisma {
      * 
      * Determine the order of Book_likes to fetch.
      */
-    orderBy?: Book_likesOrderByWithRelationInput | Book_likesOrderByWithRelationInput[]
+    orderBy?: Enumerable<Book_likesOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -8029,23 +7364,20 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of Book_likes.
      */
-    distinct?: Book_likesScalarFieldEnum | Book_likesScalarFieldEnum[]
+    distinct?: Enumerable<Book_likesScalarFieldEnum>
   }
+
 
   /**
    * Book_likes findMany
    */
-  export type Book_likesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_likes
      */
     select?: Book_likesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_likesInclude<ExtArgs> | null
     /**
@@ -8057,7 +7389,7 @@ export namespace Prisma {
      * 
      * Determine the order of Book_likes to fetch.
      */
-    orderBy?: Book_likesOrderByWithRelationInput | Book_likesOrderByWithRelationInput[]
+    orderBy?: Enumerable<Book_likesOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -8076,23 +7408,20 @@ export namespace Prisma {
      * Skip the first `n` Book_likes.
      */
     skip?: number
-    distinct?: Book_likesScalarFieldEnum | Book_likesScalarFieldEnum[]
+    distinct?: Enumerable<Book_likesScalarFieldEnum>
   }
+
 
   /**
    * Book_likes create
    */
-  export type Book_likesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_likes
      */
     select?: Book_likesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_likesInclude<ExtArgs> | null
     /**
@@ -8101,54 +7430,29 @@ export namespace Prisma {
     data: XOR<Book_likesCreateInput, Book_likesUncheckedCreateInput>
   }
 
+
   /**
    * Book_likes createMany
    */
-  export type Book_likesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to create many Book_likes.
      */
-    data: Book_likesCreateManyInput | Book_likesCreateManyInput[]
+    data: Enumerable<Book_likesCreateManyInput>
     skipDuplicates?: boolean
   }
 
-  /**
-   * Book_likes createManyAndReturn
-   */
-  export type Book_likesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Book_likes
-     */
-    select?: Book_likesSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * The data used to create many Book_likes.
-     */
-    data: Book_likesCreateManyInput | Book_likesCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: Book_likesIncludeCreateManyAndReturn<ExtArgs> | null
-  }
 
   /**
    * Book_likes update
    */
-  export type Book_likesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_likes
      */
     select?: Book_likesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_likesInclude<ExtArgs> | null
     /**
@@ -8161,10 +7465,11 @@ export namespace Prisma {
     where: Book_likesWhereUniqueInput
   }
 
+
   /**
    * Book_likes updateMany
    */
-  export type Book_likesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to update Book_likes.
      */
@@ -8173,56 +7478,19 @@ export namespace Prisma {
      * Filter which Book_likes to update
      */
     where?: Book_likesWhereInput
-    /**
-     * Limit how many Book_likes to update.
-     */
-    limit?: number
   }
 
-  /**
-   * Book_likes updateManyAndReturn
-   */
-  export type Book_likesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Book_likes
-     */
-    select?: Book_likesSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * The data used to update Book_likes.
-     */
-    data: XOR<Book_likesUpdateManyMutationInput, Book_likesUncheckedUpdateManyInput>
-    /**
-     * Filter which Book_likes to update
-     */
-    where?: Book_likesWhereInput
-    /**
-     * Limit how many Book_likes to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: Book_likesIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
 
   /**
    * Book_likes upsert
    */
-  export type Book_likesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_likes
      */
     select?: Book_likesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_likesInclude<ExtArgs> | null
     /**
@@ -8239,20 +7507,17 @@ export namespace Prisma {
     update: XOR<Book_likesUpdateInput, Book_likesUncheckedUpdateInput>
   }
 
+
   /**
    * Book_likes delete
    */
-  export type Book_likesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_likes
      */
     select?: Book_likesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_likesInclude<ExtArgs> | null
     /**
@@ -8261,42 +7526,38 @@ export namespace Prisma {
     where: Book_likesWhereUniqueInput
   }
 
+
   /**
    * Book_likes deleteMany
    */
-  export type Book_likesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Book_likes to delete
      */
     where?: Book_likesWhereInput
-    /**
-     * Limit how many Book_likes to delete.
-     */
-    limit?: number
   }
+
 
   /**
    * Book_likes without action
    */
-  export type Book_likesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_likesArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_likes
      */
     select?: Book_likesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_likes
-     */
-    omit?: Book_likesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_likesInclude<ExtArgs> | null
   }
 
 
+
   /**
    * Model Book_consulted
    */
+
 
   export type AggregateBook_consulted = {
     _count: Book_consultedCountAggregateOutputType | null
@@ -8343,7 +7604,7 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type Book_consultedAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Book_consulted to aggregate.
      */
@@ -8353,7 +7614,7 @@ export namespace Prisma {
      * 
      * Determine the order of Book_consulteds to fetch.
      */
-    orderBy?: Book_consultedOrderByWithRelationInput | Book_consultedOrderByWithRelationInput[]
+    orderBy?: Enumerable<Book_consultedOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -8403,10 +7664,10 @@ export namespace Prisma {
 
 
 
-  export type Book_consultedGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: Book_consultedWhereInput
-    orderBy?: Book_consultedOrderByWithAggregationInput | Book_consultedOrderByWithAggregationInput[]
-    by: Book_consultedScalarFieldEnum[] | Book_consultedScalarFieldEnum
+    orderBy?: Enumerable<Book_consultedOrderByWithAggregationInput>
+    by: Book_consultedScalarFieldEnum[]
     having?: Book_consultedScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -8414,6 +7675,7 @@ export namespace Prisma {
     _min?: Book_consultedMinAggregateInputType
     _max?: Book_consultedMaxAggregateInputType
   }
+
 
   export type Book_consultedGroupByOutputType = {
     book_id: string
@@ -8426,7 +7688,7 @@ export namespace Prisma {
 
   type GetBook_consultedGroupByPayload<T extends Book_consultedGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<Book_consultedGroupByOutputType, T['by']> &
+      PickArray<Book_consultedGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof Book_consultedGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -8438,28 +7700,12 @@ export namespace Prisma {
     >
 
 
-  export type Book_consultedSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type Book_consultedSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     book_id?: boolean
     patron_id?: boolean
     consulted_at?: boolean
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["book_consulted"]>
-
-  export type Book_consultedSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    book_id?: boolean
-    patron_id?: boolean
-    consulted_at?: boolean
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["book_consulted"]>
-
-  export type Book_consultedSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    book_id?: boolean
-    patron_id?: boolean
-    consulted_at?: boolean
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
+    book?: boolean | BookArgs<ExtArgs>
+    patron?: boolean | PatronArgs<ExtArgs>
   }, ExtArgs["result"]["book_consulted"]>
 
   export type Book_consultedSelectScalar = {
@@ -8468,42 +7714,20 @@ export namespace Prisma {
     consulted_at?: boolean
   }
 
-  export type Book_consultedOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"book_id" | "patron_id" | "consulted_at", ExtArgs["result"]["book_consulted"]>
-  export type Book_consultedInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }
-  export type Book_consultedIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }
-  export type Book_consultedIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
+  export type Book_consultedInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    book?: boolean | BookArgs<ExtArgs>
+    patron?: boolean | PatronArgs<ExtArgs>
   }
 
-  export type $Book_consultedPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Book_consulted"
-    objects: {
-      book: Prisma.$BookPayload<ExtArgs>
-      patron: Prisma.$PatronPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      book_id: string
-      patron_id: string
-      consulted_at: Date
-    }, ExtArgs["result"]["book_consulted"]>
-    composites: {}
-  }
 
-  type Book_consultedGetPayload<S extends boolean | null | undefined | Book_consultedDefaultArgs> = $Result.GetResult<Prisma.$Book_consultedPayload, S>
+  type Book_consultedGetPayload<S extends boolean | null | undefined | Book_consultedArgs> = $Types.GetResult<Book_consultedPayload, S>
 
-  type Book_consultedCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<Book_consultedFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type Book_consultedCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<Book_consultedFindManyArgs, 'select' | 'include'> & {
       select?: Book_consultedCountAggregateInputType | true
     }
 
-  export interface Book_consultedDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface Book_consultedDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Book_consulted'], meta: { name: 'Book_consulted' } }
     /**
      * Find zero or one Book_consulted that matches the filter.
@@ -8515,12 +7739,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUnique<T extends Book_consultedFindUniqueArgs>(args: SelectSubset<T, Book_consultedFindUniqueArgs<ExtArgs>>): Prisma__Book_consultedClient<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findUnique<T extends Book_consultedFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, Book_consultedFindUniqueArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Book_consulted'> extends True ? Prisma__Book_consultedClient<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__Book_consultedClient<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
 
     /**
-     * Find one Book_consulted that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
+     * Find one Book_consulted that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
      * @param {Book_consultedFindUniqueOrThrowArgs} args - Arguments to find a Book_consulted
      * @example
      * // Get one Book_consulted
@@ -8529,8 +7755,10 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUniqueOrThrow<T extends Book_consultedFindUniqueOrThrowArgs>(args: SelectSubset<T, Book_consultedFindUniqueOrThrowArgs<ExtArgs>>): Prisma__Book_consultedClient<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findUniqueOrThrow<T extends Book_consultedFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, Book_consultedFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__Book_consultedClient<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
 
     /**
      * Find the first Book_consulted that matches the filter.
@@ -8544,12 +7772,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirst<T extends Book_consultedFindFirstArgs>(args?: SelectSubset<T, Book_consultedFindFirstArgs<ExtArgs>>): Prisma__Book_consultedClient<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirst<T extends Book_consultedFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, Book_consultedFindFirstArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Book_consulted'> extends True ? Prisma__Book_consultedClient<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__Book_consultedClient<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
 
     /**
      * Find the first Book_consulted that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {Book_consultedFindFirstOrThrowArgs} args - Arguments to find a Book_consulted
@@ -8560,14 +7790,16 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirstOrThrow<T extends Book_consultedFindFirstOrThrowArgs>(args?: SelectSubset<T, Book_consultedFindFirstOrThrowArgs<ExtArgs>>): Prisma__Book_consultedClient<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirstOrThrow<T extends Book_consultedFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, Book_consultedFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__Book_consultedClient<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
 
     /**
      * Find zero or more Book_consulteds that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {Book_consultedFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {Book_consultedFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
      * // Get all Book_consulteds
      * const book_consulteds = await prisma.book_consulted.findMany()
@@ -8578,8 +7810,10 @@ export namespace Prisma {
      * // Only select the `book_id`
      * const book_consultedWithBook_idOnly = await prisma.book_consulted.findMany({ select: { book_id: true } })
      * 
-     */
-    findMany<T extends Book_consultedFindManyArgs>(args?: SelectSubset<T, Book_consultedFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    **/
+    findMany<T extends Book_consultedFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, Book_consultedFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'findMany', never>>
 
     /**
      * Create a Book_consulted.
@@ -8592,46 +7826,26 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    create<T extends Book_consultedCreateArgs>(args: SelectSubset<T, Book_consultedCreateArgs<ExtArgs>>): Prisma__Book_consultedClient<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    create<T extends Book_consultedCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, Book_consultedCreateArgs<ExtArgs>>
+    ): Prisma__Book_consultedClient<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
 
     /**
      * Create many Book_consulteds.
-     * @param {Book_consultedCreateManyArgs} args - Arguments to create many Book_consulteds.
-     * @example
-     * // Create many Book_consulteds
-     * const book_consulted = await prisma.book_consulted.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
+     *     @param {Book_consultedCreateManyArgs} args - Arguments to create many Book_consulteds.
+     *     @example
+     *     // Create many Book_consulteds
+     *     const book_consulted = await prisma.book_consulted.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
      *     
-     */
-    createMany<T extends Book_consultedCreateManyArgs>(args?: SelectSubset<T, Book_consultedCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Book_consulteds and returns the data saved in the database.
-     * @param {Book_consultedCreateManyAndReturnArgs} args - Arguments to create many Book_consulteds.
-     * @example
-     * // Create many Book_consulteds
-     * const book_consulted = await prisma.book_consulted.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Book_consulteds and only return the `book_id`
-     * const book_consultedWithBook_idOnly = await prisma.book_consulted.createManyAndReturn({
-     *   select: { book_id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends Book_consultedCreateManyAndReturnArgs>(args?: SelectSubset<T, Book_consultedCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    **/
+    createMany<T extends Book_consultedCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, Book_consultedCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a Book_consulted.
@@ -8644,8 +7858,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    delete<T extends Book_consultedDeleteArgs>(args: SelectSubset<T, Book_consultedDeleteArgs<ExtArgs>>): Prisma__Book_consultedClient<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    delete<T extends Book_consultedDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, Book_consultedDeleteArgs<ExtArgs>>
+    ): Prisma__Book_consultedClient<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
 
     /**
      * Update one Book_consulted.
@@ -8661,8 +7877,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    update<T extends Book_consultedUpdateArgs>(args: SelectSubset<T, Book_consultedUpdateArgs<ExtArgs>>): Prisma__Book_consultedClient<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    update<T extends Book_consultedUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, Book_consultedUpdateArgs<ExtArgs>>
+    ): Prisma__Book_consultedClient<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
 
     /**
      * Delete zero or more Book_consulteds.
@@ -8675,8 +7893,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    deleteMany<T extends Book_consultedDeleteManyArgs>(args?: SelectSubset<T, Book_consultedDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    **/
+    deleteMany<T extends Book_consultedDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, Book_consultedDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Update zero or more Book_consulteds.
@@ -8694,38 +7914,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    updateMany<T extends Book_consultedUpdateManyArgs>(args: SelectSubset<T, Book_consultedUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Book_consulteds and returns the data updated in the database.
-     * @param {Book_consultedUpdateManyAndReturnArgs} args - Arguments to update many Book_consulteds.
-     * @example
-     * // Update many Book_consulteds
-     * const book_consulted = await prisma.book_consulted.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Book_consulteds and only return the `book_id`
-     * const book_consultedWithBook_idOnly = await prisma.book_consulted.updateManyAndReturn({
-     *   select: { book_id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends Book_consultedUpdateManyAndReturnArgs>(args: SelectSubset<T, Book_consultedUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    **/
+    updateMany<T extends Book_consultedUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, Book_consultedUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Create or update one Book_consulted.
@@ -8743,9 +7935,10 @@ export namespace Prisma {
      *     // ... the filter for the Book_consulted we want to update
      *   }
      * })
-     */
-    upsert<T extends Book_consultedUpsertArgs>(args: SelectSubset<T, Book_consultedUpsertArgs<ExtArgs>>): Prisma__Book_consultedClient<$Result.GetResult<Prisma.$Book_consultedPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
+    **/
+    upsert<T extends Book_consultedUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, Book_consultedUpsertArgs<ExtArgs>>
+    ): Prisma__Book_consultedClient<$Types.GetResult<Book_consultedPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
 
     /**
      * Count the number of Book_consulteds.
@@ -8824,7 +8017,7 @@ export namespace Prisma {
         ? { orderBy: Book_consultedGroupByArgs['orderBy'] }
         : { orderBy?: Book_consultedGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -8872,10 +8065,7 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, Book_consultedGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBook_consultedGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Book_consulted model
-   */
-  readonly fields: Book_consultedFieldRefs;
+
   }
 
   /**
@@ -8884,60 +8074,62 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__Book_consultedClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    book<T extends BookDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BookDefaultArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    patron<T extends PatronDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatronDefaultArgs<ExtArgs>>): Prisma__PatronClient<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  export class Prisma__Book_consultedClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    book<T extends BookArgs<ExtArgs> = {}>(args?: Subset<T, BookArgs<ExtArgs>>): Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+
+    patron<T extends PatronArgs<ExtArgs> = {}>(args?: Subset<T, PatronArgs<ExtArgs>>): Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+
+    private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
     /**
      * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
      * resolved value cannot be modified from the callback.
      * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
      * @returns A Promise for the completion of the callback.
      */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
   }
 
 
-
-
-  /**
-   * Fields of the Book_consulted model
-   */
-  interface Book_consultedFieldRefs {
-    readonly book_id: FieldRef<"Book_consulted", 'String'>
-    readonly patron_id: FieldRef<"Book_consulted", 'String'>
-    readonly consulted_at: FieldRef<"Book_consulted", 'DateTime'>
-  }
-    
 
   // Custom InputTypes
+
   /**
-   * Book_consulted findUnique
+   * Book_consulted base type for findUnique actions
    */
-  export type Book_consultedFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_consulted
      */
     select?: Book_consultedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_consultedInclude<ExtArgs> | null
     /**
@@ -8945,95 +8137,108 @@ export namespace Prisma {
      */
     where: Book_consultedWhereUniqueInput
   }
+
+  /**
+   * Book_consulted findUnique
+   */
+  export interface Book_consultedFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Book_consultedFindUniqueArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
 
   /**
    * Book_consulted findUniqueOrThrow
    */
-  export type Book_consultedFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_consulted
      */
     select?: Book_consultedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_consultedInclude<ExtArgs> | null
     /**
      * Filter, which Book_consulted to fetch.
      */
     where: Book_consultedWhereUniqueInput
+  }
+
+
+  /**
+   * Book_consulted base type for findFirst actions
+   */
+  export type Book_consultedFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Book_consulted
+     */
+    select?: Book_consultedSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: Book_consultedInclude<ExtArgs> | null
+    /**
+     * Filter, which Book_consulted to fetch.
+     */
+    where?: Book_consultedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Book_consulteds to fetch.
+     */
+    orderBy?: Enumerable<Book_consultedOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Book_consulteds.
+     */
+    cursor?: Book_consultedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Book_consulteds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Book_consulteds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Book_consulteds.
+     */
+    distinct?: Enumerable<Book_consultedScalarFieldEnum>
   }
 
   /**
    * Book_consulted findFirst
    */
-  export type Book_consultedFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Book_consulted
-     */
-    select?: Book_consultedSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: Book_consultedInclude<ExtArgs> | null
-    /**
-     * Filter, which Book_consulted to fetch.
-     */
-    where?: Book_consultedWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Book_consulteds to fetch.
-     */
-    orderBy?: Book_consultedOrderByWithRelationInput | Book_consultedOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Book_consulteds.
-     */
-    cursor?: Book_consultedWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Book_consulteds from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Book_consulteds.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Book_consulteds.
-     */
-    distinct?: Book_consultedScalarFieldEnum | Book_consultedScalarFieldEnum[]
+  export interface Book_consultedFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Book_consultedFindFirstArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
   }
+      
 
   /**
    * Book_consulted findFirstOrThrow
    */
-  export type Book_consultedFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_consulted
      */
     select?: Book_consultedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_consultedInclude<ExtArgs> | null
     /**
@@ -9045,7 +8250,7 @@ export namespace Prisma {
      * 
      * Determine the order of Book_consulteds to fetch.
      */
-    orderBy?: Book_consultedOrderByWithRelationInput | Book_consultedOrderByWithRelationInput[]
+    orderBy?: Enumerable<Book_consultedOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -9069,23 +8274,20 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of Book_consulteds.
      */
-    distinct?: Book_consultedScalarFieldEnum | Book_consultedScalarFieldEnum[]
+    distinct?: Enumerable<Book_consultedScalarFieldEnum>
   }
+
 
   /**
    * Book_consulted findMany
    */
-  export type Book_consultedFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_consulted
      */
     select?: Book_consultedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_consultedInclude<ExtArgs> | null
     /**
@@ -9097,7 +8299,7 @@ export namespace Prisma {
      * 
      * Determine the order of Book_consulteds to fetch.
      */
-    orderBy?: Book_consultedOrderByWithRelationInput | Book_consultedOrderByWithRelationInput[]
+    orderBy?: Enumerable<Book_consultedOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -9116,23 +8318,20 @@ export namespace Prisma {
      * Skip the first `n` Book_consulteds.
      */
     skip?: number
-    distinct?: Book_consultedScalarFieldEnum | Book_consultedScalarFieldEnum[]
+    distinct?: Enumerable<Book_consultedScalarFieldEnum>
   }
+
 
   /**
    * Book_consulted create
    */
-  export type Book_consultedCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_consulted
      */
     select?: Book_consultedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_consultedInclude<ExtArgs> | null
     /**
@@ -9141,54 +8340,29 @@ export namespace Prisma {
     data: XOR<Book_consultedCreateInput, Book_consultedUncheckedCreateInput>
   }
 
+
   /**
    * Book_consulted createMany
    */
-  export type Book_consultedCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to create many Book_consulteds.
      */
-    data: Book_consultedCreateManyInput | Book_consultedCreateManyInput[]
+    data: Enumerable<Book_consultedCreateManyInput>
     skipDuplicates?: boolean
   }
 
-  /**
-   * Book_consulted createManyAndReturn
-   */
-  export type Book_consultedCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Book_consulted
-     */
-    select?: Book_consultedSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * The data used to create many Book_consulteds.
-     */
-    data: Book_consultedCreateManyInput | Book_consultedCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: Book_consultedIncludeCreateManyAndReturn<ExtArgs> | null
-  }
 
   /**
    * Book_consulted update
    */
-  export type Book_consultedUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_consulted
      */
     select?: Book_consultedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_consultedInclude<ExtArgs> | null
     /**
@@ -9201,10 +8375,11 @@ export namespace Prisma {
     where: Book_consultedWhereUniqueInput
   }
 
+
   /**
    * Book_consulted updateMany
    */
-  export type Book_consultedUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to update Book_consulteds.
      */
@@ -9213,56 +8388,19 @@ export namespace Prisma {
      * Filter which Book_consulteds to update
      */
     where?: Book_consultedWhereInput
-    /**
-     * Limit how many Book_consulteds to update.
-     */
-    limit?: number
   }
 
-  /**
-   * Book_consulted updateManyAndReturn
-   */
-  export type Book_consultedUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Book_consulted
-     */
-    select?: Book_consultedSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * The data used to update Book_consulteds.
-     */
-    data: XOR<Book_consultedUpdateManyMutationInput, Book_consultedUncheckedUpdateManyInput>
-    /**
-     * Filter which Book_consulteds to update
-     */
-    where?: Book_consultedWhereInput
-    /**
-     * Limit how many Book_consulteds to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: Book_consultedIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
 
   /**
    * Book_consulted upsert
    */
-  export type Book_consultedUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_consulted
      */
     select?: Book_consultedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_consultedInclude<ExtArgs> | null
     /**
@@ -9279,20 +8417,17 @@ export namespace Prisma {
     update: XOR<Book_consultedUpdateInput, Book_consultedUncheckedUpdateInput>
   }
 
+
   /**
    * Book_consulted delete
    */
-  export type Book_consultedDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_consulted
      */
     select?: Book_consultedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_consultedInclude<ExtArgs> | null
     /**
@@ -9301,42 +8436,38 @@ export namespace Prisma {
     where: Book_consultedWhereUniqueInput
   }
 
+
   /**
    * Book_consulted deleteMany
    */
-  export type Book_consultedDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Book_consulteds to delete
      */
     where?: Book_consultedWhereInput
-    /**
-     * Limit how many Book_consulteds to delete.
-     */
-    limit?: number
   }
+
 
   /**
    * Book_consulted without action
    */
-  export type Book_consultedDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Book_consultedArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Book_consulted
      */
     select?: Book_consultedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Book_consulted
-     */
-    omit?: Book_consultedOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: Book_consultedInclude<ExtArgs> | null
   }
 
 
+
   /**
    * Model Circulation
    */
+
 
   export type AggregateCirculation = {
     _count: CirculationCountAggregateOutputType | null
@@ -9389,7 +8520,7 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type CirculationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Circulation to aggregate.
      */
@@ -9399,7 +8530,7 @@ export namespace Prisma {
      * 
      * Determine the order of Circulations to fetch.
      */
-    orderBy?: CirculationOrderByWithRelationInput | CirculationOrderByWithRelationInput[]
+    orderBy?: Enumerable<CirculationOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -9449,10 +8580,10 @@ export namespace Prisma {
 
 
 
-  export type CirculationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: CirculationWhereInput
-    orderBy?: CirculationOrderByWithAggregationInput | CirculationOrderByWithAggregationInput[]
-    by: CirculationScalarFieldEnum[] | CirculationScalarFieldEnum
+    orderBy?: Enumerable<CirculationOrderByWithAggregationInput>
+    by: CirculationScalarFieldEnum[]
     having?: CirculationScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -9460,6 +8591,7 @@ export namespace Prisma {
     _min?: CirculationMinAggregateInputType
     _max?: CirculationMaxAggregateInputType
   }
+
 
   export type CirculationGroupByOutputType = {
     book_id: string
@@ -9473,7 +8605,7 @@ export namespace Prisma {
 
   type GetCirculationGroupByPayload<T extends CirculationGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<CirculationGroupByOutputType, T['by']> &
+      PickArray<CirculationGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof CirculationGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -9485,31 +8617,13 @@ export namespace Prisma {
     >
 
 
-  export type CirculationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type CirculationSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     book_id?: boolean
     patron_id?: boolean
     checkout?: boolean
     date_due?: boolean
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["circulation"]>
-
-  export type CirculationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    book_id?: boolean
-    patron_id?: boolean
-    checkout?: boolean
-    date_due?: boolean
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["circulation"]>
-
-  export type CirculationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    book_id?: boolean
-    patron_id?: boolean
-    checkout?: boolean
-    date_due?: boolean
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
+    book?: boolean | BookArgs<ExtArgs>
+    patron?: boolean | PatronArgs<ExtArgs>
   }, ExtArgs["result"]["circulation"]>
 
   export type CirculationSelectScalar = {
@@ -9519,43 +8633,20 @@ export namespace Prisma {
     date_due?: boolean
   }
 
-  export type CirculationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"book_id" | "patron_id" | "checkout" | "date_due", ExtArgs["result"]["circulation"]>
-  export type CirculationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }
-  export type CirculationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
-  }
-  export type CirculationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book?: boolean | BookDefaultArgs<ExtArgs>
-    patron?: boolean | PatronDefaultArgs<ExtArgs>
+  export type CirculationInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    book?: boolean | BookArgs<ExtArgs>
+    patron?: boolean | PatronArgs<ExtArgs>
   }
 
-  export type $CirculationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Circulation"
-    objects: {
-      book: Prisma.$BookPayload<ExtArgs>
-      patron: Prisma.$PatronPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      book_id: string
-      patron_id: string
-      checkout: Date
-      date_due: Date
-    }, ExtArgs["result"]["circulation"]>
-    composites: {}
-  }
 
-  type CirculationGetPayload<S extends boolean | null | undefined | CirculationDefaultArgs> = $Result.GetResult<Prisma.$CirculationPayload, S>
+  type CirculationGetPayload<S extends boolean | null | undefined | CirculationArgs> = $Types.GetResult<CirculationPayload, S>
 
-  type CirculationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<CirculationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+  type CirculationCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<CirculationFindManyArgs, 'select' | 'include'> & {
       select?: CirculationCountAggregateInputType | true
     }
 
-  export interface CirculationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  export interface CirculationDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Circulation'], meta: { name: 'Circulation' } }
     /**
      * Find zero or one Circulation that matches the filter.
@@ -9567,12 +8658,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUnique<T extends CirculationFindUniqueArgs>(args: SelectSubset<T, CirculationFindUniqueArgs<ExtArgs>>): Prisma__CirculationClient<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findUnique<T extends CirculationFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, CirculationFindUniqueArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Circulation'> extends True ? Prisma__CirculationClient<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__CirculationClient<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
 
     /**
-     * Find one Circulation that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
+     * Find one Circulation that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
      * @param {CirculationFindUniqueOrThrowArgs} args - Arguments to find a Circulation
      * @example
      * // Get one Circulation
@@ -9581,8 +8674,10 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findUniqueOrThrow<T extends CirculationFindUniqueOrThrowArgs>(args: SelectSubset<T, CirculationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CirculationClient<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findUniqueOrThrow<T extends CirculationFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, CirculationFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__CirculationClient<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
 
     /**
      * Find the first Circulation that matches the filter.
@@ -9596,12 +8691,14 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirst<T extends CirculationFindFirstArgs>(args?: SelectSubset<T, CirculationFindFirstArgs<ExtArgs>>): Prisma__CirculationClient<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirst<T extends CirculationFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, CirculationFindFirstArgs<ExtArgs>>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Circulation'> extends True ? Prisma__CirculationClient<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__CirculationClient<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
 
     /**
      * Find the first Circulation that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {CirculationFindFirstOrThrowArgs} args - Arguments to find a Circulation
@@ -9612,14 +8709,16 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     */
-    findFirstOrThrow<T extends CirculationFindFirstOrThrowArgs>(args?: SelectSubset<T, CirculationFindFirstOrThrowArgs<ExtArgs>>): Prisma__CirculationClient<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    findFirstOrThrow<T extends CirculationFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, CirculationFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__CirculationClient<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
 
     /**
      * Find zero or more Circulations that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CirculationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {CirculationFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
      * // Get all Circulations
      * const circulations = await prisma.circulation.findMany()
@@ -9630,8 +8729,10 @@ export namespace Prisma {
      * // Only select the `book_id`
      * const circulationWithBook_idOnly = await prisma.circulation.findMany({ select: { book_id: true } })
      * 
-     */
-    findMany<T extends CirculationFindManyArgs>(args?: SelectSubset<T, CirculationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    **/
+    findMany<T extends CirculationFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, CirculationFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'findMany', never>>
 
     /**
      * Create a Circulation.
@@ -9644,46 +8745,26 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    create<T extends CirculationCreateArgs>(args: SelectSubset<T, CirculationCreateArgs<ExtArgs>>): Prisma__CirculationClient<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    create<T extends CirculationCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, CirculationCreateArgs<ExtArgs>>
+    ): Prisma__CirculationClient<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
 
     /**
      * Create many Circulations.
-     * @param {CirculationCreateManyArgs} args - Arguments to create many Circulations.
-     * @example
-     * // Create many Circulations
-     * const circulation = await prisma.circulation.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
+     *     @param {CirculationCreateManyArgs} args - Arguments to create many Circulations.
+     *     @example
+     *     // Create many Circulations
+     *     const circulation = await prisma.circulation.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
      *     
-     */
-    createMany<T extends CirculationCreateManyArgs>(args?: SelectSubset<T, CirculationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Circulations and returns the data saved in the database.
-     * @param {CirculationCreateManyAndReturnArgs} args - Arguments to create many Circulations.
-     * @example
-     * // Create many Circulations
-     * const circulation = await prisma.circulation.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Circulations and only return the `book_id`
-     * const circulationWithBook_idOnly = await prisma.circulation.createManyAndReturn({
-     *   select: { book_id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends CirculationCreateManyAndReturnArgs>(args?: SelectSubset<T, CirculationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    **/
+    createMany<T extends CirculationCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, CirculationCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Delete a Circulation.
@@ -9696,8 +8777,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    delete<T extends CirculationDeleteArgs>(args: SelectSubset<T, CirculationDeleteArgs<ExtArgs>>): Prisma__CirculationClient<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    delete<T extends CirculationDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, CirculationDeleteArgs<ExtArgs>>
+    ): Prisma__CirculationClient<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
 
     /**
      * Update one Circulation.
@@ -9713,8 +8796,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    update<T extends CirculationUpdateArgs>(args: SelectSubset<T, CirculationUpdateArgs<ExtArgs>>): Prisma__CirculationClient<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    **/
+    update<T extends CirculationUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, CirculationUpdateArgs<ExtArgs>>
+    ): Prisma__CirculationClient<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
 
     /**
      * Delete zero or more Circulations.
@@ -9727,8 +8812,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    deleteMany<T extends CirculationDeleteManyArgs>(args?: SelectSubset<T, CirculationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    **/
+    deleteMany<T extends CirculationDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, CirculationDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Update zero or more Circulations.
@@ -9746,38 +8833,10 @@ export namespace Prisma {
      *   }
      * })
      * 
-     */
-    updateMany<T extends CirculationUpdateManyArgs>(args: SelectSubset<T, CirculationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Circulations and returns the data updated in the database.
-     * @param {CirculationUpdateManyAndReturnArgs} args - Arguments to update many Circulations.
-     * @example
-     * // Update many Circulations
-     * const circulation = await prisma.circulation.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Circulations and only return the `book_id`
-     * const circulationWithBook_idOnly = await prisma.circulation.updateManyAndReturn({
-     *   select: { book_id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends CirculationUpdateManyAndReturnArgs>(args: SelectSubset<T, CirculationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    **/
+    updateMany<T extends CirculationUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, CirculationUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
 
     /**
      * Create or update one Circulation.
@@ -9795,9 +8854,10 @@ export namespace Prisma {
      *     // ... the filter for the Circulation we want to update
      *   }
      * })
-     */
-    upsert<T extends CirculationUpsertArgs>(args: SelectSubset<T, CirculationUpsertArgs<ExtArgs>>): Prisma__CirculationClient<$Result.GetResult<Prisma.$CirculationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
+    **/
+    upsert<T extends CirculationUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, CirculationUpsertArgs<ExtArgs>>
+    ): Prisma__CirculationClient<$Types.GetResult<CirculationPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
 
     /**
      * Count the number of Circulations.
@@ -9876,7 +8936,7 @@ export namespace Prisma {
         ? { orderBy: CirculationGroupByArgs['orderBy'] }
         : { orderBy?: CirculationGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -9924,10 +8984,7 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, CirculationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCirculationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Circulation model
-   */
-  readonly fields: CirculationFieldRefs;
+
   }
 
   /**
@@ -9936,61 +8993,62 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CirculationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    book<T extends BookDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BookDefaultArgs<ExtArgs>>): Prisma__BookClient<$Result.GetResult<Prisma.$BookPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    patron<T extends PatronDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatronDefaultArgs<ExtArgs>>): Prisma__PatronClient<$Result.GetResult<Prisma.$PatronPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  export class Prisma__CirculationClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    book<T extends BookArgs<ExtArgs> = {}>(args?: Subset<T, BookArgs<ExtArgs>>): Prisma__BookClient<$Types.GetResult<BookPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+
+    patron<T extends PatronArgs<ExtArgs> = {}>(args?: Subset<T, PatronArgs<ExtArgs>>): Prisma__PatronClient<$Types.GetResult<PatronPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+
+    private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
     /**
      * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
      * resolved value cannot be modified from the callback.
      * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
      * @returns A Promise for the completion of the callback.
      */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
   }
 
 
-
-
-  /**
-   * Fields of the Circulation model
-   */
-  interface CirculationFieldRefs {
-    readonly book_id: FieldRef<"Circulation", 'String'>
-    readonly patron_id: FieldRef<"Circulation", 'String'>
-    readonly checkout: FieldRef<"Circulation", 'DateTime'>
-    readonly date_due: FieldRef<"Circulation", 'DateTime'>
-  }
-    
 
   // Custom InputTypes
+
   /**
-   * Circulation findUnique
+   * Circulation base type for findUnique actions
    */
-  export type CirculationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Circulation
      */
     select?: CirculationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: CirculationInclude<ExtArgs> | null
     /**
@@ -9998,95 +9056,108 @@ export namespace Prisma {
      */
     where: CirculationWhereUniqueInput
   }
+
+  /**
+   * Circulation findUnique
+   */
+  export interface CirculationFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends CirculationFindUniqueArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
 
   /**
    * Circulation findUniqueOrThrow
    */
-  export type CirculationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Circulation
      */
     select?: CirculationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: CirculationInclude<ExtArgs> | null
     /**
      * Filter, which Circulation to fetch.
      */
     where: CirculationWhereUniqueInput
+  }
+
+
+  /**
+   * Circulation base type for findFirst actions
+   */
+  export type CirculationFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Circulation
+     */
+    select?: CirculationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CirculationInclude<ExtArgs> | null
+    /**
+     * Filter, which Circulation to fetch.
+     */
+    where?: CirculationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Circulations to fetch.
+     */
+    orderBy?: Enumerable<CirculationOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Circulations.
+     */
+    cursor?: CirculationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Circulations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Circulations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Circulations.
+     */
+    distinct?: Enumerable<CirculationScalarFieldEnum>
   }
 
   /**
    * Circulation findFirst
    */
-  export type CirculationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Circulation
-     */
-    select?: CirculationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CirculationInclude<ExtArgs> | null
-    /**
-     * Filter, which Circulation to fetch.
-     */
-    where?: CirculationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Circulations to fetch.
-     */
-    orderBy?: CirculationOrderByWithRelationInput | CirculationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Circulations.
-     */
-    cursor?: CirculationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Circulations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Circulations.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Circulations.
-     */
-    distinct?: CirculationScalarFieldEnum | CirculationScalarFieldEnum[]
+  export interface CirculationFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends CirculationFindFirstArgsBase<ExtArgs> {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
   }
+      
 
   /**
    * Circulation findFirstOrThrow
    */
-  export type CirculationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Circulation
      */
     select?: CirculationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: CirculationInclude<ExtArgs> | null
     /**
@@ -10098,7 +9169,7 @@ export namespace Prisma {
      * 
      * Determine the order of Circulations to fetch.
      */
-    orderBy?: CirculationOrderByWithRelationInput | CirculationOrderByWithRelationInput[]
+    orderBy?: Enumerable<CirculationOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -10122,23 +9193,20 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of Circulations.
      */
-    distinct?: CirculationScalarFieldEnum | CirculationScalarFieldEnum[]
+    distinct?: Enumerable<CirculationScalarFieldEnum>
   }
+
 
   /**
    * Circulation findMany
    */
-  export type CirculationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Circulation
      */
     select?: CirculationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: CirculationInclude<ExtArgs> | null
     /**
@@ -10150,7 +9218,7 @@ export namespace Prisma {
      * 
      * Determine the order of Circulations to fetch.
      */
-    orderBy?: CirculationOrderByWithRelationInput | CirculationOrderByWithRelationInput[]
+    orderBy?: Enumerable<CirculationOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -10169,23 +9237,20 @@ export namespace Prisma {
      * Skip the first `n` Circulations.
      */
     skip?: number
-    distinct?: CirculationScalarFieldEnum | CirculationScalarFieldEnum[]
+    distinct?: Enumerable<CirculationScalarFieldEnum>
   }
+
 
   /**
    * Circulation create
    */
-  export type CirculationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Circulation
      */
     select?: CirculationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: CirculationInclude<ExtArgs> | null
     /**
@@ -10194,54 +9259,29 @@ export namespace Prisma {
     data: XOR<CirculationCreateInput, CirculationUncheckedCreateInput>
   }
 
+
   /**
    * Circulation createMany
    */
-  export type CirculationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to create many Circulations.
      */
-    data: CirculationCreateManyInput | CirculationCreateManyInput[]
+    data: Enumerable<CirculationCreateManyInput>
     skipDuplicates?: boolean
   }
 
-  /**
-   * Circulation createManyAndReturn
-   */
-  export type CirculationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Circulation
-     */
-    select?: CirculationSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * The data used to create many Circulations.
-     */
-    data: CirculationCreateManyInput | CirculationCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CirculationIncludeCreateManyAndReturn<ExtArgs> | null
-  }
 
   /**
    * Circulation update
    */
-  export type CirculationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Circulation
      */
     select?: CirculationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: CirculationInclude<ExtArgs> | null
     /**
@@ -10254,10 +9294,11 @@ export namespace Prisma {
     where: CirculationWhereUniqueInput
   }
 
+
   /**
    * Circulation updateMany
    */
-  export type CirculationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * The data used to update Circulations.
      */
@@ -10266,56 +9307,19 @@ export namespace Prisma {
      * Filter which Circulations to update
      */
     where?: CirculationWhereInput
-    /**
-     * Limit how many Circulations to update.
-     */
-    limit?: number
   }
 
-  /**
-   * Circulation updateManyAndReturn
-   */
-  export type CirculationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Circulation
-     */
-    select?: CirculationSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * The data used to update Circulations.
-     */
-    data: XOR<CirculationUpdateManyMutationInput, CirculationUncheckedUpdateManyInput>
-    /**
-     * Filter which Circulations to update
-     */
-    where?: CirculationWhereInput
-    /**
-     * Limit how many Circulations to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CirculationIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
 
   /**
    * Circulation upsert
    */
-  export type CirculationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Circulation
      */
     select?: CirculationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: CirculationInclude<ExtArgs> | null
     /**
@@ -10332,20 +9336,17 @@ export namespace Prisma {
     update: XOR<CirculationUpdateInput, CirculationUncheckedUpdateInput>
   }
 
+
   /**
    * Circulation delete
    */
-  export type CirculationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Circulation
      */
     select?: CirculationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: CirculationInclude<ExtArgs> | null
     /**
@@ -10354,37 +9355,32 @@ export namespace Prisma {
     where: CirculationWhereUniqueInput
   }
 
+
   /**
    * Circulation deleteMany
    */
-  export type CirculationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Filter which Circulations to delete
      */
     where?: CirculationWhereInput
-    /**
-     * Limit how many Circulations to delete.
-     */
-    limit?: number
   }
+
 
   /**
    * Circulation without action
    */
-  export type CirculationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CirculationArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Circulation
      */
     select?: CirculationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Circulation
-     */
-    omit?: CirculationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
+     * Choose, which related nodes to fetch as well.
      */
     include?: CirculationInclude<ExtArgs> | null
   }
+
 
 
   /**
@@ -10538,98 +9534,18 @@ export namespace Prisma {
 
 
   /**
-   * Field references
-   */
-
-
-  /**
-   * Reference to a field of type 'String'
-   */
-  export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
-    
-
-
-  /**
-   * Reference to a field of type 'String[]'
-   */
-  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'GMD'
-   */
-  export type EnumGMDFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GMD'>
-    
-
-
-  /**
-   * Reference to a field of type 'GMD[]'
-   */
-  export type ListEnumGMDFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GMD[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-  /**
    * Deep Input Types
    */
 
 
   export type SessionWhereInput = {
-    AND?: SessionWhereInput | SessionWhereInput[]
-    OR?: SessionWhereInput[]
-    NOT?: SessionWhereInput | SessionWhereInput[]
-    id?: StringFilter<"Session"> | string
-    sid?: StringFilter<"Session"> | string
-    data?: StringFilter<"Session"> | string
-    expiresAt?: DateTimeFilter<"Session"> | Date | string
+    AND?: Enumerable<SessionWhereInput>
+    OR?: Enumerable<SessionWhereInput>
+    NOT?: Enumerable<SessionWhereInput>
+    id?: StringFilter | string
+    sid?: StringFilter | string
+    data?: StringFilter | string
+    expiresAt?: DateTimeFilter | Date | string
   }
 
   export type SessionOrderByWithRelationInput = {
@@ -10639,15 +9555,10 @@ export namespace Prisma {
     expiresAt?: SortOrder
   }
 
-  export type SessionWhereUniqueInput = Prisma.AtLeast<{
+  export type SessionWhereUniqueInput = {
     id?: string
     sid?: string
-    AND?: SessionWhereInput | SessionWhereInput[]
-    OR?: SessionWhereInput[]
-    NOT?: SessionWhereInput | SessionWhereInput[]
-    data?: StringFilter<"Session"> | string
-    expiresAt?: DateTimeFilter<"Session"> | Date | string
-  }, "id" | "sid">
+  }
 
   export type SessionOrderByWithAggregationInput = {
     id?: SortOrder
@@ -10660,32 +9571,32 @@ export namespace Prisma {
   }
 
   export type SessionScalarWhereWithAggregatesInput = {
-    AND?: SessionScalarWhereWithAggregatesInput | SessionScalarWhereWithAggregatesInput[]
-    OR?: SessionScalarWhereWithAggregatesInput[]
-    NOT?: SessionScalarWhereWithAggregatesInput | SessionScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Session"> | string
-    sid?: StringWithAggregatesFilter<"Session"> | string
-    data?: StringWithAggregatesFilter<"Session"> | string
-    expiresAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
+    AND?: Enumerable<SessionScalarWhereWithAggregatesInput>
+    OR?: Enumerable<SessionScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<SessionScalarWhereWithAggregatesInput>
+    id?: StringWithAggregatesFilter | string
+    sid?: StringWithAggregatesFilter | string
+    data?: StringWithAggregatesFilter | string
+    expiresAt?: DateTimeWithAggregatesFilter | Date | string
   }
 
   export type LibrarianWhereInput = {
-    AND?: LibrarianWhereInput | LibrarianWhereInput[]
-    OR?: LibrarianWhereInput[]
-    NOT?: LibrarianWhereInput | LibrarianWhereInput[]
-    id?: StringFilter<"Librarian"> | string
-    firstname?: StringFilter<"Librarian"> | string
-    lastname?: StringFilter<"Librarian"> | string
-    displayname?: StringFilter<"Librarian"> | string
-    email?: StringFilter<"Librarian"> | string
-    password?: StringFilter<"Librarian"> | string
-    profile_img?: StringFilter<"Librarian"> | string
-    address?: StringFilter<"Librarian"> | string
-    contact?: StringFilter<"Librarian"> | string
-    rank?: IntFilter<"Librarian"> | number
-    books_entered?: StringNullableListFilter<"Librarian">
-    created_at?: DateTimeFilter<"Librarian"> | Date | string
-    updated_at?: DateTimeFilter<"Librarian"> | Date | string
+    AND?: Enumerable<LibrarianWhereInput>
+    OR?: Enumerable<LibrarianWhereInput>
+    NOT?: Enumerable<LibrarianWhereInput>
+    id?: StringFilter | string
+    firstname?: StringFilter | string
+    lastname?: StringFilter | string
+    displayname?: StringFilter | string
+    email?: StringFilter | string
+    password?: StringFilter | string
+    profile_img?: StringFilter | string
+    address?: StringFilter | string
+    contact?: StringFilter | string
+    rank?: IntFilter | number
+    books_entered?: StringNullableListFilter
+    created_at?: DateTimeFilter | Date | string
+    updated_at?: DateTimeFilter | Date | string
   }
 
   export type LibrarianOrderByWithRelationInput = {
@@ -10704,24 +9615,12 @@ export namespace Prisma {
     updated_at?: SortOrder
   }
 
-  export type LibrarianWhereUniqueInput = Prisma.AtLeast<{
+  export type LibrarianWhereUniqueInput = {
     id?: string
     email?: string
     contact?: string
-    books_entered?: string[]
-    AND?: LibrarianWhereInput | LibrarianWhereInput[]
-    OR?: LibrarianWhereInput[]
-    NOT?: LibrarianWhereInput | LibrarianWhereInput[]
-    firstname?: StringFilter<"Librarian"> | string
-    lastname?: StringFilter<"Librarian"> | string
-    displayname?: StringFilter<"Librarian"> | string
-    password?: StringFilter<"Librarian"> | string
-    profile_img?: StringFilter<"Librarian"> | string
-    address?: StringFilter<"Librarian"> | string
-    rank?: IntFilter<"Librarian"> | number
-    created_at?: DateTimeFilter<"Librarian"> | Date | string
-    updated_at?: DateTimeFilter<"Librarian"> | Date | string
-  }, "id" | "email" | "contact" | "books_entered">
+    books_entered?: Enumerable<string>
+  }
 
   export type LibrarianOrderByWithAggregationInput = {
     id?: SortOrder
@@ -10745,47 +9644,47 @@ export namespace Prisma {
   }
 
   export type LibrarianScalarWhereWithAggregatesInput = {
-    AND?: LibrarianScalarWhereWithAggregatesInput | LibrarianScalarWhereWithAggregatesInput[]
-    OR?: LibrarianScalarWhereWithAggregatesInput[]
-    NOT?: LibrarianScalarWhereWithAggregatesInput | LibrarianScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Librarian"> | string
-    firstname?: StringWithAggregatesFilter<"Librarian"> | string
-    lastname?: StringWithAggregatesFilter<"Librarian"> | string
-    displayname?: StringWithAggregatesFilter<"Librarian"> | string
-    email?: StringWithAggregatesFilter<"Librarian"> | string
-    password?: StringWithAggregatesFilter<"Librarian"> | string
-    profile_img?: StringWithAggregatesFilter<"Librarian"> | string
-    address?: StringWithAggregatesFilter<"Librarian"> | string
-    contact?: StringWithAggregatesFilter<"Librarian"> | string
-    rank?: IntWithAggregatesFilter<"Librarian"> | number
-    books_entered?: StringNullableListFilter<"Librarian">
-    created_at?: DateTimeWithAggregatesFilter<"Librarian"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Librarian"> | Date | string
+    AND?: Enumerable<LibrarianScalarWhereWithAggregatesInput>
+    OR?: Enumerable<LibrarianScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<LibrarianScalarWhereWithAggregatesInput>
+    id?: StringWithAggregatesFilter | string
+    firstname?: StringWithAggregatesFilter | string
+    lastname?: StringWithAggregatesFilter | string
+    displayname?: StringWithAggregatesFilter | string
+    email?: StringWithAggregatesFilter | string
+    password?: StringWithAggregatesFilter | string
+    profile_img?: StringWithAggregatesFilter | string
+    address?: StringWithAggregatesFilter | string
+    contact?: StringWithAggregatesFilter | string
+    rank?: IntWithAggregatesFilter | number
+    books_entered?: StringNullableListFilter
+    created_at?: DateTimeWithAggregatesFilter | Date | string
+    updated_at?: DateTimeWithAggregatesFilter | Date | string
   }
 
   export type BookWhereInput = {
-    AND?: BookWhereInput | BookWhereInput[]
-    OR?: BookWhereInput[]
-    NOT?: BookWhereInput | BookWhereInput[]
-    id?: StringFilter<"Book"> | string
-    title?: StringFilter<"Book"> | string
-    author?: StringFilter<"Book"> | string
-    subject?: StringNullableListFilter<"Book">
-    imprint?: StringFilter<"Book"> | string
-    collation?: StringFilter<"Book"> | string
-    G_M_D?: EnumGMDFilter<"Book"> | $Enums.GMD
-    book_cover?: StringFilter<"Book"> | string
-    material_number?: StringFilter<"Book"> | string
-    availability?: BoolFilter<"Book"> | boolean
-    bibilography?: StringFilter<"Book"> | string
-    Keywords?: StringNullableListFilter<"Book">
-    other_Title?: StringNullableFilter<"Book"> | string | null
-    co_author?: StringNullableFilter<"Book"> | string | null
-    editor?: StringNullableFilter<"Book"> | string | null
-    edition?: StringNullableFilter<"Book"> | string | null
-    series?: StringNullableFilter<"Book"> | string | null
-    web_address?: StringNullableFilter<"Book"> | string | null
-    entered_at?: DateTimeFilter<"Book"> | Date | string
+    AND?: Enumerable<BookWhereInput>
+    OR?: Enumerable<BookWhereInput>
+    NOT?: Enumerable<BookWhereInput>
+    id?: StringFilter | string
+    title?: StringFilter | string
+    author?: StringFilter | string
+    subject?: StringNullableListFilter
+    imprint?: StringFilter | string
+    collation?: StringFilter | string
+    G_M_D?: EnumGMDFilter | GMD
+    book_cover?: StringFilter | string
+    material_number?: StringFilter | string
+    availability?: BoolFilter | boolean
+    bibilography?: StringFilter | string
+    Keywords?: StringNullableListFilter
+    other_Title?: StringNullableFilter | string | null
+    co_author?: StringNullableFilter | string | null
+    editor?: StringNullableFilter | string | null
+    edition?: StringNullableFilter | string | null
+    series?: StringNullableFilter | string | null
+    web_address?: StringNullableFilter | string | null
+    entered_at?: DateTimeFilter | Date | string
     book_likes?: Book_likesListRelationFilter
     book_consulted?: Book_consultedListRelationFilter
     circulation?: CirculationListRelationFilter
@@ -10816,33 +9715,9 @@ export namespace Prisma {
     circulation?: CirculationOrderByRelationAggregateInput
   }
 
-  export type BookWhereUniqueInput = Prisma.AtLeast<{
+  export type BookWhereUniqueInput = {
     id?: string
-    AND?: BookWhereInput | BookWhereInput[]
-    OR?: BookWhereInput[]
-    NOT?: BookWhereInput | BookWhereInput[]
-    title?: StringFilter<"Book"> | string
-    author?: StringFilter<"Book"> | string
-    subject?: StringNullableListFilter<"Book">
-    imprint?: StringFilter<"Book"> | string
-    collation?: StringFilter<"Book"> | string
-    G_M_D?: EnumGMDFilter<"Book"> | $Enums.GMD
-    book_cover?: StringFilter<"Book"> | string
-    material_number?: StringFilter<"Book"> | string
-    availability?: BoolFilter<"Book"> | boolean
-    bibilography?: StringFilter<"Book"> | string
-    Keywords?: StringNullableListFilter<"Book">
-    other_Title?: StringNullableFilter<"Book"> | string | null
-    co_author?: StringNullableFilter<"Book"> | string | null
-    editor?: StringNullableFilter<"Book"> | string | null
-    edition?: StringNullableFilter<"Book"> | string | null
-    series?: StringNullableFilter<"Book"> | string | null
-    web_address?: StringNullableFilter<"Book"> | string | null
-    entered_at?: DateTimeFilter<"Book"> | Date | string
-    book_likes?: Book_likesListRelationFilter
-    book_consulted?: Book_consultedListRelationFilter
-    circulation?: CirculationListRelationFilter
-  }, "id">
+  }
 
   export type BookOrderByWithAggregationInput = {
     id?: SortOrder
@@ -10870,39 +9745,39 @@ export namespace Prisma {
   }
 
   export type BookScalarWhereWithAggregatesInput = {
-    AND?: BookScalarWhereWithAggregatesInput | BookScalarWhereWithAggregatesInput[]
-    OR?: BookScalarWhereWithAggregatesInput[]
-    NOT?: BookScalarWhereWithAggregatesInput | BookScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Book"> | string
-    title?: StringWithAggregatesFilter<"Book"> | string
-    author?: StringWithAggregatesFilter<"Book"> | string
-    subject?: StringNullableListFilter<"Book">
-    imprint?: StringWithAggregatesFilter<"Book"> | string
-    collation?: StringWithAggregatesFilter<"Book"> | string
-    G_M_D?: EnumGMDWithAggregatesFilter<"Book"> | $Enums.GMD
-    book_cover?: StringWithAggregatesFilter<"Book"> | string
-    material_number?: StringWithAggregatesFilter<"Book"> | string
-    availability?: BoolWithAggregatesFilter<"Book"> | boolean
-    bibilography?: StringWithAggregatesFilter<"Book"> | string
-    Keywords?: StringNullableListFilter<"Book">
-    other_Title?: StringNullableWithAggregatesFilter<"Book"> | string | null
-    co_author?: StringNullableWithAggregatesFilter<"Book"> | string | null
-    editor?: StringNullableWithAggregatesFilter<"Book"> | string | null
-    edition?: StringNullableWithAggregatesFilter<"Book"> | string | null
-    series?: StringNullableWithAggregatesFilter<"Book"> | string | null
-    web_address?: StringNullableWithAggregatesFilter<"Book"> | string | null
-    entered_at?: DateTimeWithAggregatesFilter<"Book"> | Date | string
+    AND?: Enumerable<BookScalarWhereWithAggregatesInput>
+    OR?: Enumerable<BookScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<BookScalarWhereWithAggregatesInput>
+    id?: StringWithAggregatesFilter | string
+    title?: StringWithAggregatesFilter | string
+    author?: StringWithAggregatesFilter | string
+    subject?: StringNullableListFilter
+    imprint?: StringWithAggregatesFilter | string
+    collation?: StringWithAggregatesFilter | string
+    G_M_D?: EnumGMDWithAggregatesFilter | GMD
+    book_cover?: StringWithAggregatesFilter | string
+    material_number?: StringWithAggregatesFilter | string
+    availability?: BoolWithAggregatesFilter | boolean
+    bibilography?: StringWithAggregatesFilter | string
+    Keywords?: StringNullableListFilter
+    other_Title?: StringNullableWithAggregatesFilter | string | null
+    co_author?: StringNullableWithAggregatesFilter | string | null
+    editor?: StringNullableWithAggregatesFilter | string | null
+    edition?: StringNullableWithAggregatesFilter | string | null
+    series?: StringNullableWithAggregatesFilter | string | null
+    web_address?: StringNullableWithAggregatesFilter | string | null
+    entered_at?: DateTimeWithAggregatesFilter | Date | string
   }
 
   export type EmailVerificationTokenWhereInput = {
-    AND?: EmailVerificationTokenWhereInput | EmailVerificationTokenWhereInput[]
-    OR?: EmailVerificationTokenWhereInput[]
-    NOT?: EmailVerificationTokenWhereInput | EmailVerificationTokenWhereInput[]
-    id?: StringFilter<"EmailVerificationToken"> | string
-    email?: StringFilter<"EmailVerificationToken"> | string
-    token?: StringFilter<"EmailVerificationToken"> | string
-    expiresAt?: DateTimeFilter<"EmailVerificationToken"> | Date | string
-    createdAt?: DateTimeFilter<"EmailVerificationToken"> | Date | string
+    AND?: Enumerable<EmailVerificationTokenWhereInput>
+    OR?: Enumerable<EmailVerificationTokenWhereInput>
+    NOT?: Enumerable<EmailVerificationTokenWhereInput>
+    id?: StringFilter | string
+    email?: StringFilter | string
+    token?: StringFilter | string
+    expiresAt?: DateTimeFilter | Date | string
+    createdAt?: DateTimeFilter | Date | string
   }
 
   export type EmailVerificationTokenOrderByWithRelationInput = {
@@ -10913,16 +9788,10 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type EmailVerificationTokenWhereUniqueInput = Prisma.AtLeast<{
+  export type EmailVerificationTokenWhereUniqueInput = {
     id?: string
     email?: string
-    AND?: EmailVerificationTokenWhereInput | EmailVerificationTokenWhereInput[]
-    OR?: EmailVerificationTokenWhereInput[]
-    NOT?: EmailVerificationTokenWhereInput | EmailVerificationTokenWhereInput[]
-    token?: StringFilter<"EmailVerificationToken"> | string
-    expiresAt?: DateTimeFilter<"EmailVerificationToken"> | Date | string
-    createdAt?: DateTimeFilter<"EmailVerificationToken"> | Date | string
-  }, "id" | "email">
+  }
 
   export type EmailVerificationTokenOrderByWithAggregationInput = {
     id?: SortOrder
@@ -10936,33 +9805,33 @@ export namespace Prisma {
   }
 
   export type EmailVerificationTokenScalarWhereWithAggregatesInput = {
-    AND?: EmailVerificationTokenScalarWhereWithAggregatesInput | EmailVerificationTokenScalarWhereWithAggregatesInput[]
-    OR?: EmailVerificationTokenScalarWhereWithAggregatesInput[]
-    NOT?: EmailVerificationTokenScalarWhereWithAggregatesInput | EmailVerificationTokenScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"EmailVerificationToken"> | string
-    email?: StringWithAggregatesFilter<"EmailVerificationToken"> | string
-    token?: StringWithAggregatesFilter<"EmailVerificationToken"> | string
-    expiresAt?: DateTimeWithAggregatesFilter<"EmailVerificationToken"> | Date | string
-    createdAt?: DateTimeWithAggregatesFilter<"EmailVerificationToken"> | Date | string
+    AND?: Enumerable<EmailVerificationTokenScalarWhereWithAggregatesInput>
+    OR?: Enumerable<EmailVerificationTokenScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<EmailVerificationTokenScalarWhereWithAggregatesInput>
+    id?: StringWithAggregatesFilter | string
+    email?: StringWithAggregatesFilter | string
+    token?: StringWithAggregatesFilter | string
+    expiresAt?: DateTimeWithAggregatesFilter | Date | string
+    createdAt?: DateTimeWithAggregatesFilter | Date | string
   }
 
   export type PatronWhereInput = {
-    AND?: PatronWhereInput | PatronWhereInput[]
-    OR?: PatronWhereInput[]
-    NOT?: PatronWhereInput | PatronWhereInput[]
-    id?: StringFilter<"Patron"> | string
-    google_Id?: StringNullableFilter<"Patron"> | string | null
-    firstname?: StringFilter<"Patron"> | string
-    lastname?: StringFilter<"Patron"> | string
-    displayname?: StringNullableFilter<"Patron"> | string | null
-    address?: StringNullableFilter<"Patron"> | string | null
-    email?: StringFilter<"Patron"> | string
-    password?: StringNullableFilter<"Patron"> | string | null
-    profile_img?: StringNullableFilter<"Patron"> | string | null
-    borrowed_books?: StringNullableListFilter<"Patron">
-    isEmailVerified?: BoolFilter<"Patron"> | boolean
-    created_at?: DateTimeFilter<"Patron"> | Date | string
-    updated_at?: DateTimeFilter<"Patron"> | Date | string
+    AND?: Enumerable<PatronWhereInput>
+    OR?: Enumerable<PatronWhereInput>
+    NOT?: Enumerable<PatronWhereInput>
+    id?: StringFilter | string
+    google_Id?: StringNullableFilter | string | null
+    firstname?: StringFilter | string
+    lastname?: StringFilter | string
+    displayname?: StringNullableFilter | string | null
+    address?: StringNullableFilter | string | null
+    email?: StringFilter | string
+    password?: StringNullableFilter | string | null
+    profile_img?: StringNullableFilter | string | null
+    borrowed_books?: StringNullableListFilter
+    isEmailVerified?: BoolFilter | boolean
+    created_at?: DateTimeFilter | Date | string
+    updated_at?: DateTimeFilter | Date | string
     book_likes?: Book_likesListRelationFilter
     book_consulted?: Book_consultedListRelationFilter
     circulation?: CirculationListRelationFilter
@@ -10987,27 +9856,13 @@ export namespace Prisma {
     circulation?: CirculationOrderByRelationAggregateInput
   }
 
-  export type PatronWhereUniqueInput = Prisma.AtLeast<{
+  export type PatronWhereUniqueInput = {
     id?: string
     google_Id?: string
     displayname?: string
     email?: string
-    borrowed_books?: string[]
-    AND?: PatronWhereInput | PatronWhereInput[]
-    OR?: PatronWhereInput[]
-    NOT?: PatronWhereInput | PatronWhereInput[]
-    firstname?: StringFilter<"Patron"> | string
-    lastname?: StringFilter<"Patron"> | string
-    address?: StringNullableFilter<"Patron"> | string | null
-    password?: StringNullableFilter<"Patron"> | string | null
-    profile_img?: StringNullableFilter<"Patron"> | string | null
-    isEmailVerified?: BoolFilter<"Patron"> | boolean
-    created_at?: DateTimeFilter<"Patron"> | Date | string
-    updated_at?: DateTimeFilter<"Patron"> | Date | string
-    book_likes?: Book_likesListRelationFilter
-    book_consulted?: Book_consultedListRelationFilter
-    circulation?: CirculationListRelationFilter
-  }, "id" | "google_Id" | "displayname" | "email" | "borrowed_books">
+    borrowed_books?: Enumerable<string>
+  }
 
   export type PatronOrderByWithAggregationInput = {
     id?: SortOrder
@@ -11029,33 +9884,33 @@ export namespace Prisma {
   }
 
   export type PatronScalarWhereWithAggregatesInput = {
-    AND?: PatronScalarWhereWithAggregatesInput | PatronScalarWhereWithAggregatesInput[]
-    OR?: PatronScalarWhereWithAggregatesInput[]
-    NOT?: PatronScalarWhereWithAggregatesInput | PatronScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Patron"> | string
-    google_Id?: StringNullableWithAggregatesFilter<"Patron"> | string | null
-    firstname?: StringWithAggregatesFilter<"Patron"> | string
-    lastname?: StringWithAggregatesFilter<"Patron"> | string
-    displayname?: StringNullableWithAggregatesFilter<"Patron"> | string | null
-    address?: StringNullableWithAggregatesFilter<"Patron"> | string | null
-    email?: StringWithAggregatesFilter<"Patron"> | string
-    password?: StringNullableWithAggregatesFilter<"Patron"> | string | null
-    profile_img?: StringNullableWithAggregatesFilter<"Patron"> | string | null
-    borrowed_books?: StringNullableListFilter<"Patron">
-    isEmailVerified?: BoolWithAggregatesFilter<"Patron"> | boolean
-    created_at?: DateTimeWithAggregatesFilter<"Patron"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Patron"> | Date | string
+    AND?: Enumerable<PatronScalarWhereWithAggregatesInput>
+    OR?: Enumerable<PatronScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<PatronScalarWhereWithAggregatesInput>
+    id?: StringWithAggregatesFilter | string
+    google_Id?: StringNullableWithAggregatesFilter | string | null
+    firstname?: StringWithAggregatesFilter | string
+    lastname?: StringWithAggregatesFilter | string
+    displayname?: StringNullableWithAggregatesFilter | string | null
+    address?: StringNullableWithAggregatesFilter | string | null
+    email?: StringWithAggregatesFilter | string
+    password?: StringNullableWithAggregatesFilter | string | null
+    profile_img?: StringNullableWithAggregatesFilter | string | null
+    borrowed_books?: StringNullableListFilter
+    isEmailVerified?: BoolWithAggregatesFilter | boolean
+    created_at?: DateTimeWithAggregatesFilter | Date | string
+    updated_at?: DateTimeWithAggregatesFilter | Date | string
   }
 
   export type Book_likesWhereInput = {
-    AND?: Book_likesWhereInput | Book_likesWhereInput[]
-    OR?: Book_likesWhereInput[]
-    NOT?: Book_likesWhereInput | Book_likesWhereInput[]
-    book_id?: StringFilter<"Book_likes"> | string
-    patron_id?: StringFilter<"Book_likes"> | string
-    liked_at?: DateTimeFilter<"Book_likes"> | Date | string
-    book?: XOR<BookScalarRelationFilter, BookWhereInput>
-    patron?: XOR<PatronScalarRelationFilter, PatronWhereInput>
+    AND?: Enumerable<Book_likesWhereInput>
+    OR?: Enumerable<Book_likesWhereInput>
+    NOT?: Enumerable<Book_likesWhereInput>
+    book_id?: StringFilter | string
+    patron_id?: StringFilter | string
+    liked_at?: DateTimeFilter | Date | string
+    book?: XOR<BookRelationFilter, BookWhereInput>
+    patron?: XOR<PatronRelationFilter, PatronWhereInput>
   }
 
   export type Book_likesOrderByWithRelationInput = {
@@ -11066,16 +9921,10 @@ export namespace Prisma {
     patron?: PatronOrderByWithRelationInput
   }
 
-  export type Book_likesWhereUniqueInput = Prisma.AtLeast<{
+  export type Book_likesWhereUniqueInput = {
     book_id?: string
     patron_id?: string
-    AND?: Book_likesWhereInput | Book_likesWhereInput[]
-    OR?: Book_likesWhereInput[]
-    NOT?: Book_likesWhereInput | Book_likesWhereInput[]
-    liked_at?: DateTimeFilter<"Book_likes"> | Date | string
-    book?: XOR<BookScalarRelationFilter, BookWhereInput>
-    patron?: XOR<PatronScalarRelationFilter, PatronWhereInput>
-  }, "book_id" | "patron_id">
+  }
 
   export type Book_likesOrderByWithAggregationInput = {
     book_id?: SortOrder
@@ -11087,23 +9936,23 @@ export namespace Prisma {
   }
 
   export type Book_likesScalarWhereWithAggregatesInput = {
-    AND?: Book_likesScalarWhereWithAggregatesInput | Book_likesScalarWhereWithAggregatesInput[]
-    OR?: Book_likesScalarWhereWithAggregatesInput[]
-    NOT?: Book_likesScalarWhereWithAggregatesInput | Book_likesScalarWhereWithAggregatesInput[]
-    book_id?: StringWithAggregatesFilter<"Book_likes"> | string
-    patron_id?: StringWithAggregatesFilter<"Book_likes"> | string
-    liked_at?: DateTimeWithAggregatesFilter<"Book_likes"> | Date | string
+    AND?: Enumerable<Book_likesScalarWhereWithAggregatesInput>
+    OR?: Enumerable<Book_likesScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<Book_likesScalarWhereWithAggregatesInput>
+    book_id?: StringWithAggregatesFilter | string
+    patron_id?: StringWithAggregatesFilter | string
+    liked_at?: DateTimeWithAggregatesFilter | Date | string
   }
 
   export type Book_consultedWhereInput = {
-    AND?: Book_consultedWhereInput | Book_consultedWhereInput[]
-    OR?: Book_consultedWhereInput[]
-    NOT?: Book_consultedWhereInput | Book_consultedWhereInput[]
-    book_id?: StringFilter<"Book_consulted"> | string
-    patron_id?: StringFilter<"Book_consulted"> | string
-    consulted_at?: DateTimeFilter<"Book_consulted"> | Date | string
-    book?: XOR<BookScalarRelationFilter, BookWhereInput>
-    patron?: XOR<PatronScalarRelationFilter, PatronWhereInput>
+    AND?: Enumerable<Book_consultedWhereInput>
+    OR?: Enumerable<Book_consultedWhereInput>
+    NOT?: Enumerable<Book_consultedWhereInput>
+    book_id?: StringFilter | string
+    patron_id?: StringFilter | string
+    consulted_at?: DateTimeFilter | Date | string
+    book?: XOR<BookRelationFilter, BookWhereInput>
+    patron?: XOR<PatronRelationFilter, PatronWhereInput>
   }
 
   export type Book_consultedOrderByWithRelationInput = {
@@ -11114,16 +9963,10 @@ export namespace Prisma {
     patron?: PatronOrderByWithRelationInput
   }
 
-  export type Book_consultedWhereUniqueInput = Prisma.AtLeast<{
+  export type Book_consultedWhereUniqueInput = {
     book_id?: string
     patron_id?: string
-    AND?: Book_consultedWhereInput | Book_consultedWhereInput[]
-    OR?: Book_consultedWhereInput[]
-    NOT?: Book_consultedWhereInput | Book_consultedWhereInput[]
-    consulted_at?: DateTimeFilter<"Book_consulted"> | Date | string
-    book?: XOR<BookScalarRelationFilter, BookWhereInput>
-    patron?: XOR<PatronScalarRelationFilter, PatronWhereInput>
-  }, "book_id" | "patron_id">
+  }
 
   export type Book_consultedOrderByWithAggregationInput = {
     book_id?: SortOrder
@@ -11135,24 +9978,24 @@ export namespace Prisma {
   }
 
   export type Book_consultedScalarWhereWithAggregatesInput = {
-    AND?: Book_consultedScalarWhereWithAggregatesInput | Book_consultedScalarWhereWithAggregatesInput[]
-    OR?: Book_consultedScalarWhereWithAggregatesInput[]
-    NOT?: Book_consultedScalarWhereWithAggregatesInput | Book_consultedScalarWhereWithAggregatesInput[]
-    book_id?: StringWithAggregatesFilter<"Book_consulted"> | string
-    patron_id?: StringWithAggregatesFilter<"Book_consulted"> | string
-    consulted_at?: DateTimeWithAggregatesFilter<"Book_consulted"> | Date | string
+    AND?: Enumerable<Book_consultedScalarWhereWithAggregatesInput>
+    OR?: Enumerable<Book_consultedScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<Book_consultedScalarWhereWithAggregatesInput>
+    book_id?: StringWithAggregatesFilter | string
+    patron_id?: StringWithAggregatesFilter | string
+    consulted_at?: DateTimeWithAggregatesFilter | Date | string
   }
 
   export type CirculationWhereInput = {
-    AND?: CirculationWhereInput | CirculationWhereInput[]
-    OR?: CirculationWhereInput[]
-    NOT?: CirculationWhereInput | CirculationWhereInput[]
-    book_id?: StringFilter<"Circulation"> | string
-    patron_id?: StringFilter<"Circulation"> | string
-    checkout?: DateTimeFilter<"Circulation"> | Date | string
-    date_due?: DateTimeFilter<"Circulation"> | Date | string
-    book?: XOR<BookScalarRelationFilter, BookWhereInput>
-    patron?: XOR<PatronScalarRelationFilter, PatronWhereInput>
+    AND?: Enumerable<CirculationWhereInput>
+    OR?: Enumerable<CirculationWhereInput>
+    NOT?: Enumerable<CirculationWhereInput>
+    book_id?: StringFilter | string
+    patron_id?: StringFilter | string
+    checkout?: DateTimeFilter | Date | string
+    date_due?: DateTimeFilter | Date | string
+    book?: XOR<BookRelationFilter, BookWhereInput>
+    patron?: XOR<PatronRelationFilter, PatronWhereInput>
   }
 
   export type CirculationOrderByWithRelationInput = {
@@ -11164,17 +10007,10 @@ export namespace Prisma {
     patron?: PatronOrderByWithRelationInput
   }
 
-  export type CirculationWhereUniqueInput = Prisma.AtLeast<{
+  export type CirculationWhereUniqueInput = {
     book_id?: string
     patron_id?: string
-    AND?: CirculationWhereInput | CirculationWhereInput[]
-    OR?: CirculationWhereInput[]
-    NOT?: CirculationWhereInput | CirculationWhereInput[]
-    checkout?: DateTimeFilter<"Circulation"> | Date | string
-    date_due?: DateTimeFilter<"Circulation"> | Date | string
-    book?: XOR<BookScalarRelationFilter, BookWhereInput>
-    patron?: XOR<PatronScalarRelationFilter, PatronWhereInput>
-  }, "book_id" | "patron_id">
+  }
 
   export type CirculationOrderByWithAggregationInput = {
     book_id?: SortOrder
@@ -11187,13 +10023,13 @@ export namespace Prisma {
   }
 
   export type CirculationScalarWhereWithAggregatesInput = {
-    AND?: CirculationScalarWhereWithAggregatesInput | CirculationScalarWhereWithAggregatesInput[]
-    OR?: CirculationScalarWhereWithAggregatesInput[]
-    NOT?: CirculationScalarWhereWithAggregatesInput | CirculationScalarWhereWithAggregatesInput[]
-    book_id?: StringWithAggregatesFilter<"Circulation"> | string
-    patron_id?: StringWithAggregatesFilter<"Circulation"> | string
-    checkout?: DateTimeWithAggregatesFilter<"Circulation"> | Date | string
-    date_due?: DateTimeWithAggregatesFilter<"Circulation"> | Date | string
+    AND?: Enumerable<CirculationScalarWhereWithAggregatesInput>
+    OR?: Enumerable<CirculationScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<CirculationScalarWhereWithAggregatesInput>
+    book_id?: StringWithAggregatesFilter | string
+    patron_id?: StringWithAggregatesFilter | string
+    checkout?: DateTimeWithAggregatesFilter | Date | string
+    date_due?: DateTimeWithAggregatesFilter | Date | string
   }
 
   export type SessionCreateInput = {
@@ -11256,7 +10092,7 @@ export namespace Prisma {
     address: string
     contact: string
     rank: number
-    books_entered?: LibrarianCreatebooks_enteredInput | string[]
+    books_entered?: LibrarianCreatebooks_enteredInput | Enumerable<string>
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -11272,7 +10108,7 @@ export namespace Prisma {
     address: string
     contact: string
     rank: number
-    books_entered?: LibrarianCreatebooks_enteredInput | string[]
+    books_entered?: LibrarianCreatebooks_enteredInput | Enumerable<string>
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -11288,7 +10124,7 @@ export namespace Prisma {
     address?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     rank?: IntFieldUpdateOperationsInput | number
-    books_entered?: LibrarianUpdatebooks_enteredInput | string[]
+    books_entered?: LibrarianUpdatebooks_enteredInput | Enumerable<string>
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11304,7 +10140,7 @@ export namespace Prisma {
     address?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     rank?: IntFieldUpdateOperationsInput | number
-    books_entered?: LibrarianUpdatebooks_enteredInput | string[]
+    books_entered?: LibrarianUpdatebooks_enteredInput | Enumerable<string>
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11320,7 +10156,7 @@ export namespace Prisma {
     address: string
     contact: string
     rank: number
-    books_entered?: LibrarianCreatebooks_enteredInput | string[]
+    books_entered?: LibrarianCreatebooks_enteredInput | Enumerable<string>
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -11336,7 +10172,7 @@ export namespace Prisma {
     address?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     rank?: IntFieldUpdateOperationsInput | number
-    books_entered?: LibrarianUpdatebooks_enteredInput | string[]
+    books_entered?: LibrarianUpdatebooks_enteredInput | Enumerable<string>
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11352,7 +10188,7 @@ export namespace Prisma {
     address?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     rank?: IntFieldUpdateOperationsInput | number
-    books_entered?: LibrarianUpdatebooks_enteredInput | string[]
+    books_entered?: LibrarianUpdatebooks_enteredInput | Enumerable<string>
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11361,15 +10197,15 @@ export namespace Prisma {
     id?: string
     title: string
     author: string
-    subject?: BookCreatesubjectInput | string[]
+    subject?: BookCreatesubjectInput | Enumerable<string>
     imprint: string
     collation: string
-    G_M_D: $Enums.GMD
+    G_M_D: GMD
     book_cover: string
     material_number: string
     availability: boolean
     bibilography: string
-    Keywords?: BookCreateKeywordsInput | string[]
+    Keywords?: BookCreateKeywordsInput | Enumerable<string>
     other_Title?: string | null
     co_author?: string | null
     editor?: string | null
@@ -11386,15 +10222,15 @@ export namespace Prisma {
     id?: string
     title: string
     author: string
-    subject?: BookCreatesubjectInput | string[]
+    subject?: BookCreatesubjectInput | Enumerable<string>
     imprint: string
     collation: string
-    G_M_D: $Enums.GMD
+    G_M_D: GMD
     book_cover: string
     material_number: string
     availability: boolean
     bibilography: string
-    Keywords?: BookCreateKeywordsInput | string[]
+    Keywords?: BookCreateKeywordsInput | Enumerable<string>
     other_Title?: string | null
     co_author?: string | null
     editor?: string | null
@@ -11411,15 +10247,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
-    subject?: BookUpdatesubjectInput | string[]
+    subject?: BookUpdatesubjectInput | Enumerable<string>
     imprint?: StringFieldUpdateOperationsInput | string
     collation?: StringFieldUpdateOperationsInput | string
-    G_M_D?: EnumGMDFieldUpdateOperationsInput | $Enums.GMD
+    G_M_D?: EnumGMDFieldUpdateOperationsInput | GMD
     book_cover?: StringFieldUpdateOperationsInput | string
     material_number?: StringFieldUpdateOperationsInput | string
     availability?: BoolFieldUpdateOperationsInput | boolean
     bibilography?: StringFieldUpdateOperationsInput | string
-    Keywords?: BookUpdateKeywordsInput | string[]
+    Keywords?: BookUpdateKeywordsInput | Enumerable<string>
     other_Title?: NullableStringFieldUpdateOperationsInput | string | null
     co_author?: NullableStringFieldUpdateOperationsInput | string | null
     editor?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11436,15 +10272,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
-    subject?: BookUpdatesubjectInput | string[]
+    subject?: BookUpdatesubjectInput | Enumerable<string>
     imprint?: StringFieldUpdateOperationsInput | string
     collation?: StringFieldUpdateOperationsInput | string
-    G_M_D?: EnumGMDFieldUpdateOperationsInput | $Enums.GMD
+    G_M_D?: EnumGMDFieldUpdateOperationsInput | GMD
     book_cover?: StringFieldUpdateOperationsInput | string
     material_number?: StringFieldUpdateOperationsInput | string
     availability?: BoolFieldUpdateOperationsInput | boolean
     bibilography?: StringFieldUpdateOperationsInput | string
-    Keywords?: BookUpdateKeywordsInput | string[]
+    Keywords?: BookUpdateKeywordsInput | Enumerable<string>
     other_Title?: NullableStringFieldUpdateOperationsInput | string | null
     co_author?: NullableStringFieldUpdateOperationsInput | string | null
     editor?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11461,15 +10297,15 @@ export namespace Prisma {
     id?: string
     title: string
     author: string
-    subject?: BookCreatesubjectInput | string[]
+    subject?: BookCreatesubjectInput | Enumerable<string>
     imprint: string
     collation: string
-    G_M_D: $Enums.GMD
+    G_M_D: GMD
     book_cover: string
     material_number: string
     availability: boolean
     bibilography: string
-    Keywords?: BookCreateKeywordsInput | string[]
+    Keywords?: BookCreateKeywordsInput | Enumerable<string>
     other_Title?: string | null
     co_author?: string | null
     editor?: string | null
@@ -11483,15 +10319,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
-    subject?: BookUpdatesubjectInput | string[]
+    subject?: BookUpdatesubjectInput | Enumerable<string>
     imprint?: StringFieldUpdateOperationsInput | string
     collation?: StringFieldUpdateOperationsInput | string
-    G_M_D?: EnumGMDFieldUpdateOperationsInput | $Enums.GMD
+    G_M_D?: EnumGMDFieldUpdateOperationsInput | GMD
     book_cover?: StringFieldUpdateOperationsInput | string
     material_number?: StringFieldUpdateOperationsInput | string
     availability?: BoolFieldUpdateOperationsInput | boolean
     bibilography?: StringFieldUpdateOperationsInput | string
-    Keywords?: BookUpdateKeywordsInput | string[]
+    Keywords?: BookUpdateKeywordsInput | Enumerable<string>
     other_Title?: NullableStringFieldUpdateOperationsInput | string | null
     co_author?: NullableStringFieldUpdateOperationsInput | string | null
     editor?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11505,15 +10341,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
-    subject?: BookUpdatesubjectInput | string[]
+    subject?: BookUpdatesubjectInput | Enumerable<string>
     imprint?: StringFieldUpdateOperationsInput | string
     collation?: StringFieldUpdateOperationsInput | string
-    G_M_D?: EnumGMDFieldUpdateOperationsInput | $Enums.GMD
+    G_M_D?: EnumGMDFieldUpdateOperationsInput | GMD
     book_cover?: StringFieldUpdateOperationsInput | string
     material_number?: StringFieldUpdateOperationsInput | string
     availability?: BoolFieldUpdateOperationsInput | boolean
     bibilography?: StringFieldUpdateOperationsInput | string
-    Keywords?: BookUpdateKeywordsInput | string[]
+    Keywords?: BookUpdateKeywordsInput | Enumerable<string>
     other_Title?: NullableStringFieldUpdateOperationsInput | string | null
     co_author?: NullableStringFieldUpdateOperationsInput | string | null
     editor?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11589,7 +10425,7 @@ export namespace Prisma {
     email: string
     password?: string | null
     profile_img?: string | null
-    borrowed_books?: PatronCreateborrowed_booksInput | string[]
+    borrowed_books?: PatronCreateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -11608,7 +10444,7 @@ export namespace Prisma {
     email: string
     password?: string | null
     profile_img?: string | null
-    borrowed_books?: PatronCreateborrowed_booksInput | string[]
+    borrowed_books?: PatronCreateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -11627,7 +10463,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_img?: NullableStringFieldUpdateOperationsInput | string | null
-    borrowed_books?: PatronUpdateborrowed_booksInput | string[]
+    borrowed_books?: PatronUpdateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11646,7 +10482,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_img?: NullableStringFieldUpdateOperationsInput | string | null
-    borrowed_books?: PatronUpdateborrowed_booksInput | string[]
+    borrowed_books?: PatronUpdateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11665,7 +10501,7 @@ export namespace Prisma {
     email: string
     password?: string | null
     profile_img?: string | null
-    borrowed_books?: PatronCreateborrowed_booksInput | string[]
+    borrowed_books?: PatronCreateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -11681,7 +10517,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_img?: NullableStringFieldUpdateOperationsInput | string | null
-    borrowed_books?: PatronUpdateborrowed_booksInput | string[]
+    borrowed_books?: PatronUpdateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11697,7 +10533,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_img?: NullableStringFieldUpdateOperationsInput | string | null
-    borrowed_books?: PatronUpdateborrowed_booksInput | string[]
+    borrowed_books?: PatronUpdateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11830,30 +10666,30 @@ export namespace Prisma {
     date_due?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type StringFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
+  export type StringFilter = {
+    equals?: string
+    in?: Enumerable<string> | string
+    notIn?: Enumerable<string> | string
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
     mode?: QueryMode
-    not?: NestedStringFilter<$PrismaModel> | string
+    not?: NestedStringFilter | string
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  export type DateTimeFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string> | Date | string
+    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeFilter | Date | string
   }
 
   export type SessionCountOrderByAggregateInput = {
@@ -11877,54 +10713,54 @@ export namespace Prisma {
     expiresAt?: SortOrder
   }
 
-  export type StringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
+  export type StringWithAggregatesFilter = {
+    equals?: string
+    in?: Enumerable<string> | string
+    notIn?: Enumerable<string> | string
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
     mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
+    not?: NestedStringWithAggregatesFilter | string
+    _count?: NestedIntFilter
+    _min?: NestedStringFilter
+    _max?: NestedStringFilter
   }
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
+  export type DateTimeWithAggregatesFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string> | Date | string
+    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeWithAggregatesFilter | Date | string
+    _count?: NestedIntFilter
+    _min?: NestedDateTimeFilter
+    _max?: NestedDateTimeFilter
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+  export type IntFilter = {
+    equals?: number
+    in?: Enumerable<number> | number
+    notIn?: Enumerable<number> | number
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntFilter | number
   }
 
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+  export type StringNullableListFilter = {
+    equals?: Enumerable<string> | null
+    has?: string | null
+    hasEvery?: Enumerable<string>
+    hasSome?: Enumerable<string>
     isEmpty?: boolean
   }
 
@@ -11982,47 +10818,47 @@ export namespace Prisma {
     rank?: SortOrder
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
+  export type IntWithAggregatesFilter = {
+    equals?: number
+    in?: Enumerable<number> | number
+    notIn?: Enumerable<number> | number
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntWithAggregatesFilter | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedIntFilter
+    _min?: NestedIntFilter
+    _max?: NestedIntFilter
   }
 
-  export type EnumGMDFilter<$PrismaModel = never> = {
-    equals?: $Enums.GMD | EnumGMDFieldRefInput<$PrismaModel>
-    in?: $Enums.GMD[] | ListEnumGMDFieldRefInput<$PrismaModel>
-    notIn?: $Enums.GMD[] | ListEnumGMDFieldRefInput<$PrismaModel>
-    not?: NestedEnumGMDFilter<$PrismaModel> | $Enums.GMD
+  export type EnumGMDFilter = {
+    equals?: GMD
+    in?: Enumerable<GMD>
+    notIn?: Enumerable<GMD>
+    not?: NestedEnumGMDFilter | GMD
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type BoolFilter = {
+    equals?: boolean
+    not?: NestedBoolFilter | boolean
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
+  export type StringNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | string | null
+    notIn?: Enumerable<string> | string | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
     mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+    not?: NestedStringNullableFilter | string | null
   }
 
   export type Book_likesListRelationFilter = {
@@ -12122,40 +10958,40 @@ export namespace Prisma {
     entered_at?: SortOrder
   }
 
-  export type EnumGMDWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.GMD | EnumGMDFieldRefInput<$PrismaModel>
-    in?: $Enums.GMD[] | ListEnumGMDFieldRefInput<$PrismaModel>
-    notIn?: $Enums.GMD[] | ListEnumGMDFieldRefInput<$PrismaModel>
-    not?: NestedEnumGMDWithAggregatesFilter<$PrismaModel> | $Enums.GMD
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumGMDFilter<$PrismaModel>
-    _max?: NestedEnumGMDFilter<$PrismaModel>
+  export type EnumGMDWithAggregatesFilter = {
+    equals?: GMD
+    in?: Enumerable<GMD>
+    notIn?: Enumerable<GMD>
+    not?: NestedEnumGMDWithAggregatesFilter | GMD
+    _count?: NestedIntFilter
+    _min?: NestedEnumGMDFilter
+    _max?: NestedEnumGMDFilter
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type BoolWithAggregatesFilter = {
+    equals?: boolean
+    not?: NestedBoolWithAggregatesFilter | boolean
+    _count?: NestedIntFilter
+    _min?: NestedBoolFilter
+    _max?: NestedBoolFilter
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
+  export type StringNullableWithAggregatesFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | string | null
+    notIn?: Enumerable<string> | string | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
     mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedStringNullableFilter
+    _max?: NestedStringNullableFilter
   }
 
   export type EmailVerificationTokenCountOrderByAggregateInput = {
@@ -12228,14 +11064,14 @@ export namespace Prisma {
     updated_at?: SortOrder
   }
 
-  export type BookScalarRelationFilter = {
-    is?: BookWhereInput
-    isNot?: BookWhereInput
+  export type BookRelationFilter = {
+    is?: BookWhereInput | null
+    isNot?: BookWhereInput | null
   }
 
-  export type PatronScalarRelationFilter = {
-    is?: PatronWhereInput
-    isNot?: PatronWhereInput
+  export type PatronRelationFilter = {
+    is?: PatronWhereInput | null
+    isNot?: PatronWhereInput | null
   }
 
   export type Book_likesCountOrderByAggregateInput = {
@@ -12304,7 +11140,7 @@ export namespace Prisma {
   }
 
   export type LibrarianCreatebooks_enteredInput = {
-    set: string[]
+    set: Enumerable<string>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -12316,67 +11152,67 @@ export namespace Prisma {
   }
 
   export type LibrarianUpdatebooks_enteredInput = {
-    set?: string[]
-    push?: string | string[]
+    set?: Enumerable<string>
+    push?: string | Enumerable<string>
   }
 
   export type BookCreatesubjectInput = {
-    set: string[]
+    set: Enumerable<string>
   }
 
   export type BookCreateKeywordsInput = {
-    set: string[]
+    set: Enumerable<string>
   }
 
   export type Book_likesCreateNestedManyWithoutBookInput = {
-    create?: XOR<Book_likesCreateWithoutBookInput, Book_likesUncheckedCreateWithoutBookInput> | Book_likesCreateWithoutBookInput[] | Book_likesUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: Book_likesCreateOrConnectWithoutBookInput | Book_likesCreateOrConnectWithoutBookInput[]
+    create?: XOR<Enumerable<Book_likesCreateWithoutBookInput>, Enumerable<Book_likesUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<Book_likesCreateOrConnectWithoutBookInput>
     createMany?: Book_likesCreateManyBookInputEnvelope
-    connect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
+    connect?: Enumerable<Book_likesWhereUniqueInput>
   }
 
   export type Book_consultedCreateNestedManyWithoutBookInput = {
-    create?: XOR<Book_consultedCreateWithoutBookInput, Book_consultedUncheckedCreateWithoutBookInput> | Book_consultedCreateWithoutBookInput[] | Book_consultedUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: Book_consultedCreateOrConnectWithoutBookInput | Book_consultedCreateOrConnectWithoutBookInput[]
+    create?: XOR<Enumerable<Book_consultedCreateWithoutBookInput>, Enumerable<Book_consultedUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<Book_consultedCreateOrConnectWithoutBookInput>
     createMany?: Book_consultedCreateManyBookInputEnvelope
-    connect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
+    connect?: Enumerable<Book_consultedWhereUniqueInput>
   }
 
   export type CirculationCreateNestedManyWithoutBookInput = {
-    create?: XOR<CirculationCreateWithoutBookInput, CirculationUncheckedCreateWithoutBookInput> | CirculationCreateWithoutBookInput[] | CirculationUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: CirculationCreateOrConnectWithoutBookInput | CirculationCreateOrConnectWithoutBookInput[]
+    create?: XOR<Enumerable<CirculationCreateWithoutBookInput>, Enumerable<CirculationUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<CirculationCreateOrConnectWithoutBookInput>
     createMany?: CirculationCreateManyBookInputEnvelope
-    connect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
+    connect?: Enumerable<CirculationWhereUniqueInput>
   }
 
   export type Book_likesUncheckedCreateNestedManyWithoutBookInput = {
-    create?: XOR<Book_likesCreateWithoutBookInput, Book_likesUncheckedCreateWithoutBookInput> | Book_likesCreateWithoutBookInput[] | Book_likesUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: Book_likesCreateOrConnectWithoutBookInput | Book_likesCreateOrConnectWithoutBookInput[]
+    create?: XOR<Enumerable<Book_likesCreateWithoutBookInput>, Enumerable<Book_likesUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<Book_likesCreateOrConnectWithoutBookInput>
     createMany?: Book_likesCreateManyBookInputEnvelope
-    connect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
+    connect?: Enumerable<Book_likesWhereUniqueInput>
   }
 
   export type Book_consultedUncheckedCreateNestedManyWithoutBookInput = {
-    create?: XOR<Book_consultedCreateWithoutBookInput, Book_consultedUncheckedCreateWithoutBookInput> | Book_consultedCreateWithoutBookInput[] | Book_consultedUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: Book_consultedCreateOrConnectWithoutBookInput | Book_consultedCreateOrConnectWithoutBookInput[]
+    create?: XOR<Enumerable<Book_consultedCreateWithoutBookInput>, Enumerable<Book_consultedUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<Book_consultedCreateOrConnectWithoutBookInput>
     createMany?: Book_consultedCreateManyBookInputEnvelope
-    connect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
+    connect?: Enumerable<Book_consultedWhereUniqueInput>
   }
 
   export type CirculationUncheckedCreateNestedManyWithoutBookInput = {
-    create?: XOR<CirculationCreateWithoutBookInput, CirculationUncheckedCreateWithoutBookInput> | CirculationCreateWithoutBookInput[] | CirculationUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: CirculationCreateOrConnectWithoutBookInput | CirculationCreateOrConnectWithoutBookInput[]
+    create?: XOR<Enumerable<CirculationCreateWithoutBookInput>, Enumerable<CirculationUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<CirculationCreateOrConnectWithoutBookInput>
     createMany?: CirculationCreateManyBookInputEnvelope
-    connect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
+    connect?: Enumerable<CirculationWhereUniqueInput>
   }
 
   export type BookUpdatesubjectInput = {
-    set?: string[]
-    push?: string | string[]
+    set?: Enumerable<string>
+    push?: string | Enumerable<string>
   }
 
   export type EnumGMDFieldUpdateOperationsInput = {
-    set?: $Enums.GMD
+    set?: GMD
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -12384,8 +11220,8 @@ export namespace Prisma {
   }
 
   export type BookUpdateKeywordsInput = {
-    set?: string[]
-    push?: string | string[]
+    set?: Enumerable<string>
+    push?: string | Enumerable<string>
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -12393,222 +11229,222 @@ export namespace Prisma {
   }
 
   export type Book_likesUpdateManyWithoutBookNestedInput = {
-    create?: XOR<Book_likesCreateWithoutBookInput, Book_likesUncheckedCreateWithoutBookInput> | Book_likesCreateWithoutBookInput[] | Book_likesUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: Book_likesCreateOrConnectWithoutBookInput | Book_likesCreateOrConnectWithoutBookInput[]
-    upsert?: Book_likesUpsertWithWhereUniqueWithoutBookInput | Book_likesUpsertWithWhereUniqueWithoutBookInput[]
+    create?: XOR<Enumerable<Book_likesCreateWithoutBookInput>, Enumerable<Book_likesUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<Book_likesCreateOrConnectWithoutBookInput>
+    upsert?: Enumerable<Book_likesUpsertWithWhereUniqueWithoutBookInput>
     createMany?: Book_likesCreateManyBookInputEnvelope
-    set?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    disconnect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    delete?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    connect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    update?: Book_likesUpdateWithWhereUniqueWithoutBookInput | Book_likesUpdateWithWhereUniqueWithoutBookInput[]
-    updateMany?: Book_likesUpdateManyWithWhereWithoutBookInput | Book_likesUpdateManyWithWhereWithoutBookInput[]
-    deleteMany?: Book_likesScalarWhereInput | Book_likesScalarWhereInput[]
+    set?: Enumerable<Book_likesWhereUniqueInput>
+    disconnect?: Enumerable<Book_likesWhereUniqueInput>
+    delete?: Enumerable<Book_likesWhereUniqueInput>
+    connect?: Enumerable<Book_likesWhereUniqueInput>
+    update?: Enumerable<Book_likesUpdateWithWhereUniqueWithoutBookInput>
+    updateMany?: Enumerable<Book_likesUpdateManyWithWhereWithoutBookInput>
+    deleteMany?: Enumerable<Book_likesScalarWhereInput>
   }
 
   export type Book_consultedUpdateManyWithoutBookNestedInput = {
-    create?: XOR<Book_consultedCreateWithoutBookInput, Book_consultedUncheckedCreateWithoutBookInput> | Book_consultedCreateWithoutBookInput[] | Book_consultedUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: Book_consultedCreateOrConnectWithoutBookInput | Book_consultedCreateOrConnectWithoutBookInput[]
-    upsert?: Book_consultedUpsertWithWhereUniqueWithoutBookInput | Book_consultedUpsertWithWhereUniqueWithoutBookInput[]
+    create?: XOR<Enumerable<Book_consultedCreateWithoutBookInput>, Enumerable<Book_consultedUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<Book_consultedCreateOrConnectWithoutBookInput>
+    upsert?: Enumerable<Book_consultedUpsertWithWhereUniqueWithoutBookInput>
     createMany?: Book_consultedCreateManyBookInputEnvelope
-    set?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    disconnect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    delete?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    connect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    update?: Book_consultedUpdateWithWhereUniqueWithoutBookInput | Book_consultedUpdateWithWhereUniqueWithoutBookInput[]
-    updateMany?: Book_consultedUpdateManyWithWhereWithoutBookInput | Book_consultedUpdateManyWithWhereWithoutBookInput[]
-    deleteMany?: Book_consultedScalarWhereInput | Book_consultedScalarWhereInput[]
+    set?: Enumerable<Book_consultedWhereUniqueInput>
+    disconnect?: Enumerable<Book_consultedWhereUniqueInput>
+    delete?: Enumerable<Book_consultedWhereUniqueInput>
+    connect?: Enumerable<Book_consultedWhereUniqueInput>
+    update?: Enumerable<Book_consultedUpdateWithWhereUniqueWithoutBookInput>
+    updateMany?: Enumerable<Book_consultedUpdateManyWithWhereWithoutBookInput>
+    deleteMany?: Enumerable<Book_consultedScalarWhereInput>
   }
 
   export type CirculationUpdateManyWithoutBookNestedInput = {
-    create?: XOR<CirculationCreateWithoutBookInput, CirculationUncheckedCreateWithoutBookInput> | CirculationCreateWithoutBookInput[] | CirculationUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: CirculationCreateOrConnectWithoutBookInput | CirculationCreateOrConnectWithoutBookInput[]
-    upsert?: CirculationUpsertWithWhereUniqueWithoutBookInput | CirculationUpsertWithWhereUniqueWithoutBookInput[]
+    create?: XOR<Enumerable<CirculationCreateWithoutBookInput>, Enumerable<CirculationUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<CirculationCreateOrConnectWithoutBookInput>
+    upsert?: Enumerable<CirculationUpsertWithWhereUniqueWithoutBookInput>
     createMany?: CirculationCreateManyBookInputEnvelope
-    set?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    disconnect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    delete?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    connect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    update?: CirculationUpdateWithWhereUniqueWithoutBookInput | CirculationUpdateWithWhereUniqueWithoutBookInput[]
-    updateMany?: CirculationUpdateManyWithWhereWithoutBookInput | CirculationUpdateManyWithWhereWithoutBookInput[]
-    deleteMany?: CirculationScalarWhereInput | CirculationScalarWhereInput[]
+    set?: Enumerable<CirculationWhereUniqueInput>
+    disconnect?: Enumerable<CirculationWhereUniqueInput>
+    delete?: Enumerable<CirculationWhereUniqueInput>
+    connect?: Enumerable<CirculationWhereUniqueInput>
+    update?: Enumerable<CirculationUpdateWithWhereUniqueWithoutBookInput>
+    updateMany?: Enumerable<CirculationUpdateManyWithWhereWithoutBookInput>
+    deleteMany?: Enumerable<CirculationScalarWhereInput>
   }
 
   export type Book_likesUncheckedUpdateManyWithoutBookNestedInput = {
-    create?: XOR<Book_likesCreateWithoutBookInput, Book_likesUncheckedCreateWithoutBookInput> | Book_likesCreateWithoutBookInput[] | Book_likesUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: Book_likesCreateOrConnectWithoutBookInput | Book_likesCreateOrConnectWithoutBookInput[]
-    upsert?: Book_likesUpsertWithWhereUniqueWithoutBookInput | Book_likesUpsertWithWhereUniqueWithoutBookInput[]
+    create?: XOR<Enumerable<Book_likesCreateWithoutBookInput>, Enumerable<Book_likesUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<Book_likesCreateOrConnectWithoutBookInput>
+    upsert?: Enumerable<Book_likesUpsertWithWhereUniqueWithoutBookInput>
     createMany?: Book_likesCreateManyBookInputEnvelope
-    set?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    disconnect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    delete?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    connect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    update?: Book_likesUpdateWithWhereUniqueWithoutBookInput | Book_likesUpdateWithWhereUniqueWithoutBookInput[]
-    updateMany?: Book_likesUpdateManyWithWhereWithoutBookInput | Book_likesUpdateManyWithWhereWithoutBookInput[]
-    deleteMany?: Book_likesScalarWhereInput | Book_likesScalarWhereInput[]
+    set?: Enumerable<Book_likesWhereUniqueInput>
+    disconnect?: Enumerable<Book_likesWhereUniqueInput>
+    delete?: Enumerable<Book_likesWhereUniqueInput>
+    connect?: Enumerable<Book_likesWhereUniqueInput>
+    update?: Enumerable<Book_likesUpdateWithWhereUniqueWithoutBookInput>
+    updateMany?: Enumerable<Book_likesUpdateManyWithWhereWithoutBookInput>
+    deleteMany?: Enumerable<Book_likesScalarWhereInput>
   }
 
   export type Book_consultedUncheckedUpdateManyWithoutBookNestedInput = {
-    create?: XOR<Book_consultedCreateWithoutBookInput, Book_consultedUncheckedCreateWithoutBookInput> | Book_consultedCreateWithoutBookInput[] | Book_consultedUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: Book_consultedCreateOrConnectWithoutBookInput | Book_consultedCreateOrConnectWithoutBookInput[]
-    upsert?: Book_consultedUpsertWithWhereUniqueWithoutBookInput | Book_consultedUpsertWithWhereUniqueWithoutBookInput[]
+    create?: XOR<Enumerable<Book_consultedCreateWithoutBookInput>, Enumerable<Book_consultedUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<Book_consultedCreateOrConnectWithoutBookInput>
+    upsert?: Enumerable<Book_consultedUpsertWithWhereUniqueWithoutBookInput>
     createMany?: Book_consultedCreateManyBookInputEnvelope
-    set?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    disconnect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    delete?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    connect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    update?: Book_consultedUpdateWithWhereUniqueWithoutBookInput | Book_consultedUpdateWithWhereUniqueWithoutBookInput[]
-    updateMany?: Book_consultedUpdateManyWithWhereWithoutBookInput | Book_consultedUpdateManyWithWhereWithoutBookInput[]
-    deleteMany?: Book_consultedScalarWhereInput | Book_consultedScalarWhereInput[]
+    set?: Enumerable<Book_consultedWhereUniqueInput>
+    disconnect?: Enumerable<Book_consultedWhereUniqueInput>
+    delete?: Enumerable<Book_consultedWhereUniqueInput>
+    connect?: Enumerable<Book_consultedWhereUniqueInput>
+    update?: Enumerable<Book_consultedUpdateWithWhereUniqueWithoutBookInput>
+    updateMany?: Enumerable<Book_consultedUpdateManyWithWhereWithoutBookInput>
+    deleteMany?: Enumerable<Book_consultedScalarWhereInput>
   }
 
   export type CirculationUncheckedUpdateManyWithoutBookNestedInput = {
-    create?: XOR<CirculationCreateWithoutBookInput, CirculationUncheckedCreateWithoutBookInput> | CirculationCreateWithoutBookInput[] | CirculationUncheckedCreateWithoutBookInput[]
-    connectOrCreate?: CirculationCreateOrConnectWithoutBookInput | CirculationCreateOrConnectWithoutBookInput[]
-    upsert?: CirculationUpsertWithWhereUniqueWithoutBookInput | CirculationUpsertWithWhereUniqueWithoutBookInput[]
+    create?: XOR<Enumerable<CirculationCreateWithoutBookInput>, Enumerable<CirculationUncheckedCreateWithoutBookInput>>
+    connectOrCreate?: Enumerable<CirculationCreateOrConnectWithoutBookInput>
+    upsert?: Enumerable<CirculationUpsertWithWhereUniqueWithoutBookInput>
     createMany?: CirculationCreateManyBookInputEnvelope
-    set?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    disconnect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    delete?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    connect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    update?: CirculationUpdateWithWhereUniqueWithoutBookInput | CirculationUpdateWithWhereUniqueWithoutBookInput[]
-    updateMany?: CirculationUpdateManyWithWhereWithoutBookInput | CirculationUpdateManyWithWhereWithoutBookInput[]
-    deleteMany?: CirculationScalarWhereInput | CirculationScalarWhereInput[]
+    set?: Enumerable<CirculationWhereUniqueInput>
+    disconnect?: Enumerable<CirculationWhereUniqueInput>
+    delete?: Enumerable<CirculationWhereUniqueInput>
+    connect?: Enumerable<CirculationWhereUniqueInput>
+    update?: Enumerable<CirculationUpdateWithWhereUniqueWithoutBookInput>
+    updateMany?: Enumerable<CirculationUpdateManyWithWhereWithoutBookInput>
+    deleteMany?: Enumerable<CirculationScalarWhereInput>
   }
 
   export type PatronCreateborrowed_booksInput = {
-    set: string[]
+    set: Enumerable<string>
   }
 
   export type Book_likesCreateNestedManyWithoutPatronInput = {
-    create?: XOR<Book_likesCreateWithoutPatronInput, Book_likesUncheckedCreateWithoutPatronInput> | Book_likesCreateWithoutPatronInput[] | Book_likesUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: Book_likesCreateOrConnectWithoutPatronInput | Book_likesCreateOrConnectWithoutPatronInput[]
+    create?: XOR<Enumerable<Book_likesCreateWithoutPatronInput>, Enumerable<Book_likesUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<Book_likesCreateOrConnectWithoutPatronInput>
     createMany?: Book_likesCreateManyPatronInputEnvelope
-    connect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
+    connect?: Enumerable<Book_likesWhereUniqueInput>
   }
 
   export type Book_consultedCreateNestedManyWithoutPatronInput = {
-    create?: XOR<Book_consultedCreateWithoutPatronInput, Book_consultedUncheckedCreateWithoutPatronInput> | Book_consultedCreateWithoutPatronInput[] | Book_consultedUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: Book_consultedCreateOrConnectWithoutPatronInput | Book_consultedCreateOrConnectWithoutPatronInput[]
+    create?: XOR<Enumerable<Book_consultedCreateWithoutPatronInput>, Enumerable<Book_consultedUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<Book_consultedCreateOrConnectWithoutPatronInput>
     createMany?: Book_consultedCreateManyPatronInputEnvelope
-    connect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
+    connect?: Enumerable<Book_consultedWhereUniqueInput>
   }
 
   export type CirculationCreateNestedManyWithoutPatronInput = {
-    create?: XOR<CirculationCreateWithoutPatronInput, CirculationUncheckedCreateWithoutPatronInput> | CirculationCreateWithoutPatronInput[] | CirculationUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: CirculationCreateOrConnectWithoutPatronInput | CirculationCreateOrConnectWithoutPatronInput[]
+    create?: XOR<Enumerable<CirculationCreateWithoutPatronInput>, Enumerable<CirculationUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<CirculationCreateOrConnectWithoutPatronInput>
     createMany?: CirculationCreateManyPatronInputEnvelope
-    connect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
+    connect?: Enumerable<CirculationWhereUniqueInput>
   }
 
   export type Book_likesUncheckedCreateNestedManyWithoutPatronInput = {
-    create?: XOR<Book_likesCreateWithoutPatronInput, Book_likesUncheckedCreateWithoutPatronInput> | Book_likesCreateWithoutPatronInput[] | Book_likesUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: Book_likesCreateOrConnectWithoutPatronInput | Book_likesCreateOrConnectWithoutPatronInput[]
+    create?: XOR<Enumerable<Book_likesCreateWithoutPatronInput>, Enumerable<Book_likesUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<Book_likesCreateOrConnectWithoutPatronInput>
     createMany?: Book_likesCreateManyPatronInputEnvelope
-    connect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
+    connect?: Enumerable<Book_likesWhereUniqueInput>
   }
 
   export type Book_consultedUncheckedCreateNestedManyWithoutPatronInput = {
-    create?: XOR<Book_consultedCreateWithoutPatronInput, Book_consultedUncheckedCreateWithoutPatronInput> | Book_consultedCreateWithoutPatronInput[] | Book_consultedUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: Book_consultedCreateOrConnectWithoutPatronInput | Book_consultedCreateOrConnectWithoutPatronInput[]
+    create?: XOR<Enumerable<Book_consultedCreateWithoutPatronInput>, Enumerable<Book_consultedUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<Book_consultedCreateOrConnectWithoutPatronInput>
     createMany?: Book_consultedCreateManyPatronInputEnvelope
-    connect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
+    connect?: Enumerable<Book_consultedWhereUniqueInput>
   }
 
   export type CirculationUncheckedCreateNestedManyWithoutPatronInput = {
-    create?: XOR<CirculationCreateWithoutPatronInput, CirculationUncheckedCreateWithoutPatronInput> | CirculationCreateWithoutPatronInput[] | CirculationUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: CirculationCreateOrConnectWithoutPatronInput | CirculationCreateOrConnectWithoutPatronInput[]
+    create?: XOR<Enumerable<CirculationCreateWithoutPatronInput>, Enumerable<CirculationUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<CirculationCreateOrConnectWithoutPatronInput>
     createMany?: CirculationCreateManyPatronInputEnvelope
-    connect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
+    connect?: Enumerable<CirculationWhereUniqueInput>
   }
 
   export type PatronUpdateborrowed_booksInput = {
-    set?: string[]
-    push?: string | string[]
+    set?: Enumerable<string>
+    push?: string | Enumerable<string>
   }
 
   export type Book_likesUpdateManyWithoutPatronNestedInput = {
-    create?: XOR<Book_likesCreateWithoutPatronInput, Book_likesUncheckedCreateWithoutPatronInput> | Book_likesCreateWithoutPatronInput[] | Book_likesUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: Book_likesCreateOrConnectWithoutPatronInput | Book_likesCreateOrConnectWithoutPatronInput[]
-    upsert?: Book_likesUpsertWithWhereUniqueWithoutPatronInput | Book_likesUpsertWithWhereUniqueWithoutPatronInput[]
+    create?: XOR<Enumerable<Book_likesCreateWithoutPatronInput>, Enumerable<Book_likesUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<Book_likesCreateOrConnectWithoutPatronInput>
+    upsert?: Enumerable<Book_likesUpsertWithWhereUniqueWithoutPatronInput>
     createMany?: Book_likesCreateManyPatronInputEnvelope
-    set?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    disconnect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    delete?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    connect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    update?: Book_likesUpdateWithWhereUniqueWithoutPatronInput | Book_likesUpdateWithWhereUniqueWithoutPatronInput[]
-    updateMany?: Book_likesUpdateManyWithWhereWithoutPatronInput | Book_likesUpdateManyWithWhereWithoutPatronInput[]
-    deleteMany?: Book_likesScalarWhereInput | Book_likesScalarWhereInput[]
+    set?: Enumerable<Book_likesWhereUniqueInput>
+    disconnect?: Enumerable<Book_likesWhereUniqueInput>
+    delete?: Enumerable<Book_likesWhereUniqueInput>
+    connect?: Enumerable<Book_likesWhereUniqueInput>
+    update?: Enumerable<Book_likesUpdateWithWhereUniqueWithoutPatronInput>
+    updateMany?: Enumerable<Book_likesUpdateManyWithWhereWithoutPatronInput>
+    deleteMany?: Enumerable<Book_likesScalarWhereInput>
   }
 
   export type Book_consultedUpdateManyWithoutPatronNestedInput = {
-    create?: XOR<Book_consultedCreateWithoutPatronInput, Book_consultedUncheckedCreateWithoutPatronInput> | Book_consultedCreateWithoutPatronInput[] | Book_consultedUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: Book_consultedCreateOrConnectWithoutPatronInput | Book_consultedCreateOrConnectWithoutPatronInput[]
-    upsert?: Book_consultedUpsertWithWhereUniqueWithoutPatronInput | Book_consultedUpsertWithWhereUniqueWithoutPatronInput[]
+    create?: XOR<Enumerable<Book_consultedCreateWithoutPatronInput>, Enumerable<Book_consultedUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<Book_consultedCreateOrConnectWithoutPatronInput>
+    upsert?: Enumerable<Book_consultedUpsertWithWhereUniqueWithoutPatronInput>
     createMany?: Book_consultedCreateManyPatronInputEnvelope
-    set?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    disconnect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    delete?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    connect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    update?: Book_consultedUpdateWithWhereUniqueWithoutPatronInput | Book_consultedUpdateWithWhereUniqueWithoutPatronInput[]
-    updateMany?: Book_consultedUpdateManyWithWhereWithoutPatronInput | Book_consultedUpdateManyWithWhereWithoutPatronInput[]
-    deleteMany?: Book_consultedScalarWhereInput | Book_consultedScalarWhereInput[]
+    set?: Enumerable<Book_consultedWhereUniqueInput>
+    disconnect?: Enumerable<Book_consultedWhereUniqueInput>
+    delete?: Enumerable<Book_consultedWhereUniqueInput>
+    connect?: Enumerable<Book_consultedWhereUniqueInput>
+    update?: Enumerable<Book_consultedUpdateWithWhereUniqueWithoutPatronInput>
+    updateMany?: Enumerable<Book_consultedUpdateManyWithWhereWithoutPatronInput>
+    deleteMany?: Enumerable<Book_consultedScalarWhereInput>
   }
 
   export type CirculationUpdateManyWithoutPatronNestedInput = {
-    create?: XOR<CirculationCreateWithoutPatronInput, CirculationUncheckedCreateWithoutPatronInput> | CirculationCreateWithoutPatronInput[] | CirculationUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: CirculationCreateOrConnectWithoutPatronInput | CirculationCreateOrConnectWithoutPatronInput[]
-    upsert?: CirculationUpsertWithWhereUniqueWithoutPatronInput | CirculationUpsertWithWhereUniqueWithoutPatronInput[]
+    create?: XOR<Enumerable<CirculationCreateWithoutPatronInput>, Enumerable<CirculationUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<CirculationCreateOrConnectWithoutPatronInput>
+    upsert?: Enumerable<CirculationUpsertWithWhereUniqueWithoutPatronInput>
     createMany?: CirculationCreateManyPatronInputEnvelope
-    set?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    disconnect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    delete?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    connect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    update?: CirculationUpdateWithWhereUniqueWithoutPatronInput | CirculationUpdateWithWhereUniqueWithoutPatronInput[]
-    updateMany?: CirculationUpdateManyWithWhereWithoutPatronInput | CirculationUpdateManyWithWhereWithoutPatronInput[]
-    deleteMany?: CirculationScalarWhereInput | CirculationScalarWhereInput[]
+    set?: Enumerable<CirculationWhereUniqueInput>
+    disconnect?: Enumerable<CirculationWhereUniqueInput>
+    delete?: Enumerable<CirculationWhereUniqueInput>
+    connect?: Enumerable<CirculationWhereUniqueInput>
+    update?: Enumerable<CirculationUpdateWithWhereUniqueWithoutPatronInput>
+    updateMany?: Enumerable<CirculationUpdateManyWithWhereWithoutPatronInput>
+    deleteMany?: Enumerable<CirculationScalarWhereInput>
   }
 
   export type Book_likesUncheckedUpdateManyWithoutPatronNestedInput = {
-    create?: XOR<Book_likesCreateWithoutPatronInput, Book_likesUncheckedCreateWithoutPatronInput> | Book_likesCreateWithoutPatronInput[] | Book_likesUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: Book_likesCreateOrConnectWithoutPatronInput | Book_likesCreateOrConnectWithoutPatronInput[]
-    upsert?: Book_likesUpsertWithWhereUniqueWithoutPatronInput | Book_likesUpsertWithWhereUniqueWithoutPatronInput[]
+    create?: XOR<Enumerable<Book_likesCreateWithoutPatronInput>, Enumerable<Book_likesUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<Book_likesCreateOrConnectWithoutPatronInput>
+    upsert?: Enumerable<Book_likesUpsertWithWhereUniqueWithoutPatronInput>
     createMany?: Book_likesCreateManyPatronInputEnvelope
-    set?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    disconnect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    delete?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    connect?: Book_likesWhereUniqueInput | Book_likesWhereUniqueInput[]
-    update?: Book_likesUpdateWithWhereUniqueWithoutPatronInput | Book_likesUpdateWithWhereUniqueWithoutPatronInput[]
-    updateMany?: Book_likesUpdateManyWithWhereWithoutPatronInput | Book_likesUpdateManyWithWhereWithoutPatronInput[]
-    deleteMany?: Book_likesScalarWhereInput | Book_likesScalarWhereInput[]
+    set?: Enumerable<Book_likesWhereUniqueInput>
+    disconnect?: Enumerable<Book_likesWhereUniqueInput>
+    delete?: Enumerable<Book_likesWhereUniqueInput>
+    connect?: Enumerable<Book_likesWhereUniqueInput>
+    update?: Enumerable<Book_likesUpdateWithWhereUniqueWithoutPatronInput>
+    updateMany?: Enumerable<Book_likesUpdateManyWithWhereWithoutPatronInput>
+    deleteMany?: Enumerable<Book_likesScalarWhereInput>
   }
 
   export type Book_consultedUncheckedUpdateManyWithoutPatronNestedInput = {
-    create?: XOR<Book_consultedCreateWithoutPatronInput, Book_consultedUncheckedCreateWithoutPatronInput> | Book_consultedCreateWithoutPatronInput[] | Book_consultedUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: Book_consultedCreateOrConnectWithoutPatronInput | Book_consultedCreateOrConnectWithoutPatronInput[]
-    upsert?: Book_consultedUpsertWithWhereUniqueWithoutPatronInput | Book_consultedUpsertWithWhereUniqueWithoutPatronInput[]
+    create?: XOR<Enumerable<Book_consultedCreateWithoutPatronInput>, Enumerable<Book_consultedUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<Book_consultedCreateOrConnectWithoutPatronInput>
+    upsert?: Enumerable<Book_consultedUpsertWithWhereUniqueWithoutPatronInput>
     createMany?: Book_consultedCreateManyPatronInputEnvelope
-    set?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    disconnect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    delete?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    connect?: Book_consultedWhereUniqueInput | Book_consultedWhereUniqueInput[]
-    update?: Book_consultedUpdateWithWhereUniqueWithoutPatronInput | Book_consultedUpdateWithWhereUniqueWithoutPatronInput[]
-    updateMany?: Book_consultedUpdateManyWithWhereWithoutPatronInput | Book_consultedUpdateManyWithWhereWithoutPatronInput[]
-    deleteMany?: Book_consultedScalarWhereInput | Book_consultedScalarWhereInput[]
+    set?: Enumerable<Book_consultedWhereUniqueInput>
+    disconnect?: Enumerable<Book_consultedWhereUniqueInput>
+    delete?: Enumerable<Book_consultedWhereUniqueInput>
+    connect?: Enumerable<Book_consultedWhereUniqueInput>
+    update?: Enumerable<Book_consultedUpdateWithWhereUniqueWithoutPatronInput>
+    updateMany?: Enumerable<Book_consultedUpdateManyWithWhereWithoutPatronInput>
+    deleteMany?: Enumerable<Book_consultedScalarWhereInput>
   }
 
   export type CirculationUncheckedUpdateManyWithoutPatronNestedInput = {
-    create?: XOR<CirculationCreateWithoutPatronInput, CirculationUncheckedCreateWithoutPatronInput> | CirculationCreateWithoutPatronInput[] | CirculationUncheckedCreateWithoutPatronInput[]
-    connectOrCreate?: CirculationCreateOrConnectWithoutPatronInput | CirculationCreateOrConnectWithoutPatronInput[]
-    upsert?: CirculationUpsertWithWhereUniqueWithoutPatronInput | CirculationUpsertWithWhereUniqueWithoutPatronInput[]
+    create?: XOR<Enumerable<CirculationCreateWithoutPatronInput>, Enumerable<CirculationUncheckedCreateWithoutPatronInput>>
+    connectOrCreate?: Enumerable<CirculationCreateOrConnectWithoutPatronInput>
+    upsert?: Enumerable<CirculationUpsertWithWhereUniqueWithoutPatronInput>
     createMany?: CirculationCreateManyPatronInputEnvelope
-    set?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    disconnect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    delete?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    connect?: CirculationWhereUniqueInput | CirculationWhereUniqueInput[]
-    update?: CirculationUpdateWithWhereUniqueWithoutPatronInput | CirculationUpdateWithWhereUniqueWithoutPatronInput[]
-    updateMany?: CirculationUpdateManyWithWhereWithoutPatronInput | CirculationUpdateManyWithWhereWithoutPatronInput[]
-    deleteMany?: CirculationScalarWhereInput | CirculationScalarWhereInput[]
+    set?: Enumerable<CirculationWhereUniqueInput>
+    disconnect?: Enumerable<CirculationWhereUniqueInput>
+    delete?: Enumerable<CirculationWhereUniqueInput>
+    connect?: Enumerable<CirculationWhereUniqueInput>
+    update?: Enumerable<CirculationUpdateWithWhereUniqueWithoutPatronInput>
+    updateMany?: Enumerable<CirculationUpdateManyWithWhereWithoutPatronInput>
+    deleteMany?: Enumerable<CirculationScalarWhereInput>
   }
 
   export type BookCreateNestedOneWithoutBook_likesInput = {
@@ -12628,7 +11464,7 @@ export namespace Prisma {
     connectOrCreate?: BookCreateOrConnectWithoutBook_likesInput
     upsert?: BookUpsertWithoutBook_likesInput
     connect?: BookWhereUniqueInput
-    update?: XOR<XOR<BookUpdateToOneWithWhereWithoutBook_likesInput, BookUpdateWithoutBook_likesInput>, BookUncheckedUpdateWithoutBook_likesInput>
+    update?: XOR<BookUpdateWithoutBook_likesInput, BookUncheckedUpdateWithoutBook_likesInput>
   }
 
   export type PatronUpdateOneRequiredWithoutBook_likesNestedInput = {
@@ -12636,7 +11472,7 @@ export namespace Prisma {
     connectOrCreate?: PatronCreateOrConnectWithoutBook_likesInput
     upsert?: PatronUpsertWithoutBook_likesInput
     connect?: PatronWhereUniqueInput
-    update?: XOR<XOR<PatronUpdateToOneWithWhereWithoutBook_likesInput, PatronUpdateWithoutBook_likesInput>, PatronUncheckedUpdateWithoutBook_likesInput>
+    update?: XOR<PatronUpdateWithoutBook_likesInput, PatronUncheckedUpdateWithoutBook_likesInput>
   }
 
   export type BookCreateNestedOneWithoutBook_consultedInput = {
@@ -12656,7 +11492,7 @@ export namespace Prisma {
     connectOrCreate?: BookCreateOrConnectWithoutBook_consultedInput
     upsert?: BookUpsertWithoutBook_consultedInput
     connect?: BookWhereUniqueInput
-    update?: XOR<XOR<BookUpdateToOneWithWhereWithoutBook_consultedInput, BookUpdateWithoutBook_consultedInput>, BookUncheckedUpdateWithoutBook_consultedInput>
+    update?: XOR<BookUpdateWithoutBook_consultedInput, BookUncheckedUpdateWithoutBook_consultedInput>
   }
 
   export type PatronUpdateOneRequiredWithoutBook_consultedNestedInput = {
@@ -12664,7 +11500,7 @@ export namespace Prisma {
     connectOrCreate?: PatronCreateOrConnectWithoutBook_consultedInput
     upsert?: PatronUpsertWithoutBook_consultedInput
     connect?: PatronWhereUniqueInput
-    update?: XOR<XOR<PatronUpdateToOneWithWhereWithoutBook_consultedInput, PatronUpdateWithoutBook_consultedInput>, PatronUncheckedUpdateWithoutBook_consultedInput>
+    update?: XOR<PatronUpdateWithoutBook_consultedInput, PatronUncheckedUpdateWithoutBook_consultedInput>
   }
 
   export type BookCreateNestedOneWithoutCirculationInput = {
@@ -12684,7 +11520,7 @@ export namespace Prisma {
     connectOrCreate?: BookCreateOrConnectWithoutCirculationInput
     upsert?: BookUpsertWithoutCirculationInput
     connect?: BookWhereUniqueInput
-    update?: XOR<XOR<BookUpdateToOneWithWhereWithoutCirculationInput, BookUpdateWithoutCirculationInput>, BookUncheckedUpdateWithoutCirculationInput>
+    update?: XOR<BookUpdateWithoutCirculationInput, BookUncheckedUpdateWithoutCirculationInput>
   }
 
   export type PatronUpdateOneRequiredWithoutCirculationNestedInput = {
@@ -12692,173 +11528,173 @@ export namespace Prisma {
     connectOrCreate?: PatronCreateOrConnectWithoutCirculationInput
     upsert?: PatronUpsertWithoutCirculationInput
     connect?: PatronWhereUniqueInput
-    update?: XOR<XOR<PatronUpdateToOneWithWhereWithoutCirculationInput, PatronUpdateWithoutCirculationInput>, PatronUncheckedUpdateWithoutCirculationInput>
+    update?: XOR<PatronUpdateWithoutCirculationInput, PatronUncheckedUpdateWithoutCirculationInput>
   }
 
-  export type NestedStringFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringFilter<$PrismaModel> | string
+  export type NestedStringFilter = {
+    equals?: string
+    in?: Enumerable<string> | string
+    notIn?: Enumerable<string> | string
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringFilter | string
   }
 
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  export type NestedDateTimeFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string> | Date | string
+    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeFilter | Date | string
   }
 
-  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
+  export type NestedStringWithAggregatesFilter = {
+    equals?: string
+    in?: Enumerable<string> | string
+    notIn?: Enumerable<string> | string
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringWithAggregatesFilter | string
+    _count?: NestedIntFilter
+    _min?: NestedStringFilter
+    _max?: NestedStringFilter
   }
 
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+  export type NestedIntFilter = {
+    equals?: number
+    in?: Enumerable<number> | number
+    notIn?: Enumerable<number> | number
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntFilter | number
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
+  export type NestedDateTimeWithAggregatesFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string> | Date | string
+    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeWithAggregatesFilter | Date | string
+    _count?: NestedIntFilter
+    _min?: NestedDateTimeFilter
+    _max?: NestedDateTimeFilter
   }
 
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
+  export type NestedIntWithAggregatesFilter = {
+    equals?: number
+    in?: Enumerable<number> | number
+    notIn?: Enumerable<number> | number
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntWithAggregatesFilter | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedIntFilter
+    _min?: NestedIntFilter
+    _max?: NestedIntFilter
   }
 
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
+  export type NestedFloatFilter = {
+    equals?: number
+    in?: Enumerable<number> | number
+    notIn?: Enumerable<number> | number
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatFilter | number
   }
 
-  export type NestedEnumGMDFilter<$PrismaModel = never> = {
-    equals?: $Enums.GMD | EnumGMDFieldRefInput<$PrismaModel>
-    in?: $Enums.GMD[] | ListEnumGMDFieldRefInput<$PrismaModel>
-    notIn?: $Enums.GMD[] | ListEnumGMDFieldRefInput<$PrismaModel>
-    not?: NestedEnumGMDFilter<$PrismaModel> | $Enums.GMD
+  export type NestedEnumGMDFilter = {
+    equals?: GMD
+    in?: Enumerable<GMD>
+    notIn?: Enumerable<GMD>
+    not?: NestedEnumGMDFilter | GMD
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type NestedBoolFilter = {
+    equals?: boolean
+    not?: NestedBoolFilter | boolean
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  export type NestedStringNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | string | null
+    notIn?: Enumerable<string> | string | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringNullableFilter | string | null
   }
 
-  export type NestedEnumGMDWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.GMD | EnumGMDFieldRefInput<$PrismaModel>
-    in?: $Enums.GMD[] | ListEnumGMDFieldRefInput<$PrismaModel>
-    notIn?: $Enums.GMD[] | ListEnumGMDFieldRefInput<$PrismaModel>
-    not?: NestedEnumGMDWithAggregatesFilter<$PrismaModel> | $Enums.GMD
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumGMDFilter<$PrismaModel>
-    _max?: NestedEnumGMDFilter<$PrismaModel>
+  export type NestedEnumGMDWithAggregatesFilter = {
+    equals?: GMD
+    in?: Enumerable<GMD>
+    notIn?: Enumerable<GMD>
+    not?: NestedEnumGMDWithAggregatesFilter | GMD
+    _count?: NestedIntFilter
+    _min?: NestedEnumGMDFilter
+    _max?: NestedEnumGMDFilter
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type NestedBoolWithAggregatesFilter = {
+    equals?: boolean
+    not?: NestedBoolWithAggregatesFilter | boolean
+    _count?: NestedIntFilter
+    _min?: NestedBoolFilter
+    _max?: NestedBoolFilter
   }
 
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+  export type NestedStringNullableWithAggregatesFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | string | null
+    notIn?: Enumerable<string> | string | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringNullableWithAggregatesFilter | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedStringNullableFilter
+    _max?: NestedStringNullableFilter
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type NestedIntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | number | null
+    notIn?: Enumerable<number> | number | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
   }
 
   export type Book_likesCreateWithoutBookInput = {
@@ -12877,7 +11713,7 @@ export namespace Prisma {
   }
 
   export type Book_likesCreateManyBookInputEnvelope = {
-    data: Book_likesCreateManyBookInput | Book_likesCreateManyBookInput[]
+    data: Enumerable<Book_likesCreateManyBookInput>
     skipDuplicates?: boolean
   }
 
@@ -12897,7 +11733,7 @@ export namespace Prisma {
   }
 
   export type Book_consultedCreateManyBookInputEnvelope = {
-    data: Book_consultedCreateManyBookInput | Book_consultedCreateManyBookInput[]
+    data: Enumerable<Book_consultedCreateManyBookInput>
     skipDuplicates?: boolean
   }
 
@@ -12919,7 +11755,7 @@ export namespace Prisma {
   }
 
   export type CirculationCreateManyBookInputEnvelope = {
-    data: CirculationCreateManyBookInput | CirculationCreateManyBookInput[]
+    data: Enumerable<CirculationCreateManyBookInput>
     skipDuplicates?: boolean
   }
 
@@ -12936,16 +11772,16 @@ export namespace Prisma {
 
   export type Book_likesUpdateManyWithWhereWithoutBookInput = {
     where: Book_likesScalarWhereInput
-    data: XOR<Book_likesUpdateManyMutationInput, Book_likesUncheckedUpdateManyWithoutBookInput>
+    data: XOR<Book_likesUpdateManyMutationInput, Book_likesUncheckedUpdateManyWithoutBook_likesInput>
   }
 
   export type Book_likesScalarWhereInput = {
-    AND?: Book_likesScalarWhereInput | Book_likesScalarWhereInput[]
-    OR?: Book_likesScalarWhereInput[]
-    NOT?: Book_likesScalarWhereInput | Book_likesScalarWhereInput[]
-    book_id?: StringFilter<"Book_likes"> | string
-    patron_id?: StringFilter<"Book_likes"> | string
-    liked_at?: DateTimeFilter<"Book_likes"> | Date | string
+    AND?: Enumerable<Book_likesScalarWhereInput>
+    OR?: Enumerable<Book_likesScalarWhereInput>
+    NOT?: Enumerable<Book_likesScalarWhereInput>
+    book_id?: StringFilter | string
+    patron_id?: StringFilter | string
+    liked_at?: DateTimeFilter | Date | string
   }
 
   export type Book_consultedUpsertWithWhereUniqueWithoutBookInput = {
@@ -12961,16 +11797,16 @@ export namespace Prisma {
 
   export type Book_consultedUpdateManyWithWhereWithoutBookInput = {
     where: Book_consultedScalarWhereInput
-    data: XOR<Book_consultedUpdateManyMutationInput, Book_consultedUncheckedUpdateManyWithoutBookInput>
+    data: XOR<Book_consultedUpdateManyMutationInput, Book_consultedUncheckedUpdateManyWithoutBook_consultedInput>
   }
 
   export type Book_consultedScalarWhereInput = {
-    AND?: Book_consultedScalarWhereInput | Book_consultedScalarWhereInput[]
-    OR?: Book_consultedScalarWhereInput[]
-    NOT?: Book_consultedScalarWhereInput | Book_consultedScalarWhereInput[]
-    book_id?: StringFilter<"Book_consulted"> | string
-    patron_id?: StringFilter<"Book_consulted"> | string
-    consulted_at?: DateTimeFilter<"Book_consulted"> | Date | string
+    AND?: Enumerable<Book_consultedScalarWhereInput>
+    OR?: Enumerable<Book_consultedScalarWhereInput>
+    NOT?: Enumerable<Book_consultedScalarWhereInput>
+    book_id?: StringFilter | string
+    patron_id?: StringFilter | string
+    consulted_at?: DateTimeFilter | Date | string
   }
 
   export type CirculationUpsertWithWhereUniqueWithoutBookInput = {
@@ -12986,17 +11822,17 @@ export namespace Prisma {
 
   export type CirculationUpdateManyWithWhereWithoutBookInput = {
     where: CirculationScalarWhereInput
-    data: XOR<CirculationUpdateManyMutationInput, CirculationUncheckedUpdateManyWithoutBookInput>
+    data: XOR<CirculationUpdateManyMutationInput, CirculationUncheckedUpdateManyWithoutCirculationInput>
   }
 
   export type CirculationScalarWhereInput = {
-    AND?: CirculationScalarWhereInput | CirculationScalarWhereInput[]
-    OR?: CirculationScalarWhereInput[]
-    NOT?: CirculationScalarWhereInput | CirculationScalarWhereInput[]
-    book_id?: StringFilter<"Circulation"> | string
-    patron_id?: StringFilter<"Circulation"> | string
-    checkout?: DateTimeFilter<"Circulation"> | Date | string
-    date_due?: DateTimeFilter<"Circulation"> | Date | string
+    AND?: Enumerable<CirculationScalarWhereInput>
+    OR?: Enumerable<CirculationScalarWhereInput>
+    NOT?: Enumerable<CirculationScalarWhereInput>
+    book_id?: StringFilter | string
+    patron_id?: StringFilter | string
+    checkout?: DateTimeFilter | Date | string
+    date_due?: DateTimeFilter | Date | string
   }
 
   export type Book_likesCreateWithoutPatronInput = {
@@ -13015,7 +11851,7 @@ export namespace Prisma {
   }
 
   export type Book_likesCreateManyPatronInputEnvelope = {
-    data: Book_likesCreateManyPatronInput | Book_likesCreateManyPatronInput[]
+    data: Enumerable<Book_likesCreateManyPatronInput>
     skipDuplicates?: boolean
   }
 
@@ -13035,7 +11871,7 @@ export namespace Prisma {
   }
 
   export type Book_consultedCreateManyPatronInputEnvelope = {
-    data: Book_consultedCreateManyPatronInput | Book_consultedCreateManyPatronInput[]
+    data: Enumerable<Book_consultedCreateManyPatronInput>
     skipDuplicates?: boolean
   }
 
@@ -13057,7 +11893,7 @@ export namespace Prisma {
   }
 
   export type CirculationCreateManyPatronInputEnvelope = {
-    data: CirculationCreateManyPatronInput | CirculationCreateManyPatronInput[]
+    data: Enumerable<CirculationCreateManyPatronInput>
     skipDuplicates?: boolean
   }
 
@@ -13074,7 +11910,7 @@ export namespace Prisma {
 
   export type Book_likesUpdateManyWithWhereWithoutPatronInput = {
     where: Book_likesScalarWhereInput
-    data: XOR<Book_likesUpdateManyMutationInput, Book_likesUncheckedUpdateManyWithoutPatronInput>
+    data: XOR<Book_likesUpdateManyMutationInput, Book_likesUncheckedUpdateManyWithoutBook_likesInput>
   }
 
   export type Book_consultedUpsertWithWhereUniqueWithoutPatronInput = {
@@ -13090,7 +11926,7 @@ export namespace Prisma {
 
   export type Book_consultedUpdateManyWithWhereWithoutPatronInput = {
     where: Book_consultedScalarWhereInput
-    data: XOR<Book_consultedUpdateManyMutationInput, Book_consultedUncheckedUpdateManyWithoutPatronInput>
+    data: XOR<Book_consultedUpdateManyMutationInput, Book_consultedUncheckedUpdateManyWithoutBook_consultedInput>
   }
 
   export type CirculationUpsertWithWhereUniqueWithoutPatronInput = {
@@ -13106,22 +11942,22 @@ export namespace Prisma {
 
   export type CirculationUpdateManyWithWhereWithoutPatronInput = {
     where: CirculationScalarWhereInput
-    data: XOR<CirculationUpdateManyMutationInput, CirculationUncheckedUpdateManyWithoutPatronInput>
+    data: XOR<CirculationUpdateManyMutationInput, CirculationUncheckedUpdateManyWithoutCirculationInput>
   }
 
   export type BookCreateWithoutBook_likesInput = {
     id?: string
     title: string
     author: string
-    subject?: BookCreatesubjectInput | string[]
+    subject?: BookCreatesubjectInput | Enumerable<string>
     imprint: string
     collation: string
-    G_M_D: $Enums.GMD
+    G_M_D: GMD
     book_cover: string
     material_number: string
     availability: boolean
     bibilography: string
-    Keywords?: BookCreateKeywordsInput | string[]
+    Keywords?: BookCreateKeywordsInput | Enumerable<string>
     other_Title?: string | null
     co_author?: string | null
     editor?: string | null
@@ -13137,15 +11973,15 @@ export namespace Prisma {
     id?: string
     title: string
     author: string
-    subject?: BookCreatesubjectInput | string[]
+    subject?: BookCreatesubjectInput | Enumerable<string>
     imprint: string
     collation: string
-    G_M_D: $Enums.GMD
+    G_M_D: GMD
     book_cover: string
     material_number: string
     availability: boolean
     bibilography: string
-    Keywords?: BookCreateKeywordsInput | string[]
+    Keywords?: BookCreateKeywordsInput | Enumerable<string>
     other_Title?: string | null
     co_author?: string | null
     editor?: string | null
@@ -13172,7 +12008,7 @@ export namespace Prisma {
     email: string
     password?: string | null
     profile_img?: string | null
-    borrowed_books?: PatronCreateborrowed_booksInput | string[]
+    borrowed_books?: PatronCreateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -13190,7 +12026,7 @@ export namespace Prisma {
     email: string
     password?: string | null
     profile_img?: string | null
-    borrowed_books?: PatronCreateborrowed_booksInput | string[]
+    borrowed_books?: PatronCreateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -13206,27 +12042,21 @@ export namespace Prisma {
   export type BookUpsertWithoutBook_likesInput = {
     update: XOR<BookUpdateWithoutBook_likesInput, BookUncheckedUpdateWithoutBook_likesInput>
     create: XOR<BookCreateWithoutBook_likesInput, BookUncheckedCreateWithoutBook_likesInput>
-    where?: BookWhereInput
-  }
-
-  export type BookUpdateToOneWithWhereWithoutBook_likesInput = {
-    where?: BookWhereInput
-    data: XOR<BookUpdateWithoutBook_likesInput, BookUncheckedUpdateWithoutBook_likesInput>
   }
 
   export type BookUpdateWithoutBook_likesInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
-    subject?: BookUpdatesubjectInput | string[]
+    subject?: BookUpdatesubjectInput | Enumerable<string>
     imprint?: StringFieldUpdateOperationsInput | string
     collation?: StringFieldUpdateOperationsInput | string
-    G_M_D?: EnumGMDFieldUpdateOperationsInput | $Enums.GMD
+    G_M_D?: EnumGMDFieldUpdateOperationsInput | GMD
     book_cover?: StringFieldUpdateOperationsInput | string
     material_number?: StringFieldUpdateOperationsInput | string
     availability?: BoolFieldUpdateOperationsInput | boolean
     bibilography?: StringFieldUpdateOperationsInput | string
-    Keywords?: BookUpdateKeywordsInput | string[]
+    Keywords?: BookUpdateKeywordsInput | Enumerable<string>
     other_Title?: NullableStringFieldUpdateOperationsInput | string | null
     co_author?: NullableStringFieldUpdateOperationsInput | string | null
     editor?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13242,15 +12072,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
-    subject?: BookUpdatesubjectInput | string[]
+    subject?: BookUpdatesubjectInput | Enumerable<string>
     imprint?: StringFieldUpdateOperationsInput | string
     collation?: StringFieldUpdateOperationsInput | string
-    G_M_D?: EnumGMDFieldUpdateOperationsInput | $Enums.GMD
+    G_M_D?: EnumGMDFieldUpdateOperationsInput | GMD
     book_cover?: StringFieldUpdateOperationsInput | string
     material_number?: StringFieldUpdateOperationsInput | string
     availability?: BoolFieldUpdateOperationsInput | boolean
     bibilography?: StringFieldUpdateOperationsInput | string
-    Keywords?: BookUpdateKeywordsInput | string[]
+    Keywords?: BookUpdateKeywordsInput | Enumerable<string>
     other_Title?: NullableStringFieldUpdateOperationsInput | string | null
     co_author?: NullableStringFieldUpdateOperationsInput | string | null
     editor?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13265,12 +12095,6 @@ export namespace Prisma {
   export type PatronUpsertWithoutBook_likesInput = {
     update: XOR<PatronUpdateWithoutBook_likesInput, PatronUncheckedUpdateWithoutBook_likesInput>
     create: XOR<PatronCreateWithoutBook_likesInput, PatronUncheckedCreateWithoutBook_likesInput>
-    where?: PatronWhereInput
-  }
-
-  export type PatronUpdateToOneWithWhereWithoutBook_likesInput = {
-    where?: PatronWhereInput
-    data: XOR<PatronUpdateWithoutBook_likesInput, PatronUncheckedUpdateWithoutBook_likesInput>
   }
 
   export type PatronUpdateWithoutBook_likesInput = {
@@ -13283,7 +12107,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_img?: NullableStringFieldUpdateOperationsInput | string | null
-    borrowed_books?: PatronUpdateborrowed_booksInput | string[]
+    borrowed_books?: PatronUpdateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13301,7 +12125,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_img?: NullableStringFieldUpdateOperationsInput | string | null
-    borrowed_books?: PatronUpdateborrowed_booksInput | string[]
+    borrowed_books?: PatronUpdateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13313,15 +12137,15 @@ export namespace Prisma {
     id?: string
     title: string
     author: string
-    subject?: BookCreatesubjectInput | string[]
+    subject?: BookCreatesubjectInput | Enumerable<string>
     imprint: string
     collation: string
-    G_M_D: $Enums.GMD
+    G_M_D: GMD
     book_cover: string
     material_number: string
     availability: boolean
     bibilography: string
-    Keywords?: BookCreateKeywordsInput | string[]
+    Keywords?: BookCreateKeywordsInput | Enumerable<string>
     other_Title?: string | null
     co_author?: string | null
     editor?: string | null
@@ -13337,15 +12161,15 @@ export namespace Prisma {
     id?: string
     title: string
     author: string
-    subject?: BookCreatesubjectInput | string[]
+    subject?: BookCreatesubjectInput | Enumerable<string>
     imprint: string
     collation: string
-    G_M_D: $Enums.GMD
+    G_M_D: GMD
     book_cover: string
     material_number: string
     availability: boolean
     bibilography: string
-    Keywords?: BookCreateKeywordsInput | string[]
+    Keywords?: BookCreateKeywordsInput | Enumerable<string>
     other_Title?: string | null
     co_author?: string | null
     editor?: string | null
@@ -13372,7 +12196,7 @@ export namespace Prisma {
     email: string
     password?: string | null
     profile_img?: string | null
-    borrowed_books?: PatronCreateborrowed_booksInput | string[]
+    borrowed_books?: PatronCreateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -13390,7 +12214,7 @@ export namespace Prisma {
     email: string
     password?: string | null
     profile_img?: string | null
-    borrowed_books?: PatronCreateborrowed_booksInput | string[]
+    borrowed_books?: PatronCreateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -13406,27 +12230,21 @@ export namespace Prisma {
   export type BookUpsertWithoutBook_consultedInput = {
     update: XOR<BookUpdateWithoutBook_consultedInput, BookUncheckedUpdateWithoutBook_consultedInput>
     create: XOR<BookCreateWithoutBook_consultedInput, BookUncheckedCreateWithoutBook_consultedInput>
-    where?: BookWhereInput
-  }
-
-  export type BookUpdateToOneWithWhereWithoutBook_consultedInput = {
-    where?: BookWhereInput
-    data: XOR<BookUpdateWithoutBook_consultedInput, BookUncheckedUpdateWithoutBook_consultedInput>
   }
 
   export type BookUpdateWithoutBook_consultedInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
-    subject?: BookUpdatesubjectInput | string[]
+    subject?: BookUpdatesubjectInput | Enumerable<string>
     imprint?: StringFieldUpdateOperationsInput | string
     collation?: StringFieldUpdateOperationsInput | string
-    G_M_D?: EnumGMDFieldUpdateOperationsInput | $Enums.GMD
+    G_M_D?: EnumGMDFieldUpdateOperationsInput | GMD
     book_cover?: StringFieldUpdateOperationsInput | string
     material_number?: StringFieldUpdateOperationsInput | string
     availability?: BoolFieldUpdateOperationsInput | boolean
     bibilography?: StringFieldUpdateOperationsInput | string
-    Keywords?: BookUpdateKeywordsInput | string[]
+    Keywords?: BookUpdateKeywordsInput | Enumerable<string>
     other_Title?: NullableStringFieldUpdateOperationsInput | string | null
     co_author?: NullableStringFieldUpdateOperationsInput | string | null
     editor?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13442,15 +12260,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
-    subject?: BookUpdatesubjectInput | string[]
+    subject?: BookUpdatesubjectInput | Enumerable<string>
     imprint?: StringFieldUpdateOperationsInput | string
     collation?: StringFieldUpdateOperationsInput | string
-    G_M_D?: EnumGMDFieldUpdateOperationsInput | $Enums.GMD
+    G_M_D?: EnumGMDFieldUpdateOperationsInput | GMD
     book_cover?: StringFieldUpdateOperationsInput | string
     material_number?: StringFieldUpdateOperationsInput | string
     availability?: BoolFieldUpdateOperationsInput | boolean
     bibilography?: StringFieldUpdateOperationsInput | string
-    Keywords?: BookUpdateKeywordsInput | string[]
+    Keywords?: BookUpdateKeywordsInput | Enumerable<string>
     other_Title?: NullableStringFieldUpdateOperationsInput | string | null
     co_author?: NullableStringFieldUpdateOperationsInput | string | null
     editor?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13465,12 +12283,6 @@ export namespace Prisma {
   export type PatronUpsertWithoutBook_consultedInput = {
     update: XOR<PatronUpdateWithoutBook_consultedInput, PatronUncheckedUpdateWithoutBook_consultedInput>
     create: XOR<PatronCreateWithoutBook_consultedInput, PatronUncheckedCreateWithoutBook_consultedInput>
-    where?: PatronWhereInput
-  }
-
-  export type PatronUpdateToOneWithWhereWithoutBook_consultedInput = {
-    where?: PatronWhereInput
-    data: XOR<PatronUpdateWithoutBook_consultedInput, PatronUncheckedUpdateWithoutBook_consultedInput>
   }
 
   export type PatronUpdateWithoutBook_consultedInput = {
@@ -13483,7 +12295,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_img?: NullableStringFieldUpdateOperationsInput | string | null
-    borrowed_books?: PatronUpdateborrowed_booksInput | string[]
+    borrowed_books?: PatronUpdateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13501,7 +12313,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_img?: NullableStringFieldUpdateOperationsInput | string | null
-    borrowed_books?: PatronUpdateborrowed_booksInput | string[]
+    borrowed_books?: PatronUpdateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13513,15 +12325,15 @@ export namespace Prisma {
     id?: string
     title: string
     author: string
-    subject?: BookCreatesubjectInput | string[]
+    subject?: BookCreatesubjectInput | Enumerable<string>
     imprint: string
     collation: string
-    G_M_D: $Enums.GMD
+    G_M_D: GMD
     book_cover: string
     material_number: string
     availability: boolean
     bibilography: string
-    Keywords?: BookCreateKeywordsInput | string[]
+    Keywords?: BookCreateKeywordsInput | Enumerable<string>
     other_Title?: string | null
     co_author?: string | null
     editor?: string | null
@@ -13537,15 +12349,15 @@ export namespace Prisma {
     id?: string
     title: string
     author: string
-    subject?: BookCreatesubjectInput | string[]
+    subject?: BookCreatesubjectInput | Enumerable<string>
     imprint: string
     collation: string
-    G_M_D: $Enums.GMD
+    G_M_D: GMD
     book_cover: string
     material_number: string
     availability: boolean
     bibilography: string
-    Keywords?: BookCreateKeywordsInput | string[]
+    Keywords?: BookCreateKeywordsInput | Enumerable<string>
     other_Title?: string | null
     co_author?: string | null
     editor?: string | null
@@ -13572,7 +12384,7 @@ export namespace Prisma {
     email: string
     password?: string | null
     profile_img?: string | null
-    borrowed_books?: PatronCreateborrowed_booksInput | string[]
+    borrowed_books?: PatronCreateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -13590,7 +12402,7 @@ export namespace Prisma {
     email: string
     password?: string | null
     profile_img?: string | null
-    borrowed_books?: PatronCreateborrowed_booksInput | string[]
+    borrowed_books?: PatronCreateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -13606,27 +12418,21 @@ export namespace Prisma {
   export type BookUpsertWithoutCirculationInput = {
     update: XOR<BookUpdateWithoutCirculationInput, BookUncheckedUpdateWithoutCirculationInput>
     create: XOR<BookCreateWithoutCirculationInput, BookUncheckedCreateWithoutCirculationInput>
-    where?: BookWhereInput
-  }
-
-  export type BookUpdateToOneWithWhereWithoutCirculationInput = {
-    where?: BookWhereInput
-    data: XOR<BookUpdateWithoutCirculationInput, BookUncheckedUpdateWithoutCirculationInput>
   }
 
   export type BookUpdateWithoutCirculationInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
-    subject?: BookUpdatesubjectInput | string[]
+    subject?: BookUpdatesubjectInput | Enumerable<string>
     imprint?: StringFieldUpdateOperationsInput | string
     collation?: StringFieldUpdateOperationsInput | string
-    G_M_D?: EnumGMDFieldUpdateOperationsInput | $Enums.GMD
+    G_M_D?: EnumGMDFieldUpdateOperationsInput | GMD
     book_cover?: StringFieldUpdateOperationsInput | string
     material_number?: StringFieldUpdateOperationsInput | string
     availability?: BoolFieldUpdateOperationsInput | boolean
     bibilography?: StringFieldUpdateOperationsInput | string
-    Keywords?: BookUpdateKeywordsInput | string[]
+    Keywords?: BookUpdateKeywordsInput | Enumerable<string>
     other_Title?: NullableStringFieldUpdateOperationsInput | string | null
     co_author?: NullableStringFieldUpdateOperationsInput | string | null
     editor?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13642,15 +12448,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     author?: StringFieldUpdateOperationsInput | string
-    subject?: BookUpdatesubjectInput | string[]
+    subject?: BookUpdatesubjectInput | Enumerable<string>
     imprint?: StringFieldUpdateOperationsInput | string
     collation?: StringFieldUpdateOperationsInput | string
-    G_M_D?: EnumGMDFieldUpdateOperationsInput | $Enums.GMD
+    G_M_D?: EnumGMDFieldUpdateOperationsInput | GMD
     book_cover?: StringFieldUpdateOperationsInput | string
     material_number?: StringFieldUpdateOperationsInput | string
     availability?: BoolFieldUpdateOperationsInput | boolean
     bibilography?: StringFieldUpdateOperationsInput | string
-    Keywords?: BookUpdateKeywordsInput | string[]
+    Keywords?: BookUpdateKeywordsInput | Enumerable<string>
     other_Title?: NullableStringFieldUpdateOperationsInput | string | null
     co_author?: NullableStringFieldUpdateOperationsInput | string | null
     editor?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13665,12 +12471,6 @@ export namespace Prisma {
   export type PatronUpsertWithoutCirculationInput = {
     update: XOR<PatronUpdateWithoutCirculationInput, PatronUncheckedUpdateWithoutCirculationInput>
     create: XOR<PatronCreateWithoutCirculationInput, PatronUncheckedCreateWithoutCirculationInput>
-    where?: PatronWhereInput
-  }
-
-  export type PatronUpdateToOneWithWhereWithoutCirculationInput = {
-    where?: PatronWhereInput
-    data: XOR<PatronUpdateWithoutCirculationInput, PatronUncheckedUpdateWithoutCirculationInput>
   }
 
   export type PatronUpdateWithoutCirculationInput = {
@@ -13683,7 +12483,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_img?: NullableStringFieldUpdateOperationsInput | string | null
-    borrowed_books?: PatronUpdateborrowed_booksInput | string[]
+    borrowed_books?: PatronUpdateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13701,7 +12501,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: NullableStringFieldUpdateOperationsInput | string | null
     profile_img?: NullableStringFieldUpdateOperationsInput | string | null
-    borrowed_books?: PatronUpdateborrowed_booksInput | string[]
+    borrowed_books?: PatronUpdateborrowed_booksInput | Enumerable<string>
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13735,7 +12535,7 @@ export namespace Prisma {
     liked_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type Book_likesUncheckedUpdateManyWithoutBookInput = {
+  export type Book_likesUncheckedUpdateManyWithoutBook_likesInput = {
     patron_id?: StringFieldUpdateOperationsInput | string
     liked_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13750,7 +12550,7 @@ export namespace Prisma {
     consulted_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type Book_consultedUncheckedUpdateManyWithoutBookInput = {
+  export type Book_consultedUncheckedUpdateManyWithoutBook_consultedInput = {
     patron_id?: StringFieldUpdateOperationsInput | string
     consulted_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13767,7 +12567,7 @@ export namespace Prisma {
     date_due?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CirculationUncheckedUpdateManyWithoutBookInput = {
+  export type CirculationUncheckedUpdateManyWithoutCirculationInput = {
     patron_id?: StringFieldUpdateOperationsInput | string
     checkout?: DateTimeFieldUpdateOperationsInput | Date | string
     date_due?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13799,22 +12599,12 @@ export namespace Prisma {
     liked_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type Book_likesUncheckedUpdateManyWithoutPatronInput = {
-    book_id?: StringFieldUpdateOperationsInput | string
-    liked_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type Book_consultedUpdateWithoutPatronInput = {
     consulted_at?: DateTimeFieldUpdateOperationsInput | Date | string
     book?: BookUpdateOneRequiredWithoutBook_consultedNestedInput
   }
 
   export type Book_consultedUncheckedUpdateWithoutPatronInput = {
-    book_id?: StringFieldUpdateOperationsInput | string
-    consulted_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type Book_consultedUncheckedUpdateManyWithoutPatronInput = {
     book_id?: StringFieldUpdateOperationsInput | string
     consulted_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13826,12 +12616,6 @@ export namespace Prisma {
   }
 
   export type CirculationUncheckedUpdateWithoutPatronInput = {
-    book_id?: StringFieldUpdateOperationsInput | string
-    checkout?: DateTimeFieldUpdateOperationsInput | Date | string
-    date_due?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type CirculationUncheckedUpdateManyWithoutPatronInput = {
     book_id?: StringFieldUpdateOperationsInput | string
     checkout?: DateTimeFieldUpdateOperationsInput | Date | string
     date_due?: DateTimeFieldUpdateOperationsInput | Date | string

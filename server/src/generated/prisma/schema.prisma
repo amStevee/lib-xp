@@ -18,51 +18,50 @@ model Session {
   id        String   @id
   sid       String   @unique
   data      String
-  expiresAt DateTime
+  expiresAt   DateTime
 }
 
 model Librarian {
-  id            String   @unique @default(uuid())
-  firstname     String
-  lastname      String
-  displayname   String
-  email         String   @unique
-  password      String
-  profile_img   String
-  address       String
-  contact       String   @unique
-  rank          Int
+  id String @default(uuid()) @unique
+  firstname String
+  lastname String
+  displayname String
+  email String @unique
+  password String
+  profile_img String
+  address String
+  contact String @unique
+  rank Int
   books_entered String[] @unique
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map("librarian")
 }
-
 // default available to true
 model Book {
-  id              String           @unique @default(uuid())
-  title           String
-  author          String
-  subject         String[]
-  imprint         String
-  collation       String
-  G_M_D           GMD
-  book_cover      String
+  id String @default(uuid()) @unique
+  title String
+  author String
+  subject String[]
+  imprint String
+  collation String
+  G_M_D GMD 
+  book_cover String
   material_number String
-  availability    Boolean
-  bibilography    String
-  Keywords        String[]
-  other_Title     String?
-  co_author       String?
-  editor          String?
-  edition         String?
-  series          String?
-  web_address     String?
-  entered_at      DateTime         @default(now())
-  book_likes      Book_likes[]
-  book_consulted  Book_consulted[]
-  circulation     Circulation[]
+  availability Boolean
+  bibilography String
+  Keywords String[]
+  other_Title String?
+  co_author String?
+  editor String?
+  edition String?
+  series String?
+  web_address String?
+  entered_at DateTime @default(now())
+  book_likes Book_likes[]
+  book_consulted Book_consulted[]
+  circulation Circulation[]
 
   @@index([title])
   @@index([author])
@@ -70,9 +69,9 @@ model Book {
 }
 
 model EmailVerificationToken {
-  id        String   @unique @default(uuid())
-  email     String   @unique
-  token     String
+  id String @default(uuid()) @unique
+  email String @unique
+  token String
   expiresAt DateTime
   createdAt DateTime @default(now())
 
@@ -80,53 +79,54 @@ model EmailVerificationToken {
 }
 
 model Patron {
-  id              String           @unique @default(uuid())
-  google_Id       String?          @unique
-  firstname       String
-  lastname        String
-  displayname     String?          @unique
-  address         String?
-  email           String           @unique
-  password        String?
-  profile_img     String?
-  borrowed_books  String[]         @unique
-  isEmailVerified Boolean          @default(false)
-  created_at      DateTime         @default(now())
-  updated_at      DateTime         @updatedAt
-  book_likes      Book_likes[]
-  book_consulted  Book_consulted[]
-  circulation     Circulation[]
+  id String @default(uuid()) @unique
+  google_Id String? @unique
+  firstname String
+  lastname String
+  displayname String? @unique
+  address String?
+  email String @unique
+  password String?
+  profile_img String?
+  borrowed_books String[] @unique
+  isEmailVerified Boolean @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  book_likes Book_likes[]
+  book_consulted Book_consulted[]
+  circulation Circulation[]
 
   @@map("patron")
+
 }
 
 model Book_likes {
-  book_id   String   @unique
-  book      Book     @relation(fields: [book_id], references: [id], onDelete: Cascade)
-  patron_id String   @unique
-  patron    Patron   @relation(fields: [patron_id], references: [id], onDelete: Cascade)
-  liked_at  DateTime @default(now())
+  book_id String @unique
+  book Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  patron_id String @unique
+  patron Patron @relation(fields: [patron_id], references: [id], onDelete: Cascade)
+  liked_at DateTime @default(now())
 
   @@map("book_likes")
 }
 
 model Book_consulted {
-  book_id      String   @unique
-  book         Book     @relation(fields: [book_id], references: [id], onDelete: Cascade)
-  patron_id    String   @unique
-  patron       Patron   @relation(fields: [patron_id], references: [id], onDelete: Cascade)
+  book_id String @unique
+  book Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  patron_id String @unique
+  patron Patron @relation(fields: [patron_id], references: [id], onDelete: Cascade)
   consulted_at DateTime @default(now())
 
   @@map("book_consulted")
 }
 
 model Circulation {
-  book_id   String   @unique
-  book      Book     @relation(fields: [book_id], references: [id], onDelete: Cascade)
-  patron_id String   @unique
-  patron    Patron   @relation(fields: [patron_id], references: [id], onDelete: Cascade)
-  checkout  DateTime @default(now())
-  date_due  DateTime
+  book_id String @unique
+  book Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  patron_id String @unique
+  patron Patron @relation(fields: [patron_id], references: [id], onDelete: Cascade)
+  checkout DateTime @default(now())
+  date_due DateTime
 
   @@map("circulation")
 }

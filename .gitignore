@@ -15,6 +15,9 @@ dump.rdb
 /build
 /dist
 /logs
+logs.json
+*.log
+*.log.*
 
 # misc
 .DS_Store

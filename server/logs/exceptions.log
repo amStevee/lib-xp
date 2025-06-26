@@ -1,0 +1,290 @@
+{
+  error: CustomError: email source not found
+      at Object.<anonymous> [90m(C:\Users\HP\Desktop\libxp\server\[39msrc\services\verifyEmail.services.ts:25:9[90m)[39m
+  [90m    at Module._compile (node:internal/modules/cjs/loader:1554:14)[39m
+      at Module.m._compile [90m(C:\Users\HP\Desktop\libxp\server\[39mnode_modules\[4m.pnpm[24m\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\node_modules\[4mts-node[24m\src\index.ts:1618:23[90m)[39m
+  [90m    at node:internal/modules/cjs/loader:1706:10[39m
+      at Object.require.extensions.<computed> [as .ts] [90m(C:\Users\HP\Desktop\libxp\server\[39mnode_modules\[4m.pnpm[24m\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\node_modules\[4mts-node[24m\src\index.ts:1621:12[90m)[39m
+  [90m    at Module.load (node:internal/modules/cjs/loader:1289:32)[39m
+  [90m    at Function._load (node:internal/modules/cjs/loader:1108:12)[39m
+  [90m    at TracingChannel.traceSync (node:diagnostics_channel:322:14)[39m
+  [90m    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)[39m
+  [90m    at Module.require (node:internal/modules/cjs/loader:1311:12)[39m {
+    statusCode: [33m404[39m,
+    isOperational: [33mtrue[39m
+  },
+  level: [32m'error'[39m,
+  message: [32m'uncaughtException: email source not found\n'[39m +
+    [32m'Error: email source not found\n'[39m +
+    [32m'    at Object.<anonymous> (C:\\Users\\HP\\Desktop\\libxp\\server\\src\\services\\verifyEmail.services.ts:25:9)\n'[39m +
+    [32m'    at Module._compile (node:internal/modules/cjs/loader:1554:14)\n'[39m +
+    [32m'    at Module.m._compile (C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts:1618:23)\n'[39m +
+    [32m'    at node:internal/modules/cjs/loader:1706:10\n'[39m +
+    [32m'    at Object.require.extensions.<computed> [as .ts] (C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts:1621:12)\n'[39m +
+    [32m'    at Module.load (node:internal/modules/cjs/loader:1289:32)\n'[39m +
+    [32m'    at Function._load (node:internal/modules/cjs/loader:1108:12)\n'[39m +
+    [32m'    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n'[39m +
+    [32m'    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)\n'[39m +
+    [32m'    at Module.require (node:internal/modules/cjs/loader:1311:12)'[39m,
+  stack: [32m'Error: email source not found\n'[39m +
+    [32m'    at Object.<anonymous> (C:\\Users\\HP\\Desktop\\libxp\\server\\src\\services\\verifyEmail.services.ts:25:9)\n'[39m +
+    [32m'    at Module._compile (node:internal/modules/cjs/loader:1554:14)\n'[39m +
+    [32m'    at Module.m._compile (C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts:1618:23)\n'[39m +
+    [32m'    at node:internal/modules/cjs/loader:1706:10\n'[39m +
+    [32m'    at Object.require.extensions.<computed> [as .ts] (C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts:1621:12)\n'[39m +
+    [32m'    at Module.load (node:internal/modules/cjs/loader:1289:32)\n'[39m +
+    [32m'    at Function._load (node:internal/modules/cjs/loader:1108:12)\n'[39m +
+    [32m'    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n'[39m +
+    [32m'    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)\n'[39m +
+    [32m'    at Module.require (node:internal/modules/cjs/loader:1311:12)'[39m,
+  exception: [33mtrue[39m,
+  date: [32m'Thu Jun 26 2025 14:25:51 GMT-0700 (Pacific Daylight Time)'[39m,
+  process: {
+    pid: [33m11220[39m,
+    uid: [1mnull[22m,
+    gid: [1mnull[22m,
+    cwd: [32m'C:\\Users\\HP\\Desktop\\libxp\\server'[39m,
+    execPath: [32m'C:\\nvm4w\\nodejs\\node.exe'[39m,
+    version: [32m'v22.14.0'[39m,
+    argv: [
+      [32m'C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\dist\\bin.js'[39m,
+      [32m'C:\\Users\\HP\\Desktop\\libxp\\server\\src\\index.ts'[39m
+    ],
+    memoryUsage: {
+      rss: [33m1103319040[39m,
+      heapTotal: [33m1051664384[39m,
+      heapUsed: [33m1011435848[39m,
+      external: [33m8124954[39m,
+      arrayBuffers: [33m5026205[39m
+    }
+  },
+  os: { loadavg: [ [33m0[39m, [33m0[39m, [33m0[39m ], uptime: [33m170957.281[39m },
+  trace: [
+    {
+      column: [33m9[39m,
+      file: [32m'C:\\Users\\HP\\Desktop\\libxp\\server\\src\\services\\verifyEmail.services.ts'[39m,
+      function: [1mnull[22m,
+      line: [33m25[39m,
+      method: [1mnull[22m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m14[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [32m'Module._compile'[39m,
+      line: [33m1554[39m,
+      method: [32m'_compile'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m23[39m,
+      file: [32m'C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts'[39m,
+      function: [32m'Module.m._compile'[39m,
+      line: [33m1618[39m,
+      method: [32m'_compile'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m10[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [1mnull[22m,
+      line: [33m1706[39m,
+      method: [1mnull[22m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m12[39m,
+      file: [32m'C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts'[39m,
+      function: [32m'Object.require.extensions.<computed> [as .ts]'[39m,
+      line: [33m1621[39m,
+      method: [32m'ts]'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m32[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [32m'Module.load'[39m,
+      line: [33m1289[39m,
+      method: [32m'load'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m12[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [32m'Function._load'[39m,
+      line: [33m1108[39m,
+      method: [32m'_load'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m14[39m,
+      file: [32m'node:diagnostics_channel'[39m,
+      function: [32m'TracingChannel.traceSync'[39m,
+      line: [33m322[39m,
+      method: [32m'traceSync'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m24[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [32m'wrapModuleLoad'[39m,
+      line: [33m220[39m,
+      method: [1mnull[22m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m12[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [32m'Module.require'[39m,
+      line: [33m1311[39m,
+      method: [32m'require'[39m,
+      native: [33mfalse[39m
+    }
+  ],
+  timestamp: [32m'2025-06-26T21:25:51.250Z'[39m
+}
+{
+  error: CustomError: email source not found
+      at Object.<anonymous> [90m(C:\Users\HP\Desktop\libxp\server\[39msrc\services\verifyEmail.services.ts:25:9[90m)[39m
+  [90m    at Module._compile (node:internal/modules/cjs/loader:1554:14)[39m
+      at Module.m._compile [90m(C:\Users\HP\Desktop\libxp\server\[39mnode_modules\[4m.pnpm[24m\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\node_modules\[4mts-node[24m\src\index.ts:1618:23[90m)[39m
+  [90m    at node:internal/modules/cjs/loader:1706:10[39m
+      at Object.require.extensions.<computed> [as .ts] [90m(C:\Users\HP\Desktop\libxp\server\[39mnode_modules\[4m.pnpm[24m\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\node_modules\[4mts-node[24m\src\index.ts:1621:12[90m)[39m
+  [90m    at Module.load (node:internal/modules/cjs/loader:1289:32)[39m
+  [90m    at Function._load (node:internal/modules/cjs/loader:1108:12)[39m
+  [90m    at TracingChannel.traceSync (node:diagnostics_channel:322:14)[39m
+  [90m    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)[39m
+  [90m    at Module.require (node:internal/modules/cjs/loader:1311:12)[39m {
+    statusCode: [33m404[39m,
+    isOperational: [33mtrue[39m
+  },
+  level: [32m'error'[39m,
+  message: [32m'uncaughtException: email source not found\n'[39m +
+    [32m'Error: email source not found\n'[39m +
+    [32m'    at Object.<anonymous> (C:\\Users\\HP\\Desktop\\libxp\\server\\src\\services\\verifyEmail.services.ts:25:9)\n'[39m +
+    [32m'    at Module._compile (node:internal/modules/cjs/loader:1554:14)\n'[39m +
+    [32m'    at Module.m._compile (C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts:1618:23)\n'[39m +
+    [32m'    at node:internal/modules/cjs/loader:1706:10\n'[39m +
+    [32m'    at Object.require.extensions.<computed> [as .ts] (C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts:1621:12)\n'[39m +
+    [32m'    at Module.load (node:internal/modules/cjs/loader:1289:32)\n'[39m +
+    [32m'    at Function._load (node:internal/modules/cjs/loader:1108:12)\n'[39m +
+    [32m'    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n'[39m +
+    [32m'    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)\n'[39m +
+    [32m'    at Module.require (node:internal/modules/cjs/loader:1311:12)'[39m,
+  stack: [32m'Error: email source not found\n'[39m +
+    [32m'    at Object.<anonymous> (C:\\Users\\HP\\Desktop\\libxp\\server\\src\\services\\verifyEmail.services.ts:25:9)\n'[39m +
+    [32m'    at Module._compile (node:internal/modules/cjs/loader:1554:14)\n'[39m +
+    [32m'    at Module.m._compile (C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts:1618:23)\n'[39m +
+    [32m'    at node:internal/modules/cjs/loader:1706:10\n'[39m +
+    [32m'    at Object.require.extensions.<computed> [as .ts] (C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts:1621:12)\n'[39m +
+    [32m'    at Module.load (node:internal/modules/cjs/loader:1289:32)\n'[39m +
+    [32m'    at Function._load (node:internal/modules/cjs/loader:1108:12)\n'[39m +
+    [32m'    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n'[39m +
+    [32m'    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)\n'[39m +
+    [32m'    at Module.require (node:internal/modules/cjs/loader:1311:12)'[39m,
+  exception: [33mtrue[39m,
+  date: [32m'Thu Jun 26 2025 14:26:25 GMT-0700 (Pacific Daylight Time)'[39m,
+  process: {
+    pid: [33m6088[39m,
+    uid: [1mnull[22m,
+    gid: [1mnull[22m,
+    cwd: [32m'C:\\Users\\HP\\Desktop\\libxp\\server'[39m,
+    execPath: [32m'C:\\nvm4w\\nodejs\\node.exe'[39m,
+    version: [32m'v22.14.0'[39m,
+    argv: [
+      [32m'C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\dist\\bin.js'[39m,
+      [32m'C:\\Users\\HP\\Desktop\\libxp\\server\\src\\index.ts'[39m
+    ],
+    memoryUsage: {
+      rss: [33m1108049920[39m,
+      heapTotal: [33m1055334400[39m,
+      heapUsed: [33m1019010976[39m,
+      external: [33m8547671[39m,
+      arrayBuffers: [33m5448922[39m
+    }
+  },
+  os: { loadavg: [ [33m0[39m, [33m0[39m, [33m0[39m ], uptime: [33m170991.421[39m },
+  trace: [
+    {
+      column: [33m9[39m,
+      file: [32m'C:\\Users\\HP\\Desktop\\libxp\\server\\src\\services\\verifyEmail.services.ts'[39m,
+      function: [1mnull[22m,
+      line: [33m25[39m,
+      method: [1mnull[22m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m14[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [32m'Module._compile'[39m,
+      line: [33m1554[39m,
+      method: [32m'_compile'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m23[39m,
+      file: [32m'C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts'[39m,
+      function: [32m'Module.m._compile'[39m,
+      line: [33m1618[39m,
+      method: [32m'_compile'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m10[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [1mnull[22m,
+      line: [33m1706[39m,
+      method: [1mnull[22m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m12[39m,
+      file: [32m'C:\\Users\\HP\\Desktop\\libxp\\server\\node_modules\\.pnpm\\ts-node@10.9.2_@swc+core@1._b7dbe09b6e9026442ae02840854dbe27\\node_modules\\ts-node\\src\\index.ts'[39m,
+      function: [32m'Object.require.extensions.<computed> [as .ts]'[39m,
+      line: [33m1621[39m,
+      method: [32m'ts]'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m32[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [32m'Module.load'[39m,
+      line: [33m1289[39m,
+      method: [32m'load'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m12[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [32m'Function._load'[39m,
+      line: [33m1108[39m,
+      method: [32m'_load'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m14[39m,
+      file: [32m'node:diagnostics_channel'[39m,
+      function: [32m'TracingChannel.traceSync'[39m,
+      line: [33m322[39m,
+      method: [32m'traceSync'[39m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m24[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [32m'wrapModuleLoad'[39m,
+      line: [33m220[39m,
+      method: [1mnull[22m,
+      native: [33mfalse[39m
+    },
+    {
+      column: [33m12[39m,
+      file: [32m'node:internal/modules/cjs/loader'[39m,
+      function: [32m'Module.require'[39m,
+      line: [33m1311[39m,
+      method: [32m'require'[39m,
+      native: [33mfalse[39m
+    }
+  ],
+  timestamp: [32m'2025-06-26T21:26:25.393Z'[39m
+}

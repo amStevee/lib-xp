@@ -15,6 +15,9 @@ dump.rdb
 /build
 /dist
 /logs
+logs
+*.log
+*.log.*
 
 
 # misc

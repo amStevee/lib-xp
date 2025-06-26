@@ -1,6 +1,6 @@
 import { CreateUserDto } from "../interfaces/user";
 import {  UserRepository } from "../repositories/user.repository";
-import { Patron } from "@prisma/client";
+import { Patron } from "../generated/prisma";
 
 const userRepository = new UserRepository();
 

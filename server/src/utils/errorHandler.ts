@@ -4,6 +4,14 @@ import { CreateError } from "../interfaces/Error";
 import { logger } from "../logger";
 dotenv.config();
 
+export class CustomError extends Error {
+   constructor(public message:string, public statusCode:number, public isOperational: boolean = true) {
+        super(message)
+    
+        Error.captureStackTrace(this, this.constructor)
+    }
+}
+
 process.on('uncaughtException', (err) => {
     // Come back to this************************
     if (!(err instanceof CustomError)) {
@@ -19,14 +27,6 @@ process.on('uncaughtException', (err) => {
 export const routeNotFound = async(req:Request, res:Response, next: NextFunction) => {
     const err = new CustomError(`route for ${req.originalUrl} not found`, 404)
     next(err)
-}
-
-export class CustomError extends Error {
-   constructor(public message:string, public statusCode:number, public isOperational: boolean = true) {
-        super(message)
-    
-        Error.captureStackTrace(this, this.constructor)
-    }
 }
 
 export const globalErrorHandler = async function (error:CreateError, req:Request, res:Response, next:NextFunction) {

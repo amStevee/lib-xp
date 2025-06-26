@@ -1,7 +1,7 @@
-import db from "../config/prismaClient";
+import {prisma as db} from "../config/prismaClient";
 import * as bcrypt from 'bcrypt';
 import { CustomError } from "../utils/errorHandler";
-import { Patron } from "@prisma/client";
+import { Patron } from "../generated/prisma";
 import { UserRepositoryInt } from "../interfaces/user";
 import { randomBytes } from "crypto";
 import { eventEmitter } from "../events/event-emitter";
@@ -67,14 +67,14 @@ export class UserRepository implements UserRepositoryInt {
 
     async verifyEmail(email:string, token:string) {
     
-        const verificationRecord = await db.emailVerificationToken.findUnique({
+        const verificationRecord = await db.emailVerificationToken.findFirst({
             where: { email, token }
         });
 
         if (!verificationRecord) throw new CustomError('Invalid or expired verification token', 400);
 
         if (verificationRecord.expiresAt < new Date()) {
-            await db.emailVerificationToken.delete({where: {email, token}})
+            await db.emailVerificationToken.deleteMany({where: {email, token}})
             throw new CustomError('Token has expired', 400);
         }
 
@@ -83,7 +83,7 @@ export class UserRepository implements UserRepositoryInt {
             data: {isEmailVerified: true}
         })
 
-        await db.emailVerificationToken.delete({where: {email, token}});
+        await db.emailVerificationToken.deleteMany({where: {email, token}});
 
         logger.info(`User email verified: ${email}`);
         return db.patron.findUnique({

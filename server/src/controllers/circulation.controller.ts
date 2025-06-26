@@ -61,7 +61,7 @@ export class CirculationController {
         try {
             const closeDueDate = await criculationService.findCloseDueDate();
             let userArr:Object[] = [];
-            closeDueDate.map((bkd) => {
+            closeDueDate.map((bkd: any) => {
                 const today = Date.now();
                 const dueDate = new Date(bkd.date_due).getDate();
                 // continue this logic

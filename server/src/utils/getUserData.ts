@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { CustomError } from './errorHandler';
-import db from '../config/prismaClient';
+import {prisma as db} from '../config/prismaClient';
 import { User } from '../entities/User';
 
 let failCount = 0;

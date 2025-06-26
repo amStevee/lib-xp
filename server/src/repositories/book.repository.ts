@@ -1,4 +1,4 @@
-import db from "../config/prismaClient";
+import {prisma as db} from "../config/prismaClient";
 import { Book } from "../entities/Book";
 import { CustomError } from "../utils/errorHandler";
 

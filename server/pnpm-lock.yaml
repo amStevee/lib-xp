@@ -14,9 +14,6 @@ importers:
       '@types/morgan':
         specifier: ^1.9.9
         version: 1.9.10
-      '@types/supertest':
-        specifier: ^6.0.3
-        version: 6.0.3
       aws-sdk:
         specifier: ^2.1692.0
         version: 2.1692.0
@@ -147,6 +144,9 @@ importers:
       '@types/passport-jwt':
         specifier: ^4.0.1
         version: 4.0.1
+      '@types/supertest':
+        specifier: ^6.0.3
+        version: 6.0.3
       prisma:
         specifier: ^4.10.1
         version: 4.16.2

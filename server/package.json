@@ -26,7 +26,6 @@
   "dependencies": {
     "@quixo3/prisma-session-store": "^3.1.13",
     "@types/morgan": "^1.9.9",
-    "@types/supertest": "^6.0.3",
     "aws-sdk": "^2.1692.0",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.5.0",
@@ -72,6 +71,7 @@
     "@types/passport-google-oauth": "^1.0.45",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-jwt": "^4.0.1",
+    "@types/supertest": "^6.0.3",
     "prisma": "^4.10.1",
     "supertest": "^7.1.1",
     "ts-jest": "^29.2.5"

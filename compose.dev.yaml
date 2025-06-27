@@ -20,9 +20,9 @@ services:
       SESSION_SECRET: ${SESSION_SECRET}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      PORT: ${PORT}
     volumes:
       - "./client:/code"
-      - /code/node_modules
     depends_on:
       - server
 
@@ -39,10 +39,13 @@ services:
       SESSION_SECRET: ${SESSION_SECRET}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      SES_EMAIL_SOURCE: ${SES_EMAIL_SOURCE}
+      REDIS_URL: ${REDIS_URL}
       PORT: 3010 
       NODE_ENV: development   # To use your production database connection string, use `defang config set DATABASE_URL`
     volumes:
       - "./server:/app"
+      - "/app/node_modules"
     # depends_on:
     #   - db
     healthcheck:

@@ -1,7 +1,10 @@
 import * as redis from 'redis';
+import dotenv from 'dotenv';
+import { logger } from '../logger';
+dotenv.config()
 
 const redisClient = redis.createClient({
-    url: 'redis://127.0.0.1:6379', // The connection URL format is 'redis://host:port'
+    url: process.env.REDIS_URL, 
     // password: '', // Optional: add if Redis requires a password
   });
 
@@ -11,7 +14,8 @@ const redisClient = redis.createClient({
   
   // Event listener for errors
   redisClient.on('error', (err: Error) => {
-    console.error('Error connecting to Redis:', err);
+    logger.error('Error connecting to Redis:', err);
+    console.error('Error connecting to Redis:', err)
   });
 
   redisClient.connect()

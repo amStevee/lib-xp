@@ -43,9 +43,9 @@ services:
       REDIS_URL: ${REDIS_URL}
       PORT: 3010 
       NODE_ENV: development   # To use your production database connection string, use `defang config set DATABASE_URL`
-    volumes:
-      - "./server:/app"
-      - "/app/node_modules"
+    # volumes:
+    #   - "./server:/app"
+    #   - "/app/node_modules"
     # depends_on:
     #   - db
     healthcheck:

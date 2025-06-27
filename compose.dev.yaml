@@ -43,9 +43,10 @@ services:
       REDIS_URL: ${REDIS_URL}
       PORT: 3010 
       NODE_ENV: development   # To use your production database connection string, use `defang config set DATABASE_URL`
-    volumes:
-      - "./server/app"
-      - "/app/node_modules"
+      DEBUG: "libxp:*"  # Enable debugging for all libxp modules
+    # volumes:
+    #   - "./server:/code" 
+    #   - "/code/node_modules"  # Prevents node_modules from being overwritten by the host
     # depends_on:
     #   - db
     healthcheck:

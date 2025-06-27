@@ -43,7 +43,6 @@ services:
       REDIS_URL: ${REDIS_URL}
       PORT: 3010 
       NODE_ENV: development   # To use your production database connection string, use `defang config set DATABASE_URL`
-      DEBUG: "libxp:*"  # Enable debugging for all libxp modules
     # depends_on:
     #   - db
     healthcheck:

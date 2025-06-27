@@ -1,52 +1,68 @@
-services:
-  # db:
-  #   image: postgres:16
-  #   restart: unless-stopped
-  #   environment:
-  #     - POSTGRES_DB:${POSTGRES_DB}
-  #     - POSTGRES_USER:${POSTGRES_USER}
-  #     - POSTGRES_PASSWORD:${POSTGRES_PASSWORD}
-  #   ports:
-  #     - 5432:5432
 
-  web:
-    build:
-      context: ./client
-      dockerfile: ./Dockerfile
-    ports:
-      - 3000:3000
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      SESSION_SECRET: ${SESSION_SECRET}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      PORT: ${PORT}
-    volumes:
-      - "./client:/code"
-    depends_on:
-      - server
+      services:
+        web:
+          build:
+            context: ./client
+            dockerfile: ./Dockerfile
+          ports:
+            - 3000:3000
+          environment:
+            DATABASE_URL: ${DATABASE_URL:-postgres://postgres:postgres@db:5432/postgres}
+            SESSION_SECRET: ${SESSION_SECRET:-changeme}
+            GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-dummy}
+            GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-dummy}
+            PORT: ${PORT:-3000}
+          volumes:
+            - "./client:/code"
+          depends_on:
+            - server
 
-  server:
-    restart: unless-stopped
-    build:
-      context: ./server
-      dockerfile: ./Dockerfile
-    ports:
-      - 3010:3010
-      - 9229:9229 # debugging port
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      SESSION_SECRET: ${SESSION_SECRET}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      SES_EMAIL_SOURCE: ${SES_EMAIL_SOURCE}
-      REDIS_URL: ${REDIS_URL}
-      PORT: 3010 
-      NODE_ENV: development   # To use your production database connection string, use `defang config set DATABASE_URL`
-    # depends_on:
-    #   - db
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3010/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+        server:
+          restart: unless-stopped
+          build:
+            context: ./server
+            dockerfile: ./Dockerfile
+          ports:
+            - 3010:3010
+            - 9229:9229
+          environment:
+            DATABASE_URL: ${DATABASE_URL:-postgres://postgres:postgres@db:5432/postgres}
+            SESSION_SECRET: ${SESSION_SECRET:-changeme}
+            GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-dummy}
+            GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-dummy}
+            SES_EMAIL_SOURCE: ${SES_EMAIL_SOURCE:-dummy@example.com}
+            REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+            PORT: 3010
+            NODE_ENV: development
+          depends_on:
+            - db
+            - redis
+          healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:3010/health"]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+
+        db:
+          image: postgres:16
+          restart: unless-stopped
+          environment:
+            POSTGRES_DB: ${POSTGRES_DB:-postgres}
+            POSTGRES_USER: ${POSTGRES_USER:-postgres}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+          ports:
+            - 5432:5432
+          volumes:
+            - db_data:/var/lib/postgresql/data
+
+        redis:
+          image: redis:7
+          restart: unless-stopped
+          ports:
+            - 6379:6379
+          volumes:
+            - redis_data:/data
+
+      volumes:
+        db_data:
+        redis_data:
